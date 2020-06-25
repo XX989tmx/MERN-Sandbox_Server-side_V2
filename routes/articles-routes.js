@@ -11,7 +11,11 @@ router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
 router.post("/",[check('title').not().isEmpty(), check('content').isLength({min: 5}), check('author').not().isEmpty()], articlesControllers.createArticle);
 
-router.patch("/:articleId",check(), articlesControllers.updateArticle);
+router.patch(
+  "/:articleId",
+  [check("title").not().isEmpty(), check("content").isLength({ min: 5 })],
+  articlesControllers.updateArticle
+);
 
 router.delete("/:articleId", articlesControllers.deleteArticle);
 

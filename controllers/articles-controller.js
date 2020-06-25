@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
 
@@ -61,8 +61,8 @@ const createArticle = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
-    
-    throw new HttpError('Invalid inputs passed, please check your data.', 422);
+
+    throw new HttpError("Invalid inputs passed, please check your data.", 422);
   }
 
   const { title, content, author } = req.body;
@@ -79,23 +79,32 @@ const createArticle = (req, res, next) => {
 };
 
 const updateArticle = (req, res, next) => {
-    const { title, content } = req.body;
-    const articleId = req.params.articleId;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+  }
 
-    const updatedArticle = { ...ARTICLES.find(a => a.id === articleId)};
-    const articleIndex = ARTICLES.findIndex(a => a.id === articleId);
-    updatedArticle.title = title;
-    updatedArticle.content = content;
+  const { title, content } = req.body;
+  const articleId = req.params.articleId;
 
-    ARTICLES[articleIndex] = updatedArticle;
+  const updatedArticle = { ...ARTICLES.find((a) => a.id === articleId) };
+  const articleIndex = ARTICLES.findIndex((a) => a.id === articleId);
+  updatedArticle.title = title;
+  updatedArticle.content = content;
 
-    res.status(200).json({article: updatedArticle})
+  ARTICLES[articleIndex] = updatedArticle;
+
+  res.status(200).json({ article: updatedArticle });
 };
 
 const deleteArticle = (req, res, next) => {
   const articleId = req.params.articleId;
-  ARTICLES = ARTICLES.filter(a => a.id !== articleId);
-  res.status(200).json({message: 'Deleted place.' });
+  if (!ARTICLES.find(a => a.id === articleId)) {
+    throw new HttpError('Could not find a place for that id.', 404);
+  }
+
+  ARTICLES = ARTICLES.filter((a) => a.id !== articleId);
+  res.status(200).json({ message: "Deleted place." });
 };
 
 exports.getArticleById = getArticleById;
