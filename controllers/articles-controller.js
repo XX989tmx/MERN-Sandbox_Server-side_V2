@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const HttpError = require("../models/http-error");
 
-const ARTICLES = [
+let ARTICLES = [
   {
     id: "a1",
     title: "BIOS",
@@ -16,7 +16,7 @@ const ARTICLES = [
     title: "Memory address",
     content:
       "In computing, a memory address is a reference to a specific memory location used at various levels by software and hardware. Memory addresses are fixed-length sequences of digits conventionally displayed and manipulated as unsigned integers.[1] Such numerical semantic bases itself upon features of CPU (such as the instruction pointer and incremental address registers), as well upon use of the memory like an array endorsed by various programming languages.",
-    author: "u2",
+    author: "u3",
     category: "computer",
   },
   {
@@ -41,19 +41,19 @@ const getArticleById = (req, res, next) => {
   res.json({ article: article });
 };
 
-const getArticleByUserId = (req, res, next) => {
+const getArticlesByUserId = (req, res, next) => {
   const userId = req.params.userId;
-  const article = ARTICLES.find((a) => {
+  const articles = ARTICLES.filter((a) => {
     return a.author === userId;
   });
 
-  if (!article) {
+  if (!articles || articles.length === 0) {
     return next(
-      new HttpError("Could not find a place for the provided user id.", 404)
+      new HttpError("Could not find a articles for the provided user id.", 404)
     );
   }
 
-  res.json({ article: article });
+  res.json({ article: articles });
 };
 
 const createArticle = (req, res, next) => {
@@ -70,6 +70,28 @@ const createArticle = (req, res, next) => {
   res.status(201).json({ article: createdArticle });
 };
 
+const updateArticle = (req, res, next) => {
+    const { title, content } = req.body;
+    const articleId = req.params.articleId;
+
+    const updatedArticle = { ...ARTICLES.find(a => a.id === articleId)};
+    const articleIndex = ARTICLES.findIndex(a => a.id === articleId);
+    updatedArticle.title = title;
+    updatedArticle.content = content;
+
+    ARTICLES[articleIndex] = updatedArticle;
+
+    res.status(200).json({article: updatedArticle})
+};
+
+const deleteArticle = (req, res, next) => {
+  const articleId = req.params.articleId;
+  ARTICLES = ARTICLES.filter(a => a.id !== articleId);
+  res.status(200).json({message: 'Deleted place.' });
+};
+
 exports.getArticleById = getArticleById;
-exports.getArticleByUserId = getArticleByUserId;
+exports.getArticlesByUserId = getArticlesByUserId;
 exports.createArticle = createArticle;
+exports.updateArticle = updateArticle;
+exports.deleteArticle = deleteArticle;
