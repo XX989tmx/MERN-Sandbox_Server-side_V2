@@ -9,7 +9,7 @@ const USERS = [
     name: "tom",
     email: "test@test.com",
     password: "testers",
-  },
+  }
 ];
 
 const getUsers = (req, res, next) => {
