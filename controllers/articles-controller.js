@@ -172,13 +172,29 @@ const updateArticle = async (req, res, next) => {
   res.status(200).json({ article: article.toObject({getters: true}) });
 };
 
-const deleteArticle = (req, res, next) => {
+const deleteArticle = async (req, res, next) => {
   const articleId = req.params.articleId;
-  if (!ARTICLES.find(a => a.id === articleId)) {
-    throw new HttpError('Could not find a place for that id.', 404);
+  
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete article.', 500
+    );
+    return next(error);
   }
 
-  ARTICLES = ARTICLES.filter((a) => a.id !== articleId);
+  try {
+    await article.remove();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete article.",
+      500
+    );
+    return next(error);
+  }
+
   res.status(200).json({ message: "Deleted place." });
 };
 
