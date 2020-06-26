@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require('../util/location');
+const Article = require('../models/article');
 
 let ARTICLES = [
   {
@@ -91,16 +92,25 @@ const createArticle = async (req, res, next) => {
   }
   
 
-  const createdArticle = {
-    id: uuidv4(),
+  const createdArticle = new Article({
     title: title,
     content: content,
-    author: author,
+    address: address,
     location: coordinates,
-    address: address
-  };
+    image: "imageurl",
+    author: author
+  });
 
-  ARTICLES.push(createdArticle);
+  try {
+    await createdArticle.save();
+  // ARTICLES.push(createdArticle);
+  } catch (err) {
+    const error = new HttpError(
+      'Creating article failed, please try again.', 500
+    )
+    return next(error)
+  }
+  
 
   res.status(201).json({ article: createdArticle });
 };
