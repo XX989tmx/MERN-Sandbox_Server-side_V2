@@ -46,17 +46,25 @@ let ARTICLES = [
   },
 ];
 
-const getArticleById = (req, res, next) => {
+const getArticleById = async (req, res, next) => {
   const articleId = req.params.articleId;
-  const article = ARTICLES.find((a) => {
-    return a.id === articleId;
-  });
 
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find a place.', 500
+    );
+    return next(error);
+  }
+  
   if (!article) {
-    throw new HttpError("Could not find a place for the provided id.", 404);
+    const error = new HttpError("Could not find a place for the provided id.", 404);
+    return next(error);
   }
 
-  res.json({ article: article });
+  res.json({ article: article.toObject({getters: true}) });
 };
 
 const getArticlesByUserId = (req, res, next) => {
