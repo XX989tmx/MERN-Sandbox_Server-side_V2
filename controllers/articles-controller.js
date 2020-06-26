@@ -67,11 +67,22 @@ const getArticleById = async (req, res, next) => {
   res.json({ article: article.toObject({getters: true}) });
 };
 
-const getArticlesByUserId = (req, res, next) => {
+const getArticlesByUserId = async (req, res, next) => {
   const userId = req.params.userId;
-  const articles = ARTICLES.filter((a) => {
-    return a.author === userId;
-  });
+
+  let articles;
+  try {
+    articles = await Article.find({author: userId});
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching articles failed, please try again later', 500
+    );
+    return next(error);
+  }
+  
+  // const articles = ARTICLES.filter((a) => {
+  //   return a.author === userId;
+  // });
 
   if (!articles || articles.length === 0) {
     return next(
@@ -79,7 +90,7 @@ const getArticlesByUserId = (req, res, next) => {
     );
   }
 
-  res.json({ article: articles });
+  res.json({ article: articles.map(article => article.toObject({getters: true})) });
 };
 
 const createArticle = async (req, res, next) => {
