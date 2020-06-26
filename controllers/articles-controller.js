@@ -134,7 +134,7 @@ const createArticle = async (req, res, next) => {
   res.status(201).json({ article: createdArticle });
 };
 
-const updateArticle = (req, res, next) => {
+const updateArticle = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new HttpError("Invalid inputs passed, please check your data.", 422);
@@ -143,14 +143,33 @@ const updateArticle = (req, res, next) => {
   const { title, content } = req.body;
   const articleId = req.params.articleId;
 
-  const updatedArticle = { ...ARTICLES.find((a) => a.id === articleId) };
-  const articleIndex = ARTICLES.findIndex((a) => a.id === articleId);
-  updatedArticle.title = title;
-  updatedArticle.content = content;
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update article.',500 
+    );
+    return next(error);
+  }
 
-  ARTICLES[articleIndex] = updatedArticle;
+  // const updatedArticle = { ...ARTICLES.find((a) => a.id === articleId) };
+  // const articleIndex = ARTICLES.findIndex((a) => a.id === articleId);
+  article.title = title;
+  article.content = content;
 
-  res.status(200).json({ article: updatedArticle });
+  try {
+    await article.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update article.",
+      500
+    );
+    return next(error);
+  }
+  // ARTICLES[articleIndex] = updatedArticle;
+
+  res.status(200).json({ article: article.toObject({getters: true}) });
 };
 
 const deleteArticle = (req, res, next) => {
