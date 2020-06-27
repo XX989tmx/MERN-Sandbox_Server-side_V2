@@ -207,7 +207,7 @@ const deleteArticle = async (req, res, next) => {
   
   let article;
   try {
-    article = await Article.findById(articleId);
+    article = await Article.findById(articleId).populate('author');
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not delete article.', 500
@@ -215,8 +215,18 @@ const deleteArticle = async (req, res, next) => {
     return next(error);
   }
 
+  if (!article) {
+    const error = new HttpError('Could not find article for this id.', 404);
+    return next(error)
+  }
+
   try {
-    await article.remove();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await article.remove({session: sess});
+    article.author.articles.pull(article);
+    await article.author.save({session: sess});
+    await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete article.",
