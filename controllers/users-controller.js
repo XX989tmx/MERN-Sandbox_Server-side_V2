@@ -38,7 +38,7 @@ const signup = async (req, res, next) => {
       )) 
     }
 
-    const {name, email, password, articles} = req.body;
+    const {name, email, password} = req.body;
 
     let existingUser;
     try {
@@ -65,7 +65,7 @@ const signup = async (req, res, next) => {
       email: email,
       image: 'url',
       password: password,
-      articles: articles
+      articles: []
     })
 
     try {

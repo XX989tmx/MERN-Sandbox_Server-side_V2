@@ -1,9 +1,12 @@
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const mongoose = require('mongoose');
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require('../util/location');
 const Article = require('../models/article');
+const User = require('../models/user');
+const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 let ARTICLES = [
   {
@@ -120,9 +123,36 @@ const createArticle = async (req, res, next) => {
     author: author
   });
 
+  let user;
+
   try {
-    await createdArticle.save();
-  // ARTICLES.push(createdArticle);
+    user = await User.findById(author);
+  } catch (err) {
+    const error = new HttpError(
+      'Creating article failed, please try again.',
+      500
+    );
+    return next(error)
+  }
+
+  if (!user) {
+    const error = new HttpError(
+      'Could not find user for provided id', 404
+    );
+    return next(error);
+  }
+
+  console.log(user);
+  
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdArticle.save({session: sess});
+    user.articles.push(createdArticle);
+    await user.save({session: sess});
+    await sess.commitTransaction();
+
   } catch (err) {
     const error = new HttpError(
       'Creating article failed, please try again.', 500
