@@ -73,9 +73,9 @@ const getArticleById = async (req, res, next) => {
 const getArticlesByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
-  let articles;
+  let userWithArticles;
   try {
-    articles = await Article.find({author: userId});
+    userWithArticles = await User.findById(userId).populate('articles');
   } catch (err) {
     const error = new HttpError(
       'Fetching articles failed, please try again later', 500
@@ -87,13 +87,17 @@ const getArticlesByUserId = async (req, res, next) => {
   //   return a.author === userId;
   // });
 
-  if (!articles || articles.length === 0) {
+  if (!userWithArticles || userWithArticles.length === 0) {
     return next(
       new HttpError("Could not find a articles for the provided user id.", 404)
     );
   }
 
-  res.json({ article: articles.map(article => article.toObject({getters: true})) });
+  res.json({
+    article: userWithArticles.articles.map((article) =>
+      article.toObject({ getters: true })
+    ),
+  });
 };
 
 const createArticle = async (req, res, next) => {
