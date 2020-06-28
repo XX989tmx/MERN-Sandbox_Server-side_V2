@@ -1,17 +1,17 @@
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 
 const HttpError = require('../models/http-error');
 const User = require('../models/user');
 
-const USERS = [
-  {
-    id: "u1",
-    name: "tom",
-    email: "test@test.com",
-    password: "testers",
-  }
-];
+// const USERS = [
+//   {
+//     id: "u1",
+//     name: "tom",
+//     email: "test@test.com",
+//     password: "testers",
+//   }
+// ];
 
 const getUsers = async (req, res, next) => {
   let users;
