@@ -1,8 +1,8 @@
 // const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 
-const HttpError = require('../models/http-error');
-const User = require('../models/user');
+const HttpError = require("../models/http-error");
+const User = require("../models/user");
 
 // const USERS = [
 //   {
@@ -19,101 +19,93 @@ const getUsers = async (req, res, next) => {
     users = await User.find({}, "-password");
   } catch (err) {
     const error = new HttpError(
-      'Fetching users failed, please try again later.',
+      "Fetching users failed, please try again later.",
       500
     );
-    return next(error)
+    return next(error);
   }
-  res.json({users: users.map(user => user.toObject({getters: true}))})
+  res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log(errors);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
 
-      return next(new HttpError(
-        "Invalid inputs passed, please check your data.",
-        422
-      )) 
-    }
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
 
-    const {name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
-    let existingUser;
-    try {
-      existingUser = await User.findOne({email: email});
-    } catch (err) {
-      const error = HttpError(
-        'Signing up failed, please try again later.',
-        500
-      );
-      return next(error);
-    }
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = HttpError("Signing up failed, please try again later.", 500);
+    return next(error);
+  }
 
-    if (existingUser) {
-      const error = new HttpError(
-        'User exists already, please login instead.',
-        422
-      );
-      return next(error);
-    }
-    
+  if (existingUser) {
+    const error = new HttpError(
+      "User exists already, please login instead.",
+      422
+    );
+    return next(error);
+  }
 
-    const createdUser = new User({
-      name: name,
-      email: email,
-      image: 'url',
-      password: password,
-      articles: []
-    })
+  const createdUser = new User({
+    name: name,
+    email: email,
+    image:
+      "https://static.scientificamerican.com/sciam/cache/file/BCC3BD1E-5DC0-4843-A841706AE575C694_source.jpg?w=590&h=800&39BBF62E-5F96-4C6A-A59590CCF416DA11",
+    password: password,
+    articles: [],
+  });
 
-    try {
-      await createdUser.save();
-      // ARTICLES.push(createdArticle);
-    } catch (err) {
-      const error = new HttpError(
-        "Signing up failed, please try again.",
-        500
-      );
-      return next(error);
-    }
+  try {
+    await createdUser.save();
+    // ARTICLES.push(createdArticle);
+  } catch (err) {
+    const error = new HttpError("Signing up failed, please try again.", 500);
+    return next(error);
+  }
 
-    res.status(201).json({user: createdUser.toObject({getters: true})});
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const login = async (req, res, next) => {
-    const {email, password} = req.body;
+  const { email, password } = req.body;
 
-    let existingUser;
-    try {
-      existingUser = await User.findOne({email: email});
-    } catch (err) {
-      const error = HttpError(
-        'Logging in failed, please try again later.',
-        500
-      );
-      return next(error);
-    }
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = HttpError("Logging in failed, please try again later.", 500);
+    return next(error);
+  }
 
-    if (!existingUser || existingUser.password !== password) {
-      const error = new HttpError(
-        'Invalid credentials, could not log you in.',
-        401
-      );
-      return next(error);
-    }
+  if (!existingUser || existingUser.password !== password) {
+    const error = new HttpError(
+      "Invalid credentials, could not log you in.",
+      401
+    );
+    return next(error);
+  }
 
-    // const identifiedUser = USERS.find(u => u.email === email);
-    // if (!identifiedUser || identifiedUser.password !== password) {
-    //   throw new HttpError(
-    //     "Could not identify user, credentials seem to be wrong.",
-    //     401
-    //   );
-    // }
+  // const identifiedUser = USERS.find(u => u.email === email);
+  // if (!identifiedUser || identifiedUser.password !== password) {
+  //   throw new HttpError(
+  //     "Could not identify user, credentials seem to be wrong.",
+  //     401
+  //   );
+  // }
 
-    res.json({message: "Logged In !"});
-    
+  res.json({
+    message: "Logged In !",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 exports.getUsers = getUsers;

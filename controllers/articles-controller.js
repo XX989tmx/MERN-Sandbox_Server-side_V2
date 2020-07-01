@@ -55,7 +55,7 @@ const getArticlesByUserId = async (req, res, next) => {
   }
 
   res.json({
-    article: userWithArticles.articles.map((article) =>
+    articles: userWithArticles.articles.map((article) =>
       article.toObject({ getters: true })
     ),
   });
@@ -84,8 +84,9 @@ const createArticle = async (req, res, next) => {
     content: content,
     address: address,
     location: coordinates,
-    image: "imageurl",
-    author: author
+    image:
+      "https://static.scientificamerican.com/sciam/cache/file/BCC3BD1E-5DC0-4843-A841706AE575C694_source.jpg?w=590&h=800&39BBF62E-5F96-4C6A-A59590CCF416DA11",
+    author: author,
   });
 
   let user;
