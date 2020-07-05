@@ -152,6 +152,14 @@ const updateArticle = async (req, res, next) => {
     return next(error);
   }
 
+  if (article.author.toString() !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to edit this article.",
+      401
+    );
+    return next(error);
+  }
+
   // const updatedArticle = { ...ARTICLES.find((a) => a.id === articleId) };
   // const articleIndex = ARTICLES.findIndex((a) => a.id === articleId);
   article.title = title;
