@@ -197,6 +197,14 @@ const deleteArticle = async (req, res, next) => {
     return next(error)
   }
 
+  if (article.author.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this article.",
+      401
+    );
+    return next(error);
+  }
+
   const imagePath = article.image;
 
   try {
