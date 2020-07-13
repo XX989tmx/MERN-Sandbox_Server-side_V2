@@ -42,11 +42,22 @@ router.get("/zip/sampleFolder.zip", async (req, res, next) => {
   } catch (error) {}
 });
 
-router.get("/sample.mov", async (req, res, next) => {
+router.get("/mp4/sample-mp4-file.mp4", async (req, res, next) => {
   try {
-    await res.download("downloads/sample.mov");
+    await res.download(
+      path.join("downloads", "mp4Files", "sample-mp4-file.mp4")
+    );
     console.log("1 file was downloaded.. download was successful");
   } catch (error) {}
 });
+
+
+
+// router.get("/mp4/sample-mp4-file.mp4", async (req, res, next) => {
+//   try {
+//     await res.download("downloads/sample.mov");
+//     console.log("1 file was downloaded.. download was successful");
+//   } catch (error) {}
+// });
 
 module.exports = router;
