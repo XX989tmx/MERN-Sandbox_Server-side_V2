@@ -92,6 +92,7 @@ const createArticle = async (req, res, next) => {
     location: coordinates,
     image: req.file.path,
     author: author,
+    wishlists: [],
   });
 
   let user;
@@ -130,6 +131,42 @@ const createArticle = async (req, res, next) => {
 
   res.status(201).json({ article: createdArticle });
 };
+
+
+
+const pushArticleToWishlist = async (req, res, next) => {
+        const articleId = req.params.articleId;
+        const wishlistId = req.params.wishlistId;
+
+        let wishlist;
+        try {
+          wishlist = await Wishlist.findById(wishlistId);
+        } catch (err) {}
+
+        let article;
+        try {
+          article = await Article.findById(articleId);
+        } catch (err) {}
+
+        let wishlistOnArticle;
+        try {
+          wishlistOnArticle = await Wishlist.findById(wishlistId).populate(
+            "wishlist"
+          );
+        } catch (err) {}
+
+        try {
+          const sess = await mongoose.startSession();
+          sess.startTransaction();
+          wishlist.articles.push(article);
+          await wishlist.save({ session: sess });
+          wishlistOnArticle.article.wishlists.push(wishlist);
+          await wishlistOnArticle.save({ session: sess });
+          await sess.commitTransaction();
+        } catch (err) {}
+
+        res.json({ wishlistState: wishlist });
+      };;
 
 const updateArticle = async (req, res, next) => {
   const errors = validationResult(req);
@@ -236,3 +273,5 @@ exports.getArticlesByUserId = getArticlesByUserId;
 exports.createArticle = createArticle;
 exports.updateArticle = updateArticle;
 exports.deleteArticle = deleteArticle;
+exports.pushArticleToWishlist = pushArticleToWishlist; 
+

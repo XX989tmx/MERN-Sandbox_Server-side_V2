@@ -9,7 +9,11 @@ const router = express.Router();
 
 router.get("/:articleId", articlesControllers.getArticleById);
 
+
+
 router.get("/user/:userId", articlesControllers.getArticlesByUserId);
+
+router.get('/push_article_to_wishlist/:articleId/:wishlistId', articlesControllers.pushArticleToWishlist)
 
 router.use(checkAuth);
 

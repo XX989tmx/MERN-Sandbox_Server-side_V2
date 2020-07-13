@@ -11,7 +11,8 @@ const articleSchema = new Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
   },
-  author: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
+  author: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  wishlists:[ { type: mongoose.Types.ObjectId, required: true, ref: "Wishlist" }],
 });
 
 module.exports = mongoose.model('Article', articleSchema);
