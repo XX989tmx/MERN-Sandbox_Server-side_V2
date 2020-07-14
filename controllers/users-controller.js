@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken');
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
+const fs = require("fs");
+const path = require("path");
+
+
 // const USERS = [
 //   {
 //     id: "u1",
@@ -14,6 +18,8 @@ const User = require("../models/user");
 //     password: "testers",
 //   }
 // ];
+
+
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -39,7 +45,16 @@ const signup = async (req, res, next) => {
     );
   }
 
+  
+
   const { name, email, password } = req.body;
+
+  // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), name);
+  // console.log('The "User Name" was appended to file!');
+  // fs.appendFileSync(path.join("downloads", "excelFiles", "username.xlsx"), name);
+  // console.log('The "User Name" was appended to file!');
+  // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), email);
+  // console.log('The "User Email" was appended to file!');
 
   let existingUser;
   try {
@@ -94,7 +109,6 @@ const signup = async (req, res, next) => {
     return next(error);
   }
   
-
   res.status(201).json({ userId: createdUser.id, email: createdUser.email, token: token });
 };
 

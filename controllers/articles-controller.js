@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
@@ -77,6 +78,13 @@ const createArticle = async (req, res, next) => {
   }
 
   const { title, content, author, address } = req.body;
+
+  fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
+  console.log('The "article title" was appended to file!');
+  fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), content);
+  console.log('The "article content" was appended to file!');
+
+  
 
   let coordinates;
   try {

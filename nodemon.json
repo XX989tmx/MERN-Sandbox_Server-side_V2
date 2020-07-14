@@ -4,6 +4,7 @@
         "DB_PASSWORD": "adminx",
         "DB_NAME": "mern",
         "GOOGLE_API_KEY": "AIzaSyAKbhTjRDzON6wtSVg7TVlyB8jsVzz1Rw0",
-        "JWT_KEY": "supersecret_dont_share"
+        "JWT_KEY": "supersecret_dont_share",
+        "SENDGRID_API_KEY": "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"
     }
 }
