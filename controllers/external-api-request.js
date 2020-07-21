@@ -54,6 +54,14 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_USD);
   const USD = `current exchange rate is ${symbol_USD}${last_USD} based on USD`;
 
+  // const USD_DATA = {
+  //   last_USD: last_USD,
+  //   buy_USD: buy_USD,
+  //   sell_USD: sell_USD,
+  //   symbol_USD: symbol_USD,
+  // };
+
+
   // AUD
   const last_AUD = data.AUD.last;
   const buy_AUD = data.AUD.buy;
@@ -302,6 +310,11 @@ const getExternalApi = async (req, res, next) => {
   // } catch (error) {
 
   // }
+  
+  // let last_price_array = [];
+  // last_price_array.push(last_TWD, last_USD, last_JPY, last_THB);
+  // last_price_array.sort();
+  // console.log(last_price_array);
 
   // const c_to_USD_price = data.USD;
 
@@ -319,6 +332,8 @@ const getExternalApi = async (req, res, next) => {
   // let finalResponse = `todays price is ${something}`
 
   // console.log(c_to_f_data);
+
+  
 
   res.json({
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
@@ -339,6 +354,19 @@ const getValueBasedonCurrency = async(req, res, next) => {
 
     res.json({ value_based_on_your_currency: valueBasedOnCurrency })
 };
+
+// const getVideo = async (params) => {
+//   let response;
+//   let responseData;
+//   try {
+//     response = await axios.get("https://vimeo.com/439287536");
+//     const valid = response.isObject();
+
+//     console.log(response);
+//     console.log(valid);
+//   } catch (error) {}
+// };
+// getVideo();
 
 exports.getExternalApi = getExternalApi;
 exports.getValueBasedonCurrency = getValueBasedonCurrency;

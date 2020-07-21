@@ -41,3 +41,7 @@ const userDetailInfoSchema = new Schema({
     //     account_number: "",
     //     branch_code: ""
     // }
+    
+
+  
+    

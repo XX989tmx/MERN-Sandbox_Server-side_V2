@@ -276,6 +276,24 @@ const deleteArticle = async (req, res, next) => {
   res.status(200).json({ message: "Deleted place." });
 };
 
+// const searchQuery = (params) => {
+//   const querystring = require("querystring");
+
+//   const query = Article.find({ title: "Jean-Luc Picard" });
+//   const searchQuery = query.getFilter();
+//   const queryURLByTitle = querystring.stringify(searchQuery);
+//   const finalURL = `http://localhost500/api/articles/search?${queryURLByTitle}`;
+//   // => searchURL for querying Article document by title property
+//   // client でクリックにfinalURLへのPOSTリクエストを割り当てる？？
+
+//   const query = req.query.q;
+//   const searchResult = Article.find({ title: query });
+//   res.json({ searchResult });
+
+
+
+// }
+
 exports.getArticleById = getArticleById;
 exports.getArticlesByUserId = getArticlesByUserId;
 exports.createArticle = createArticle;
