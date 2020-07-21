@@ -97,6 +97,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_AUD);
   const AUD = `current exchange rate is ${symbol_AUD}${last_AUD} based on AUD`;
 
+  const savedAUDCryptoInfo = new Crypto({
+    currency_name: "AUD",
+    last: last_AUD,
+    buy: buy_AUD,
+    sell: sell_AUD,
+    symbol: symbol_AUD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedAUDCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving AUD data to database was successful.");
+  } catch (error) {}
+
   // BRL
   const last_BRL = data.BRL.last;
   const buy_BRL = data.BRL.buy;
@@ -107,6 +124,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_BRL);
   console.log(symbol_BRL);
   const BRL = `current exchange rate is ${symbol_BRL}${last_BRL} based on BRL`;
+
+  const savedBRLCryptoInfo = new Crypto({
+    currency_name: "BRL",
+    last: last_BRL,
+    buy: buy_BRL,
+    sell: sell_BRL,
+    symbol: symbol_BRL,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedBRLCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving BRL data to database was successful.");
+  } catch (error) {}
 
   // CAD
   const last_CAD = data.CAD.last;
@@ -119,6 +153,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_CAD);
   const CAD = `current exchange rate is ${symbol_CAD}${last_CAD} based on CAD`;
 
+  const savedCADCryptoInfo = new Crypto({
+    currency_name: "CAD",
+    last: last_CAD,
+    buy: buy_CAD,
+    sell: sell_CAD,
+    symbol: symbol_CAD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedCADCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving CAD data to database was successful.");
+  } catch (error) {}
+
   // CHF
   const last_CHF = data.CHF.last;
   const buy_CHF = data.CHF.buy;
@@ -129,6 +180,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_CHF);
   console.log(symbol_CHF);
   const CHF = `current exchange rate is ${symbol_CHF}${last_CHF} based on CAD`;
+
+  const savedCHFCryptoInfo = new Crypto({
+    currency_name: "CHF",
+    last: last_CHF,
+    buy: buy_CHF,
+    sell: sell_CHF,
+    symbol: symbol_CHF,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedCHFCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving CHF data to database was successful.");
+  } catch (error) {}
 
   // CLP
   const last_CLP = data.CLP.last;
@@ -141,6 +209,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_CLP);
   const CLP = `current exchange rate is ${symbol_CLP}${last_CLP} based on CLP`;
 
+  const savedCLPCryptoInfo = new Crypto({
+    currency_name: "CLP",
+    last: last_CLP,
+    buy: buy_CLP,
+    sell: sell_CLP,
+    symbol: symbol_CLP,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedCLPCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving CLP data to database was successful.");
+  } catch (error) {}
+
   // CNY
   const last_CNY = data.CNY.last;
   const buy_CNY = data.CNY.buy;
@@ -151,6 +236,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_CNY);
   console.log(symbol_CNY);
   const CNY = `current exchange rate is ${symbol_CNY}${last_CNY} based on CNY`;
+
+  const savedCNYCryptoInfo = new Crypto({
+    currency_name: "CNY",
+    last: last_CNY,
+    buy: buy_CNY,
+    sell: sell_CNY,
+    symbol: symbol_CNY,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedCNYCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving CNY data to database was successful.");
+  } catch (error) {}
 
   // DKK
   const last_DKK = data.DKK.last;
@@ -163,6 +265,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_DKK);
   const DKK = `current exchange rate is ${symbol_DKK}${last_DKK} based on DKK`;
 
+  const savedDKKCryptoInfo = new Crypto({
+    currency_name: "DKK",
+    last: last_DKK,
+    buy: buy_DKK,
+    sell: sell_DKK,
+    symbol: symbol_DKK,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedDKKCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving DKK data to database was successful.");
+  } catch (error) {}
+
   // EUR
   const last_EUR = data.EUR.last;
   const buy_EUR = data.EUR.buy;
@@ -173,6 +292,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_EUR);
   console.log(symbol_EUR);
   const EUR = `current exchange rate is ${symbol_EUR}${last_EUR} based on EUR`;
+
+  const savedEURCryptoInfo = new Crypto({
+    currency_name: "EUR",
+    last: last_EUR,
+    buy: buy_EUR,
+    sell: sell_EUR,
+    symbol: symbol_EUR,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedEURCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving EUR data to database was successful.");
+  } catch (error) {}
 
   // GBP
   const last_GBP = data.GBP.last;
@@ -185,6 +321,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_GBP);
   const GBP = `current exchange rate is ${symbol_GBP}${last_GBP} based on GBP`;
 
+  const savedGBPCryptoInfo = new Crypto({
+    currency_name: "GBP",
+    last: last_GBP,
+    buy: buy_GBP,
+    sell: sell_GBP,
+    symbol: symbol_GBP,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedGBPCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving GBP data to database was successful.");
+  } catch (error) {}
+
   // HKD
   const last_HKD = data.HKD.last;
   const buy_HKD = data.HKD.buy;
@@ -195,6 +348,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_HKD);
   console.log(symbol_HKD);
   const HKD = `current exchange rate is ${symbol_HKD}${last_HKD} based on HKD`;
+
+  const savedHKDCryptoInfo = new Crypto({
+    currency_name: "HKD",
+    last: last_HKD,
+    buy: buy_HKD,
+    sell: sell_HKD,
+    symbol: symbol_HKD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedHKDCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving HKD data to database was successful.");
+  } catch (error) {}
 
   // INR
   const last_INR = data.INR.last;
@@ -207,6 +377,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_INR);
   const INR = `current exchange rate is ${symbol_INR}${last_INR} based on INR`;
 
+  const savedINRCryptoInfo = new Crypto({
+    currency_name: "INR",
+    last: last_INR,
+    buy: buy_INR,
+    sell: sell_INR,
+    symbol: symbol_INR,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedINRCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving INR data to database was successful.");
+  } catch (error) {}
+
   // ISK
   const last_ISK = data.ISK.last;
   const buy_ISK = data.ISK.buy;
@@ -217,6 +404,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_ISK);
   console.log(symbol_ISK);
   const ISK = `current exchange rate is ${symbol_ISK}${last_ISK} based on ISK`;
+
+  const savedISKCryptoInfo = new Crypto({
+    currency_name: "ISK",
+    last: last_ISK,
+    buy: buy_ISK,
+    sell: sell_ISK,
+    symbol: symbol_ISK,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedISKCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving ISK data to database was successful.");
+  } catch (error) {}
 
   // JPY
   const last_JPY = data.JPY.last;
@@ -257,6 +461,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_KRW);
   const KRW = `current exchange rate is  ${symbol_KRW}${last_KRW}  based on KRW`;
 
+  const savedKRWCryptoInfo = new Crypto({
+    currency_name: "KRW",
+    last: last_KRW,
+    buy: buy_KRW,
+    sell: sell_KRW,
+    symbol: symbol_KRW,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedKRWCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving KRW data to database was successful.");
+  } catch (error) {}
+
   // NZD
   const last_NZD = data.NZD.last;
   const buy_NZD = data.NZD.buy;
@@ -267,6 +488,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_NZD);
   console.log(symbol_NZD);
   const NZD = `current exchange rate is  ${symbol_NZD}${last_NZD}  based on NZD`;
+
+  const savedNZDCryptoInfo = new Crypto({
+    currency_name: "NZD",
+    last: last_NZD,
+    buy: buy_NZD,
+    sell: sell_NZD,
+    symbol: symbol_NZD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedNZDCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving NZD data to database was successful.");
+  } catch (error) {}
 
   // PLN
   const last_PLN = data.PLN.last;
@@ -279,6 +517,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_PLN);
   const PLN = `current exchange rate is  ${symbol_PLN}${last_PLN}  based on PLN`;
 
+  const savedPLNCryptoInfo = new Crypto({
+    currency_name: "PLN",
+    last: last_PLN,
+    buy: buy_PLN,
+    sell: sell_PLN,
+    symbol: symbol_PLN,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedPLNCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving PLN data to database was successful.");
+  } catch (error) {}
+
   // RUB
   const last_RUB = data.RUB.last;
   const buy_RUB = data.RUB.buy;
@@ -289,6 +544,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_RUB);
   console.log(symbol_RUB);
   const RUB = `current exchange rate is  ${symbol_RUB}${last_RUB}  based on RUB`;
+
+  const savedRUBCryptoInfo = new Crypto({
+    currency_name: "RUB",
+    last: last_RUB,
+    buy: buy_RUB,
+    sell: sell_RUB,
+    symbol: symbol_RUB,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedRUBCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving RUB data to database was successful.");
+  } catch (error) {}
 
   // SEK
   const last_SEK = data.SEK.last;
@@ -301,6 +573,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_SEK);
   const SEK = `current exchange rate is  ${symbol_SEK}${last_SEK}  based on SEK`;
 
+  const savedSEKCryptoInfo = new Crypto({
+    currency_name: "SEK",
+    last: last_SEK,
+    buy: buy_SEK,
+    sell: sell_SEK,
+    symbol: symbol_SEK,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedSEKCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving SEK data to database was successful.");
+  } catch (error) {}
+
   // SGD
   const last_SGD = data.SGD.last;
   const buy_SGD = data.SGD.buy;
@@ -311,6 +600,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_SGD);
   console.log(symbol_SGD);
   const SGD = `current exchange rate is  ${symbol_SGD}${last_SGD}  based on SGD`;
+
+  const savedSGDCryptoInfo = new Crypto({
+    currency_name: "SGD",
+    last: last_SGD,
+    buy: buy_SGD,
+    sell: sell_SGD,
+    symbol: symbol_SGD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedSGDCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving SGD data to database was successful.");
+  } catch (error) {}
 
   // THB
   const last_THB = data.THB.last;
@@ -323,6 +629,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_THB);
   const THB = `current exchange rate is  ${symbol_THB}${last_THB}  based on THB`;
 
+  const savedTHBCryptoInfo = new Crypto({
+    currency_name: "THB",
+    last: last_THB,
+    buy: buy_THB,
+    sell: sell_THB,
+    symbol: symbol_THB,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedTHBCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving THB data to database was successful.");
+  } catch (error) {}
+
   // TRY
   const last_TRY = data.TRY.last;
   const buy_TRY = data.TRY.buy;
@@ -334,6 +657,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_TRY);
   const TRY = `current exchange rate is  ${symbol_TRY}${last_TRY}  based on TRY`;
 
+  const savedTRYCryptoInfo = new Crypto({
+    currency_name: "TRY",
+    last: last_TRY,
+    buy: buy_TRY,
+    sell: sell_TRY,
+    symbol: symbol_TRY,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedTRYCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving TRY data to database was successful.");
+  } catch (error) {}
+
   // TWD
   const last_TWD = data.TWD.last;
   const buy_TWD = data.TWD.buy;
@@ -344,6 +684,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_TWD);
   console.log(symbol_TWD);
   const TWD = `current exchange rate is  ${symbol_TWD}${last_TWD}  based on TWD`;
+
+  const savedTWDCryptoInfo = new Crypto({
+    currency_name: "TWD",
+    last: last_TWD,
+    buy: buy_TWD,
+    sell: sell_TWD,
+    symbol: symbol_TWD,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedTWDCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving TWD data to database was successful.");
+  } catch (error) {}
 
   // let USD;
   // try {
