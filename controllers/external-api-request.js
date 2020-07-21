@@ -2,8 +2,12 @@ const express = require("express");
 
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const util = require("util");
+const mongoose = require("mongoose");
 
 const getCryptoTicker = require('../util/crypto-ticker');
+
+const Crypto = require('../models/crypto');
 
 const getExternalApi = async (req, res, next) => {
     
@@ -44,6 +48,7 @@ const getExternalApi = async (req, res, next) => {
   console.log(data);
 
   // USD
+
   const last_USD = data.USD.last;
   const buy_USD = data.USD.buy;
   const sell_USD = data.USD.sell;
@@ -53,6 +58,25 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_USD);
   console.log(symbol_USD);
   const USD = `current exchange rate is ${symbol_USD}${last_USD} based on USD`;
+
+  const savedCryptoInfo = new Crypto({
+    currency_name: "USD",
+    last: last_USD,
+    buy: buy_USD,
+    sell: sell_USD,
+    symbol: symbol_USD,
+    timestamp: new Date(Date.now()).toString()
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log('Saving data to database was successful.');
+  } catch (error) {
+    
+  }
 
   // const USD_DATA = {
   //   last_USD: last_USD,
@@ -334,6 +358,12 @@ const getExternalApi = async (req, res, next) => {
   // console.log(c_to_f_data);
 
   
+  console.log(util.isNumber(last_HKD)); 
+  console.log(util.isNumber(buy_HKD));
+  console.log(util.isNumber(sell_HKD));
+  console.log(util.isString(symbol_HKD));
+  console.log(util.isString(new Date(Date.now()).toString()));
+  // console.log(Number.isInteger(last_HKD));
 
   res.json({
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
@@ -342,6 +372,7 @@ const getExternalApi = async (req, res, next) => {
 
 const getValueBasedonCurrency = async(req, res, next) => {
   const { currency, value } = req.body;
+  console.log(currency);
 
     let valueBasedOnCurrency;
 
