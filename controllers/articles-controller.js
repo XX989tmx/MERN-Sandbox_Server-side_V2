@@ -141,7 +141,6 @@ const createArticle = async (req, res, next) => {
 };
 
 
-
 const pushArticleToWishlist = async (req, res, next) => {
         const articleId = req.params.articleId;
         const wishlistId = req.params.wishlistId;

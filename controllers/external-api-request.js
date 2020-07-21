@@ -59,7 +59,7 @@ const getExternalApi = async (req, res, next) => {
   console.log(symbol_USD);
   const USD = `current exchange rate is ${symbol_USD}${last_USD} based on USD`;
 
-  const savedCryptoInfo = new Crypto({
+  const savedUSDCryptoInfo = new Crypto({
     currency_name: "USD",
     last: last_USD,
     buy: buy_USD,
@@ -71,9 +71,9 @@ const getExternalApi = async (req, res, next) => {
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    await savedCryptoInfo.save({ session: sess });
+    await savedUSDCryptoInfo.save({ session: sess });
     await sess.commitTransaction();
-    console.log('Saving data to database was successful.');
+    console.log('Saving USD data to database was successful.');
   } catch (error) {
     
   }
@@ -228,6 +228,23 @@ const getExternalApi = async (req, res, next) => {
   console.log(sell_JPY);
   console.log(symbol_JPY);
   const JPY = `current exchange rate is  ${symbol_JPY}${last_JPY} yen based on JPY`;
+
+  const savedJPYCryptoInfo = new Crypto({
+    currency_name: "JPY",
+    last: last_JPY,
+    buy: buy_JPY,
+    sell: sell_JPY,
+    symbol: symbol_JPY,
+    timestamp: new Date(Date.now()).toString(),
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await savedJPYCryptoInfo.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving JPY data to database was successful.");
+  } catch (error) {}
 
   // KRW
   const last_KRW = data.KRW.last;
