@@ -3,6 +3,18 @@ const router = express.Router();
 const fs = require("fs");
 const path = require("path");
 
+router.get("/pdf");
+router.get("/xlsx");
+router.get("/images");
+router.get("/txt");
+router.get("/zip");
+router.get("/mp4");
+
+router.get("/pdf/report/years/1950_60");
+router.get("/pdf/report/years/1990_2000");
+router.get("/pdf/report/user_generated/");
+
+
 router.get('/pdf/sample.pdf', async (req, res, next) => {
     try {
         // await res.download("downloads/pdfFiles/sample.pdf");
