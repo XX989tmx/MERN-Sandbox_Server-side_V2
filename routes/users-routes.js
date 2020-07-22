@@ -21,4 +21,18 @@ router.post(
 
 router.post("/login", usersControllers.login);
 
+router.post(
+  "/:userId/user_detail_info/create",
+  [
+    check("country").not().isEmpty(),
+    check("zip_code").not().isEmpty(),
+    check("todoufuken").not().isEmpty(),
+    check("shichousonku").not().isEmpty(),
+    check("banchi").not().isEmpty(),
+    check("name_of_residence").not().isEmpty(),
+    check("phone_number").not().isEmpty()
+  ],
+  usersControllers.createUserDetailInfo
+);
+
 module.exports = router;

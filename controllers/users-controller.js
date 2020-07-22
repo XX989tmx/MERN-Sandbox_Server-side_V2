@@ -1,14 +1,16 @@
 // const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
+const UserDetailInfo = require("../models/user-detail-info");
 
 const fs = require("fs");
 const path = require("path");
-
+const user = require("../models/user");
 
 // const USERS = [
 //   {
@@ -18,8 +20,6 @@ const path = require("path");
 //     password: "testers",
 //   }
 // ];
-
-
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -44,8 +44,6 @@ const signup = async (req, res, next) => {
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
   }
-
-  
 
   const { name, email, password } = req.body;
 
@@ -76,10 +74,12 @@ const signup = async (req, res, next) => {
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
-    const error = new HttpError('Could not create user, please try again.', 500);
+    const error = new HttpError(
+      "Could not create user, please try again.",
+      500
+    );
     return next(error);
   }
-  
 
   const createdUser = new User({
     name: name,
@@ -108,8 +108,10 @@ const signup = async (req, res, next) => {
     const error = new HttpError("Signing up failed, please try again.", 500);
     return next(error);
   }
-  
-  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token: token });
+
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token: token });
 };
 
 const login = async (req, res, next) => {
@@ -135,7 +137,10 @@ const login = async (req, res, next) => {
   try {
     isValidPassword = await bcrypt.compare(password, existingUser.password);
   } catch (err) {
-    const error = new HttpError('Could not log you in, please check your credentials and try again.', 500);
+    const error = new HttpError(
+      "Could not log you in, please check your credentials and try again.",
+      500
+    );
     return next(error);
   }
 
@@ -146,7 +151,7 @@ const login = async (req, res, next) => {
     );
     return next(error);
   }
-  
+
   let token;
   try {
     token = jwt.sign(
@@ -162,10 +167,69 @@ const login = async (req, res, next) => {
   res.json({
     userId: existingUser.id,
     email: existingUser.email,
-    token: token
+    token: token,
+  });
+};
+
+const createUserDetailInfo = async (req, res, next) => {
+  const user_id = req.params.userId;
+  console.log(user_id);
+
+  const {
+    country,
+    zip_code,
+    todoufuken,
+    shichousonku,
+    banchi,
+    name_of_residence,
+    phone_number,
+  } = req.body;
+  console.log(zip_code);
+
+  const createdUserDetailInfo = new UserDetailInfo({
+    // user_id,
+    country: country,
+    zip_code: zip_code,
+    todoufuken: todoufuken,
+    shichousonku: shichousonku,
+    banchi: banchi,
+    name_of_residence: name_of_residence,
+    phone_number: phone_number,
+  });
+
+  // let existingUser;
+  // try {
+  //   existingUser = await User.findById(user_id);
+  //   console.log(existingUser.email);
+  // } catch (error) {
+
+  // };
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdUserDetailInfo.save({ session: sess });
+    // existingUser.user_detail_infos.push(createdUserDetailInfo.id);
+    // await existingUser.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.status(201).json({
+    // country, zip_code, todoufuken, shichousonku, banchi, name_of_residence, phone_number,
+    country: createdUserDetailInfo.country,
+    zip_code: createdUserDetailInfo.zip_code,
+    todoufuken: createdUserDetailInfo.todoufuken,
+    shichousonku: createdUserDetailInfo.shichousonku,
+    banchi: createdUserDetailInfo.banchi,
+    name_of_residence: createdUserDetailInfo.name_of_residence,
+    phone_number: createdUserDetailInfo.phone_number,
+    a: "a",
   });
 };
 
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
+exports.createUserDetailInfo = createUserDetailInfo;

@@ -3,45 +3,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userDetailInfoSchema = new Schema({
-  user_id: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-  address: [
-    {
-      country: "",
-      zip_code: "",
-      todoufuken: "",
-      shichousonku: "",
-      banchi: "",
-      name_of_residence: "",
-    },
-  ],
-  phone_numbers: [
-    {
-      phone_number: "11111111111",
-    },
-    {
-      phone_number: "22222222222",
-    },
-  ],
-  //   default_payment_method: "creditCard2",
-  //   optional_payment_method: ["creditCard1", "bank1"
-  //   ]
+  country: { type: String, required: true },
+  zip_code: { type: String, required: true },
+  todoufuken: { type: String, required: true },
+  shichousonku: { type: String, required: true },
+  banchi: { type: String, required: true },
+  name_of_residence: { type: String, required: true },
+  phone_number: { type: String, required: true },
 });
-    // { type: "credit_card",
-    //   card_type: "visa",
-    //   card_name: "aaaaaaaaa",
-    //   card_number: "11111111111",
-    //   expiration_date: ISODate("01-25-1896"),
-    // },
-    // {
-    //     type: "bank",
-    //     account_number: "",
-    //     branch_code: ""
-    // }
-    
-
-  
-    
+module.exports = mongoose.model("UserDetailInfo", userDetailInfoSchema);
