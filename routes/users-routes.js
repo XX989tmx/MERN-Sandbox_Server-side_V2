@@ -36,5 +36,7 @@ router.post(
 );
 
 router.get("/:userId/user_detail_info/show", usersControllers.showUserDetailInfo);
+router.patch("/:userId/user_detail_info/update", usersControllers.updateUserDetailInfo);
+
 
 module.exports = router;

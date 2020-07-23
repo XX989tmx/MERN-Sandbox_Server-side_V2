@@ -217,7 +217,7 @@ const createUserDetailInfo = async (req, res, next) => {
   }
 
   res.status(201).json({
-    // country, zip_code, todoufuken, shichousonku, banchi, name_of_residence, phone_number,
+    
     country: createdUserDetailInfo.country,
     zip_code: createdUserDetailInfo.zip_code,
     todoufuken: createdUserDetailInfo.todoufuken,
@@ -253,6 +253,56 @@ const showUserDetailInfo = async (req, res, next) => {
     banchi: existingUserDetailInfo[0].banchi,
     name_of_residence: existingUserDetailInfo[0].name_of_residence,
     phone_number: existingUserDetailInfo[0].phone_number,
+    
+  });
+};
+
+const updateUserDetailInfo = async (req, res, next) => {
+  const user_id = req.params.userId;
+  const {
+    country,
+    zip_code,
+    todoufuken,
+    shichousonku,
+    banchi,
+    name_of_residence,
+    phone_number,
+  } = req.body;
+
+  let existingUserDetailInfo;
+  try {
+    existingUserDetailInfo = await UserDetailInfo.find({ user_id: user_id })
+      .limit(1)
+      .sort({ $natural: -1 });
+  } catch (error) {
+    
+  };
+
+  existingUserDetailInfo[0].country = country;
+  existingUserDetailInfo[0].zip_code = zip_code;
+  existingUserDetailInfo[0].todoufuken = todoufuken;
+  existingUserDetailInfo[0].shichousonku = shichousonku;
+  existingUserDetailInfo[0].banchi = banchi;
+  existingUserDetailInfo[0].name_of_residence = name_of_residence;
+  existingUserDetailInfo[0].phone_number = phone_number;
+
+  console.log(existingUserDetailInfo[0]);
+
+  try {
+    existingUserDetailInfo[0].save();
+  } catch (error) {
+    
+  }
+
+  res.json({
+    country: existingUserDetailInfo[0].country,
+    zip_code: existingUserDetailInfo[0].zip_code,
+    todoufuken: existingUserDetailInfo[0].todoufuken,
+    shichousonku: existingUserDetailInfo[0].shichousonku,
+    banchi: existingUserDetailInfo[0].banchi,
+    name_of_residence: existingUserDetailInfo[0].name_of_residence,
+    phone_number: existingUserDetailInfo[0].phone_number,
+    
   });
 };
 
@@ -261,3 +311,4 @@ exports.signup = signup;
 exports.login = login;
 exports.createUserDetailInfo = createUserDetailInfo;
 exports.showUserDetailInfo = showUserDetailInfo;
+exports.updateUserDetailInfo = updateUserDetailInfo;
