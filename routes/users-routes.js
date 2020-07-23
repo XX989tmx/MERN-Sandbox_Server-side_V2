@@ -35,4 +35,6 @@ router.post(
   usersControllers.createUserDetailInfo
 );
 
+router.get("/:userId/user_detail_info/show", usersControllers.showUserDetailInfo);
+
 module.exports = router;

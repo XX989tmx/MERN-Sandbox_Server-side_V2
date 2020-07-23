@@ -187,7 +187,7 @@ const createUserDetailInfo = async (req, res, next) => {
   console.log(zip_code);
 
   const createdUserDetailInfo = new UserDetailInfo({
-    // user_id,
+    user_id,
     country: country,
     zip_code: zip_code,
     todoufuken: todoufuken,
@@ -229,7 +229,35 @@ const createUserDetailInfo = async (req, res, next) => {
   });
 };
 
+const showUserDetailInfo = async (req, res, next) => {
+  const user_id = req.params.userId;
+
+  let existingUserDetailInfo;
+  try {
+    // existingUserDetailInfo = await UserDetailInfo.find()
+    //   { user_id: user_id },
+    //   { sort: { $natural: -1 } }
+    // );
+    existingUserDetailInfo = await UserDetailInfo.find({ user_id: user_id })
+      .limit(1)
+      .sort({ $natural: -1 });
+    console.log(existingUserDetailInfo[0]);
+    console.log(existingUserDetailInfo[0].zip_code);
+  } catch (error) {}
+
+  res.json({
+    country: existingUserDetailInfo[0].country,
+    zip_code: existingUserDetailInfo[0].zip_code,
+    todoufuken: existingUserDetailInfo[0].todoufuken,
+    shichousonku: existingUserDetailInfo[0].shichousonku,
+    banchi: existingUserDetailInfo[0].banchi,
+    name_of_residence: existingUserDetailInfo[0].name_of_residence,
+    phone_number: existingUserDetailInfo[0].phone_number,
+  });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
 exports.createUserDetailInfo = createUserDetailInfo;
+exports.showUserDetailInfo = showUserDetailInfo;

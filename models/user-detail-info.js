@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userDetailInfoSchema = new Schema({
+  user_id: { type: String, required: true },
   country: { type: String, required: true },
   zip_code: { type: String, required: true },
   todoufuken: { type: String, required: true },
