@@ -290,7 +290,18 @@ const getArticleByCategory = async(req,res,next) => {
   console.log(categoryMatchedArticles);
   console.log('category based sorting done.');
 
-  res.json({categoryMatchedArticles: categoryMatchedArticles.map(article => article.toObject({getters: true}))})
+  let countByCategory;
+  try {
+    countByCategory = await Article.count({ categories: categories });
+  } catch (error) {}
+  console.log(countByCategory);
+
+  res.json({
+    categoryMatchedArticles: categoryMatchedArticles.map((article) =>
+      article.toObject({ getters: true })
+    ),
+    countByCategory: countByCategory,
+  });
 };
 
 const getArticleByTag = async(req, res, next) => {
@@ -307,7 +318,18 @@ const getArticleByTag = async(req, res, next) => {
   console.log(tagMatchedArticles);
   console.log('tag based sorting done');
 
-  res.json({tagMatchedArticles: tagMatchedArticles.map(article => article.toObject({getters: true}))})
+  let countByTag;
+  try {
+    countByTag = await Article.count({ tags: tags });
+  } catch (error) {}
+  console.log(countByTag);
+
+  res.json({
+    tagMatchedArticles: tagMatchedArticles.map((article) =>
+      article.toObject({ getters: true })
+    ),
+    countByTag: countByTag,
+  });
 };
 
 const countArticlesByCategory = async(req, res, next) => {
