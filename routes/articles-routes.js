@@ -24,6 +24,12 @@ router.get(
   articlesControllers.getArticleByCategory
 );
 
+router.get("/count_article_by_category/:categories",articlesControllers.countArticlesByCategory);
+router.get(
+  "/count_article_by_tag/:tags",
+  articlesControllers.countArticlesByTag
+);
+
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);
 // ここより下はauthentication必須

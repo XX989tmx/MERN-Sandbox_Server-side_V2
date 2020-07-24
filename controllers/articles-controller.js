@@ -310,9 +310,36 @@ const getArticleByTag = async(req, res, next) => {
   res.json({tagMatchedArticles: tagMatchedArticles.map(article => article.toObject({getters: true}))})
 };
 
-const countArticlesByCategory = (req, res, next) => {};
+const countArticlesByCategory = async(req, res, next) => {
+  const categories = req.params.categories;
 
-const countArticlesByTag = (req, res, next) => {};
+  let countByCategory;
+  try {
+    countByCategory = await Article.count({ categories: categories });
+    
+  } catch (error) {
+    
+  }
+   console.log(countByCategory);
+   console.log("extracting data was succsessfull");
+
+  
+
+  res.json({ countByCategory: countByCategory });
+};
+
+const countArticlesByTag = async(req, res, next) => {
+  const tags = req.params.tags;
+
+  let countByTag;
+  try {
+    countByTag = await Article.count({ tags: tags });
+  } catch (error) {}
+  console.log(countByTag);
+  console.log("extracting data was succsessfull");
+
+  res.json({ countByTag: countByTag });
+};
 
 const sortArticleByTimestamp = (req, res, next) => {};
 
@@ -342,4 +369,6 @@ exports.deleteArticle = deleteArticle;
 exports.pushArticleToWishlist = pushArticleToWishlist; 
 exports.getArticleByCategory = getArticleByCategory;
 exports.getArticleByTag = getArticleByTag;
+exports.countArticlesByCategory = countArticlesByCategory;
+exports.countArticlesByTag = countArticlesByTag;
 
