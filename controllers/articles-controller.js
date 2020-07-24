@@ -278,8 +278,19 @@ const deleteArticle = async (req, res, next) => {
   res.status(200).json({ message: "Deleted place." });
 };
 
-const getArticleByCategory = (req,res,next) => {
-  
+const getArticleByCategory = async(req,res,next) => {
+  const categories = req.params.categories;
+
+  let categoryMatchedArticles;
+  try {
+    categoryMatchedArticles = await Article.find({categories: categories }); 
+  } catch (error) {
+    
+  }
+  console.log(categoryMatchedArticles);
+  console.log('category based sorting done.');
+
+  res.json({categoryMatchedArticles: categoryMatchedArticles.map(article => article.toObject({getters: true}))})
 };
 
 const getArticleByTag = async(req, res, next) => {
@@ -294,6 +305,7 @@ const getArticleByTag = async(req, res, next) => {
     
   }
   console.log(tagMatchedArticles);
+  console.log('tag based sorting done');
 
   res.json({tagMatchedArticles: tagMatchedArticles.map(article => article.toObject({getters: true}))})
 };
