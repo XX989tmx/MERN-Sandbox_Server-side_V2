@@ -11,6 +11,23 @@ const Article = require("../models/article");
 const User = require("../models/user");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 
+const allArticles = async (req, res, next) => {
+  let articles;
+  try {
+    articles = await Article.find();
+  } catch (error) {}
+
+  try {
+    count = await Article.count();
+  } catch (error) {}
+  console.log(count);
+
+  res.json({
+    articles: articles.map((a) => a.toObject({ getters: true })),
+    count: count,
+  });
+};
+
 const getArticleById = async (req, res, next) => {
   const articleId = req.params.articleId;
 
@@ -77,14 +94,12 @@ const createArticle = async (req, res, next) => {
     );
   }
 
-  const { title, content, author, address, categories, tags} = req.body;
+  const { title, content, author, address, categories, tags } = req.body;
 
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   console.log('The "article title" was appended to file!');
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), content);
   console.log('The "article content" was appended to file!');
-
-  
 
   let coordinates;
   try {
@@ -143,40 +158,39 @@ const createArticle = async (req, res, next) => {
   res.status(201).json({ article: createdArticle });
 };
 
-
 const pushArticleToWishlist = async (req, res, next) => {
-        const articleId = req.params.articleId;
-        const wishlistId = req.params.wishlistId;
+  const articleId = req.params.articleId;
+  const wishlistId = req.params.wishlistId;
 
-        let wishlist;
-        try {
-          wishlist = await Wishlist.findById(wishlistId);
-        } catch (err) {}
+  let wishlist;
+  try {
+    wishlist = await Wishlist.findById(wishlistId);
+  } catch (err) {}
 
-        let article;
-        try {
-          article = await Article.findById(articleId);
-        } catch (err) {}
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (err) {}
 
-        let wishlistOnArticle;
-        try {
-          wishlistOnArticle = await Wishlist.findById(wishlistId).populate(
-            "wishlist"
-          );
-        } catch (err) {}
+  let wishlistOnArticle;
+  try {
+    wishlistOnArticle = await Wishlist.findById(wishlistId).populate(
+      "wishlist"
+    );
+  } catch (err) {}
 
-        try {
-          const sess = await mongoose.startSession();
-          sess.startTransaction();
-          wishlist.articles.push(article);
-          await wishlist.save({ session: sess });
-          wishlistOnArticle.article.wishlists.push(wishlist);
-          await wishlistOnArticle.save({ session: sess });
-          await sess.commitTransaction();
-        } catch (err) {}
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    wishlist.articles.push(article);
+    await wishlist.save({ session: sess });
+    wishlistOnArticle.article.wishlists.push(wishlist);
+    await wishlistOnArticle.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {}
 
-        res.json({ wishlistState: wishlist });
-      };;
+  res.json({ wishlistState: wishlist });
+};
 
 const updateArticle = async (req, res, next) => {
   const errors = validationResult(req);
@@ -278,17 +292,15 @@ const deleteArticle = async (req, res, next) => {
   res.status(200).json({ message: "Deleted place." });
 };
 
-const getArticleByCategory = async(req,res,next) => {
+const getArticleByCategory = async (req, res, next) => {
   const categories = req.params.categories;
 
   let categoryMatchedArticles;
   try {
-    categoryMatchedArticles = await Article.find({categories: categories }); 
-  } catch (error) {
-    
-  }
+    categoryMatchedArticles = await Article.find({ categories: categories });
+  } catch (error) {}
   console.log(categoryMatchedArticles);
-  console.log('category based sorting done.');
+  console.log("category based sorting done.");
 
   let countByCategory;
   try {
@@ -304,19 +316,17 @@ const getArticleByCategory = async(req,res,next) => {
   });
 };
 
-const getArticleByTag = async(req, res, next) => {
+const getArticleByTag = async (req, res, next) => {
   const tags = req.params.tags;
   console.log(tags);
   const userId = req.params.userId;
 
   let tagMatchedArticles;
   try {
-    tagMatchedArticles = await Article.find({tags: tags }); 
-  } catch (error) {
-    
-  }
+    tagMatchedArticles = await Article.find({ tags: tags });
+  } catch (error) {}
   console.log(tagMatchedArticles);
-  console.log('tag based sorting done');
+  console.log("tag based sorting done");
 
   let countByTag;
   try {
@@ -332,25 +342,20 @@ const getArticleByTag = async(req, res, next) => {
   });
 };
 
-const countArticlesByCategory = async(req, res, next) => {
+const countArticlesByCategory = async (req, res, next) => {
   const categories = req.params.categories;
 
   let countByCategory;
   try {
     countByCategory = await Article.count({ categories: categories });
-    
-  } catch (error) {
-    
-  }
-   console.log(countByCategory);
-   console.log("extracting data was succsessfull");
-
-  
+  } catch (error) {}
+  console.log(countByCategory);
+  console.log("extracting data was succsessfull");
 
   res.json({ countByCategory: countByCategory });
 };
 
-const countArticlesByTag = async(req, res, next) => {
+const countArticlesByTag = async (req, res, next) => {
   const tags = req.params.tags;
 
   let countByTag;
@@ -364,6 +369,39 @@ const countArticlesByTag = async(req, res, next) => {
 };
 
 const sortArticleByTimestamp = (req, res, next) => {};
+
+// const searchQuery = async(req, res, next) => {
+//   let results;
+//   try {
+//     results = await Article.aggregate([
+//     {
+//       $search: {
+//         queryString: {
+//           defaultPath: "content",
+//           query: "a",
+//         },
+//       },
+//     },
+//     {
+//       $limit: 3,
+//     },
+//     {
+//       $project: {
+//         _id: 0,
+//         title: 1,
+//         content: 1,
+//         image: 0,
+//         address: 0,
+//         location: 0,
+//         author: 0
+//       },
+//     },
+//   ]);
+//   } catch (error) {
+
+//   }
+//   res.json({results: results.map(r => r.toObject({getters: true}))})
+// }
 
 // const searchQuery = (params) => {
 //   const querystring = require("querystring");
@@ -379,8 +417,6 @@ const sortArticleByTimestamp = (req, res, next) => {};
 //   const searchResult = Article.find({ title: query });
 //   res.json({ searchResult });
 
-
-
 // }
 
 exports.getArticleById = getArticleById;
@@ -388,9 +424,9 @@ exports.getArticlesByUserId = getArticlesByUserId;
 exports.createArticle = createArticle;
 exports.updateArticle = updateArticle;
 exports.deleteArticle = deleteArticle;
-exports.pushArticleToWishlist = pushArticleToWishlist; 
+exports.pushArticleToWishlist = pushArticleToWishlist;
 exports.getArticleByCategory = getArticleByCategory;
 exports.getArticleByTag = getArticleByTag;
 exports.countArticlesByCategory = countArticlesByCategory;
 exports.countArticlesByTag = countArticlesByTag;
-
+exports.allArticles = allArticles;

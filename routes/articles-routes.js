@@ -7,28 +7,33 @@ const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
+router.get("/all", articlesControllers.allArticles);
+
 router.get("/:articleId", articlesControllers.getArticleById);
-
-
 
 router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
-router.get('/push_article_to_wishlist/:articleId/:wishlistId', articlesControllers.pushArticleToWishlist)
-
 router.get(
-  "/get_article_by_tags/:tags",
-  articlesControllers.getArticleByTag
+  "/push_article_to_wishlist/:articleId/:wishlistId",
+  articlesControllers.pushArticleToWishlist
 );
+
+router.get("/get_article_by_tags/:tags", articlesControllers.getArticleByTag);
 router.get(
   "/get_article_by_categories/:categories",
   articlesControllers.getArticleByCategory
 );
 
-router.get("/count_article_by_category/:categories",articlesControllers.countArticlesByCategory);
+router.get(
+  "/count_article_by_category/:categories",
+  articlesControllers.countArticlesByCategory
+);
 router.get(
   "/count_article_by_tag/:tags",
   articlesControllers.countArticlesByTag
 );
+
+
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);
@@ -50,8 +55,6 @@ router.patch(
   [check("title").not().isEmpty(), check("content").isLength({ min: 5 })],
   articlesControllers.updateArticle
 );
-
-
 
 router.delete("/:articleId", articlesControllers.deleteArticle);
 
