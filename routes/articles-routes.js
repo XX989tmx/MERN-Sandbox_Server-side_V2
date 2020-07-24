@@ -15,7 +15,18 @@ router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
 router.get('/push_article_to_wishlist/:articleId/:wishlistId', articlesControllers.pushArticleToWishlist)
 
+router.get(
+  "/get_article_by_tags/:tags",
+  articlesControllers.getArticleByTag
+);
+router.get(
+  "/get_article_by_categories/:categories",
+  articlesControllers.getArticleByCategory
+);
+
+// ここより前はauth無しでアクセス可能
 router.use(checkAuth);
+// ここより下はauthentication必須
 
 router.post(
   "/",
@@ -33,6 +44,8 @@ router.patch(
   [check("title").not().isEmpty(), check("content").isLength({ min: 5 })],
   articlesControllers.updateArticle
 );
+
+
 
 router.delete("/:articleId", articlesControllers.deleteArticle);
 

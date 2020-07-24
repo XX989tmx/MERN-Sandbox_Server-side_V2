@@ -12,7 +12,13 @@ const articleSchema = new Schema({
     lng: { type: Number, required: true },
   },
   author: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
-  wishlists:[ { type: mongoose.Types.ObjectId, required: true, ref: "Wishlist" }],
+  wishlists: [
+    { type: mongoose.Types.ObjectId, required: true, ref: "Wishlist" },
+  ],
+  categories: [{ type: String, required: true }],
+  date_created: { type: String, required: true },
+  tags: [{ type: String, required: true }],
+  // review: { type: Number, required: true },
 });
 
 module.exports = mongoose.model('Article', articleSchema);

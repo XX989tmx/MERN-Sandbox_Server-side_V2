@@ -77,7 +77,7 @@ const createArticle = async (req, res, next) => {
     );
   }
 
-  const { title, content, author, address } = req.body;
+  const { title, content, author, address, categories, tags} = req.body;
 
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   console.log('The "article title" was appended to file!');
@@ -101,6 +101,9 @@ const createArticle = async (req, res, next) => {
     image: req.file.path,
     author: author,
     wishlists: [],
+    categories: categories,
+    date_created: new Date(Date.now()).toString(),
+    tags: tags,
   });
 
   let user;
@@ -275,6 +278,32 @@ const deleteArticle = async (req, res, next) => {
   res.status(200).json({ message: "Deleted place." });
 };
 
+const getArticleByCategory = (req,res,next) => {
+  
+};
+
+const getArticleByTag = async(req, res, next) => {
+  const tags = req.params.tags;
+  console.log(tags);
+  const userId = req.params.userId;
+
+  let tagMatchedArticles;
+  try {
+    tagMatchedArticles = await Article.find({tags: tags }); 
+  } catch (error) {
+    
+  }
+  console.log(tagMatchedArticles);
+
+  res.json({tagMatchedArticles: tagMatchedArticles.map(article => article.toObject({getters: true}))})
+};
+
+const countArticlesByCategory = (req, res, next) => {};
+
+const countArticlesByTag = (req, res, next) => {};
+
+const sortArticleByTimestamp = (req, res, next) => {};
+
 // const searchQuery = (params) => {
 //   const querystring = require("querystring");
 
@@ -299,4 +328,6 @@ exports.createArticle = createArticle;
 exports.updateArticle = updateArticle;
 exports.deleteArticle = deleteArticle;
 exports.pushArticleToWishlist = pushArticleToWishlist; 
+exports.getArticleByCategory = getArticleByCategory;
+exports.getArticleByTag = getArticleByTag;
 
