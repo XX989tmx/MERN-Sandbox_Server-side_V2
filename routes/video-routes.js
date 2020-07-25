@@ -5,7 +5,7 @@ const videoControllers = require('../controllers/video-controllers');
 
 router.get("/index", videoControllers.getAllVideos);
 
-router.get("/new", videoControllers.createNewVideo);
+router.post("/new", videoControllers.createNewVideo);
 
 router.get('/:videoId', videoControllers.getVideoById);
 

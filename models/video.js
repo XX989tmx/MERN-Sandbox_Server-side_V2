@@ -9,7 +9,7 @@ const videoSchema = new Schema({
   src: { type: String, required: true },
   tags: [{ type: String, required: true }],
   categories: [{ type: String, required: true }],
-  genre: [{ type: String, required: true }],
+  // genre: [{ type: String, required: true }],
   date_created: { type: String, required: true },
   // admin: { type: mongoose.Types.ObjectId, required: true, ref: "Admin" },
   // likes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Like" }],
