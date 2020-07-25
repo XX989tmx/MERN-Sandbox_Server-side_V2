@@ -15,6 +15,7 @@ const zipfileUploadRoutes = require('./routes/zipfile-upload-routes');
 const getExternalApiRoutes = require('./routes/external-api-routes');
 
 const zipUpload = require('./middleware/zip-file-upload');
+const videoRoutes = require('./routes/video-routes');
 
 
 const app = express();
@@ -43,6 +44,8 @@ app.use("/api/download", downloadRoutes);
 app.use("/api/upload", zipfileUploadRoutes);
 
 app.use("/api/get_external_api", getExternalApiRoutes);
+
+app.use("/api/videos", videoRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
