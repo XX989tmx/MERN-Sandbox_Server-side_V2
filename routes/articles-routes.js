@@ -33,7 +33,7 @@ router.get(
   articlesControllers.countArticlesByTag
 );
 
-
+router.get("/get_specific_article_by_id/:articleId", articlesControllers.getSpecificArticleById)
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);

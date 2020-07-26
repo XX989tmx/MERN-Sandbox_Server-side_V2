@@ -370,6 +370,20 @@ const countArticlesByTag = async (req, res, next) => {
 
 const sortArticleByTimestamp = (req, res, next) => {};
 
+const getSpecificArticleById = async(req, res, next) => {
+  const articleId = req.params.articleId;
+
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (error) {
+    
+  };
+  console.log(article);
+
+  res.json({article: article.toObject({getters:true})})
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -430,3 +444,4 @@ exports.getArticleByTag = getArticleByTag;
 exports.countArticlesByCategory = countArticlesByCategory;
 exports.countArticlesByTag = countArticlesByTag;
 exports.allArticles = allArticles;
+exports.getSpecificArticleById = getSpecificArticleById;
