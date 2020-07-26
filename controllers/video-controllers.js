@@ -69,6 +69,46 @@ const createNewVideo = async (req, res, next) => {
   res.json({ createdVideo });
 };
 
+const getVideoByTags = async(req, res, next) => {
+    const tags = req.params.tags;
+
+    let tagMatchedVideos;
+    try {
+        tagMatchedVideos = await Video.find({ tags: tags });
+    } catch (error) {
+        
+    }
+    console.log(tagMatchedVideos);
+
+    let countByTag;
+    try {
+        countByTag = await Video.count({ tags: tags });
+    } catch (error) {
+        
+    }
+    console.log(countByTag);
+
+    res.json({
+      tagMatchedVideos: tagMatchedVideos.map((video) =>
+        video.toObject({ getters: true })
+      ),
+      countByTag: countByTag,
+    });
+};
+
+const getVideoByCategories = async(req, res, next) => {
+    
+};
+
+const getVideoByPersons = async(req, res, next) => {
+    
+}
+
 exports.getAllVideos = getAllVideos;
 exports.getVideoById = getVideoById;
 exports.createNewVideo = createNewVideo;
+exports.getVideoByTags = getVideoByTags;
+exports.getVideoByCategories = getVideoByCategories;
+exports.getVideoByPersons = getVideoByPersons;
+
+

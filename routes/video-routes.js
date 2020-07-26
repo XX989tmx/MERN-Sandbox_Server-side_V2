@@ -9,4 +9,10 @@ router.post("/new", videoControllers.createNewVideo);
 
 router.get('/:videoId', videoControllers.getVideoById);
 
+router.get("/get_video_by_tags/:tags", videoControllers.getVideoByTags);
+
+router.get("/get_video_by_categories/:categories", videoControllers.getVideoByCategories);
+
+router.get("/get_video_by_persons/:persons", videoControllers.getVideoByPersons);
+
 module.exports = router;
