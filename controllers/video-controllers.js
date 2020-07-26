@@ -97,7 +97,30 @@ const getVideoByTags = async(req, res, next) => {
 };
 
 const getVideoByCategories = async(req, res, next) => {
-    
+    const categories = req.params.categories;
+
+    let categoryMatchedVideos;
+    try {
+        categoryMatchedVideos = await Video.find({ categories: categories });
+    } catch (error) {
+        
+    }
+    console.log(categoryMatchedVideos);
+
+    let countByCategory;
+    try {
+        countByCategory = await Video.count({ categories: categories });
+    } catch (error) {
+        
+    }
+    console.log(countByCategory);
+
+    res.json({
+      categoryMatchedVideos: categoryMatchedVideos.map((video) =>
+        video.toObject({ getters: true })
+      ),
+      countByCategory: countByCategory,
+    });
 };
 
 const getVideoByPersons = async(req, res, next) => {
