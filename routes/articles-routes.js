@@ -8,6 +8,12 @@ const checkAuth = require("../middleware/check-auth");
 const router = express.Router();
 
 router.get("/all", articlesControllers.allArticles);
+//GET 'https:://localhost500/api/articles/all?q=query'
+
+// OR search (k1 or k2)
+//GET 'https:://localhost500/api/articles/all?k1=keyword1&k2=keyword2'
+// AND search (k1 and k2)
+//GET 'https:://localhost500/api/articles/all?k1=keyword1&k2=keyword2'
 
 router.get("/:articleId", articlesControllers.getArticleById);
 

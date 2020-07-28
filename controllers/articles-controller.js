@@ -12,19 +12,42 @@ const User = require("../models/user");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 const allArticles = async (req, res, next) => {
+  // const query = req.query.q;
   let articles;
-  try {
-    articles = await Article.find();
-  } catch (error) {}
+  let query = {};
+  if (req.query.q && req.query.and) {
+    try {
+      query = {
+        $and: [
+          { title: { $regex: req.query.q, $options: "i" } },
+          { content: { $regex: req.query.q, $options: "i" } },
+        ],
+      };
+      articles = await Article.find(query);
+    } catch {}
+  } else if (!!req.query.q) {
+    try {
+      query = {
+        $or: [
+          { title: { $regex: req.query.q, $options: "i" } },
+          { content: { $regex: req.query.q, $options: "i" } },
+        ],
+      };
+      articles = await Article.find(query);
+    } catch (error) {}
+  } else {
+    try {
+      articles = await Article.find();
+    } catch (error) {}
 
-  try {
-    count = await Article.count();
-  } catch (error) {}
-  console.log(count);
+    try {
+      count = await Article.count();
+    } catch (error) {}
+    console.log(count);
+  }
 
   res.json({
     articles: articles.map((a) => a.toObject({ getters: true })),
-    count: count,
   });
 };
 
@@ -370,18 +393,16 @@ const countArticlesByTag = async (req, res, next) => {
 
 const sortArticleByTimestamp = (req, res, next) => {};
 
-const getSpecificArticleById = async(req, res, next) => {
+const getSpecificArticleById = async (req, res, next) => {
   const articleId = req.params.articleId;
 
   let article;
   try {
     article = await Article.findById(articleId);
-  } catch (error) {
-    
-  };
+  } catch (error) {}
   console.log(article);
 
-  res.json({article: article.toObject({getters:true})})
+  res.json({ article: article.toObject({ getters: true }) });
 };
 
 // const searchQuery = async(req, res, next) => {
