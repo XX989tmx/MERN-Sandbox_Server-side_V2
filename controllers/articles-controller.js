@@ -15,7 +15,7 @@ const allArticles = async (req, res, next) => {
   // const query = req.query.q;
   let articles;
   let query = {};
-  if (req.query.q && req.query.and) {
+  if (req.query.q && req.query.and === "true") {
     try {
       query = {
         $and: [
@@ -23,8 +23,25 @@ const allArticles = async (req, res, next) => {
           { content: { $regex: req.query.q, $options: "i" } },
         ],
       };
-      articles = await Article.find(query);
+      articles = await Article.find(query).sort({ _id: -1 });
     } catch {}
+  } else if (req.query.sort) {
+    if (req.query.sort === "oldest") {
+      try {
+        query = {
+          $or: [
+            { title: { $regex: req.query.q, $options: "i" } },
+            { content: { $regex: req.query.q, $options: "i" } },
+          ],
+        };
+        articles = await Article.find(query).sort({ _id: 1 });
+        // articles = await Article.find().sort({ date_created: -1 });
+      } catch {}
+    } else {
+      try {
+        articles = await Article.find().sort({ _id: -1 });
+      } catch {}
+    }
   } else if (!!req.query.q) {
     try {
       query = {
@@ -33,11 +50,11 @@ const allArticles = async (req, res, next) => {
           { content: { $regex: req.query.q, $options: "i" } },
         ],
       };
-      articles = await Article.find(query);
+      articles = await Article.find(query).sort({ _id: -1 });
     } catch (error) {}
   } else {
     try {
-      articles = await Article.find();
+      articles = await Article.find().sort({ _id: -1 });
     } catch (error) {}
 
     try {
