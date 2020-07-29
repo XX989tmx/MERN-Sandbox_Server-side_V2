@@ -337,7 +337,9 @@ const getArticleByCategory = async (req, res, next) => {
 
   let categoryMatchedArticles;
   try {
-    categoryMatchedArticles = await Article.find({ categories: categories });
+    categoryMatchedArticles = await Article.find({
+      categories: categories,
+    }).sort({ _id: -1 });
   } catch (error) {}
   console.log(categoryMatchedArticles);
   console.log("category based sorting done.");
@@ -363,7 +365,7 @@ const getArticleByTag = async (req, res, next) => {
 
   let tagMatchedArticles;
   try {
-    tagMatchedArticles = await Article.find({ tags: tags });
+    tagMatchedArticles = await Article.find({ tags: tags }).sort({ _id: -1 });
   } catch (error) {}
   console.log(tagMatchedArticles);
   console.log("tag based sorting done");
