@@ -5,7 +5,7 @@ const Video = require('../models/video');
 const getAllVideos = async (req, res, next) => {
     let videos;
     try {
-        videos = await Video.find();
+        videos = await Video.find().sort({ _id: -1 });
     } catch (error) {
         
     }
@@ -74,7 +74,7 @@ const getVideoByTags = async(req, res, next) => {
 
     let tagMatchedVideos;
     try {
-        tagMatchedVideos = await Video.find({ tags: tags });
+        tagMatchedVideos = await Video.find({ tags: tags }).sort({ _id: -1 });
     } catch (error) {
         
     }
@@ -101,7 +101,9 @@ const getVideoByCategories = async(req, res, next) => {
 
     let categoryMatchedVideos;
     try {
-        categoryMatchedVideos = await Video.find({ categories: categories });
+        categoryMatchedVideos = await Video.find({
+          categories: categories,
+        }).sort({ _id: -1 });
     } catch (error) {
         
     }
