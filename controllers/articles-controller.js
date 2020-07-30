@@ -50,6 +50,51 @@ const allArticles = async (req, res, next) => {
     articles = await Article.find({ tags: req.query.tags }).sort({
       _id: -1,
     });
+  } else if (req.query.price) {
+    switch (req.query.price) {
+      case "0~499":
+        articles = await Article.find({ price: { $gt: 0, $lte: 499 } }).sort({
+          _id: -1,
+        });
+        break;
+      case "500~999":
+        articles = await Article.find({ price: { $gte: 500, $lte: 999 } }).sort(
+          {
+            _id: -1,
+          }
+        );
+        break;
+      case "1000~1999":
+        articles = await Article.find({
+          price: { $gte: 1000, $lte: 1999 },
+        }).sort({
+          _id: -1,
+        });
+        break;
+      case "2000~4999":
+        articles = await Article.find({
+          price: { $gte: 2000, $lte: 4999 },
+        }).sort({
+          _id: -1,
+        });
+        break;
+      case "5000~9999":
+        articles = await Article.find({
+          price: { $gte: 5000, $lte: 9999 },
+        }).sort({
+          _id: -1,
+        });
+        break;
+      case "10000~":
+        articles = await Article.find({
+          price: { $gte: 10000 },
+        }).sort({
+          _id: -1,
+        });
+        break;
+      default:
+        break;
+    }
   } else if (!!req.query.q) {
     try {
       query = {
@@ -142,7 +187,7 @@ const createArticle = async (req, res, next) => {
     );
   }
 
-  const { title, content, author, address, categories, tags } = req.body;
+  const { title, content, author, address, categories, tags, price } = req.body;
 
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   console.log('The "article title" was appended to file!');
@@ -167,6 +212,7 @@ const createArticle = async (req, res, next) => {
     categories: categories,
     date_created: new Date(Date.now()).toString(),
     tags: tags,
+    price: price,
   });
 
   let user;
