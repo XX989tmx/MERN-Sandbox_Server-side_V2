@@ -42,6 +42,10 @@ const allArticles = async (req, res, next) => {
         articles = await Article.find().sort({ _id: -1 });
       } catch {}
     }
+  } else if (req.query.categories) {
+    articles = await Article.find({ categories: req.query.categories }).sort({
+      _id: -1,
+    });
   } else if (!!req.query.q) {
     try {
       query = {
