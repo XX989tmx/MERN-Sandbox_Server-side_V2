@@ -732,6 +732,60 @@ const getExternalApi = async (req, res, next) => {
 
   // console.log(c_to_f_data);
 
+  var lastValueOfEveryCurrency = {
+    last_JPY,
+    last_USD,
+    last_AUD,
+    last_BRL,
+    last_CAD,
+    last_CHF,
+    last_CLP,
+    last_CNY,
+    last_DKK,
+    last_EUR,
+    last_GBP,
+    last_HKD,
+    last_INR,
+    last_ISK,
+    last_KRW,
+    last_NZD,
+    last_PLN,
+    last_RUB,
+    last_SEK,
+    last_SGD,
+    last_THB,
+    last_TRY,
+    last_TWD,
+  };
+
+  var currencySymbolOfEveryCurrency = {
+    symbol_JPY,
+    symbol_USD,
+    symbol_AUD,
+    symbol_BRL,
+    symbol_CAD,
+    symbol_CHF,
+    symbol_CLP,
+    symbol_CNY,
+    symbol_DKK,
+    symbol_EUR,
+    symbol_GBP,
+    symbol_HKD,
+    symbol_INR,
+    symbol_ISK,
+    symbol_KRW,
+    symbol_NZD,
+    symbol_PLN,
+    symbol_RUB,
+    symbol_SEK,
+    symbol_SGD,
+    symbol_THB,
+    symbol_TRY,
+    symbol_TWD,
+  };
+  
+console.log(lastValueOfEveryCurrency.last_JPY);
+console.log(currencySymbolOfEveryCurrency.symbol_JPY);
   
   console.log(util.isNumber(last_HKD)); 
   console.log(util.isNumber(buy_HKD));
@@ -740,8 +794,11 @@ const getExternalApi = async (req, res, next) => {
   console.log(util.isString(new Date(Date.now()).toString()));
   // console.log(Number.isInteger(last_HKD));
 
+
   res.json({
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
+    lastValueOfEveryCurrency: lastValueOfEveryCurrency,
+    currencySymbolOfEveryCurrency: currencySymbolOfEveryCurrency,
   });
 };
 
