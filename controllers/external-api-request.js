@@ -818,6 +818,33 @@ const getValueBasedonCurrency = async(req, res, next) => {
     res.json({ value_based_on_your_currency: valueBasedOnCurrency })
 };
 
+const getHistoricalPrice = async (req, res, next) => {
+  const response = await axios.get(
+    "https://api.coindesk.com/v1/bpi/historical/close.json?start=2020-07-01&end=2020-07-31 "
+  );
+
+  const data = response.data;
+  console.log(data);
+  console.log(Object.keys(data.bpi));
+  console.log(Object.values(data.bpi));
+  console.log(data.bpi["2020-05-30"]);
+  console.log(data.bpi["2020-08-01"]);
+
+  let historicalPrice2020_1m1_to8m1;
+  historicalPrice2020_1m1_to8m1 = Object.values(data.bpi);
+  console.log(historicalPrice2020_1m1_to8m1);
+
+  let dateStringArray;
+  dateStringArray = Object.keys(data.bpi);
+  console.log(dateStringArray);
+
+  let historicalPriceData;
+  historicalPriceData = Object.values(data.bpi);
+  console.log(historicalPriceData);
+
+  res.json({ dateStringArray, historicalPriceData });
+};
+
 // const getVideo = async (params) => {
 //   let response;
 //   let responseData;
@@ -833,3 +860,4 @@ const getValueBasedonCurrency = async(req, res, next) => {
 
 exports.getExternalApi = getExternalApi;
 exports.getValueBasedonCurrency = getValueBasedonCurrency;
+exports.getHistoricalPrice = getHistoricalPrice;
