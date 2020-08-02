@@ -819,9 +819,15 @@ const getValueBasedonCurrency = async(req, res, next) => {
 };
 
 const getHistoricalPrice = async (req, res, next) => {
+
   const response = await axios.get(
-    "https://api.coindesk.com/v1/bpi/historical/close.json?start=2020-07-01&end=2020-07-31 "
+    `https://api.coindesk.com/v1/bpi/historical/close.json?start=${encodeURIComponent(
+      req.query.start
+    )}&end=${encodeURIComponent(req.query.end)}`
   );
+  // const response = await axios.get(
+  //   "https://api.coindesk.com/v1/bpi/historical/close.json?start=2020-07-01&end=2020-07-31 "
+  // );
 
   const data = response.data;
   console.log(data);
