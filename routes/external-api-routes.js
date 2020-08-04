@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.get("/crypto_currency", getExternalApiControllers.getExternalApi);
 
+router.get("/crypto_currency/health_index", getExternalApiControllers.getHealthIndex);
+
 router.get("/crypto_currency/historical_data", getExternalApiControllers.getHistoricalPrice);
 
 router.get("/crypto_currency_data/ranking");

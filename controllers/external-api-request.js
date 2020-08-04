@@ -5,13 +5,11 @@ const bodyParser = require("body-parser");
 const util = require("util");
 const mongoose = require("mongoose");
 
-const getCryptoTicker = require('../util/crypto-ticker');
+const getCryptoTicker = require("../util/crypto-ticker");
 
-const Crypto = require('../models/crypto');
+const Crypto = require("../models/crypto");
 
 const getExternalApi = async (req, res, next) => {
-    
-    
   //   const converter = async function (currency, value) {
   //       // const c_to_f_response = await axios.get(`https://blockchain.info/tobtc?currency=${currency}&value=${value}`);
   //   // const c_to_f_data = c_to_f_response.data;
@@ -75,7 +73,7 @@ const getExternalApi = async (req, res, next) => {
   //   await sess.commitTransaction();
   //   console.log('Saving USD data to database was successful.');
   // } catch (error) {
-    
+
   // }
 
   // const USD_DATA = {
@@ -84,7 +82,6 @@ const getExternalApi = async (req, res, next) => {
   //   sell_USD: sell_USD,
   //   symbol_USD: symbol_USD,
   // };
-
 
   // AUD
   const last_AUD = data.AUD.last;
@@ -702,14 +699,13 @@ const getExternalApi = async (req, res, next) => {
   //   console.log("Saving TWD data to database was successful.");
   // } catch (error) {}
 
-
   // let USD;
   // try {
   //   USD =  await getCryptoTicker();
   // } catch (error) {
 
   // }
-  
+
   // let last_price_array = [];
   // last_price_array.push(last_TWD, last_USD, last_JPY, last_THB);
   // last_price_array.sort();
@@ -783,17 +779,16 @@ const getExternalApi = async (req, res, next) => {
     symbol_TRY,
     symbol_TWD,
   };
-  
-console.log(lastValueOfEveryCurrency.last_JPY);
-console.log(currencySymbolOfEveryCurrency.symbol_JPY);
-  
-  console.log(util.isNumber(last_HKD)); 
+
+  console.log(lastValueOfEveryCurrency.last_JPY);
+  console.log(currencySymbolOfEveryCurrency.symbol_JPY);
+
+  console.log(util.isNumber(last_HKD));
   console.log(util.isNumber(buy_HKD));
   console.log(util.isNumber(sell_HKD));
   console.log(util.isString(symbol_HKD));
   console.log(util.isString(new Date(Date.now()).toString()));
   // console.log(Number.isInteger(last_HKD));
-
 
   res.json({
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
@@ -802,24 +797,21 @@ console.log(currencySymbolOfEveryCurrency.symbol_JPY);
   });
 };
 
-const getValueBasedonCurrency = async(req, res, next) => {
+const getValueBasedonCurrency = async (req, res, next) => {
   const { currency, value } = req.body;
   console.log(currency);
 
-    let valueBasedOnCurrency;
+  let valueBasedOnCurrency;
 
-    try {
-      valueBasedOnCurrency = await getCryptoTicker(currency, value);
-      console.log(valueBasedOnCurrency);
-    } catch (error) {
-      
-    };
+  try {
+    valueBasedOnCurrency = await getCryptoTicker(currency, value);
+    console.log(valueBasedOnCurrency);
+  } catch (error) {}
 
-    res.json({ value_based_on_your_currency: valueBasedOnCurrency })
+  res.json({ value_based_on_your_currency: valueBasedOnCurrency });
 };
 
 const getHistoricalPrice = async (req, res, next) => {
-
   const response = await axios.get(
     `https://api.coindesk.com/v1/bpi/historical/close.json?start=${encodeURIComponent(
       req.query.start
@@ -851,6 +843,22 @@ const getHistoricalPrice = async (req, res, next) => {
   res.json({ dateStringArray, historicalPriceData });
 };
 
+const getHealthIndex = async (req, res, next) => {
+  let response;
+  try {
+    response = await axios.get(
+      "https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=BTC&apikey=NJ8R070MTBSJMEDM"
+    );
+  } catch (error) {}
+
+  console.log(response);
+  console.log(response.data);
+
+  let data = response.data;
+
+  res.status(200).json({ data });
+};
+
 // const getVideo = async (params) => {
 //   let response;
 //   let responseData;
@@ -867,3 +875,4 @@ const getHistoricalPrice = async (req, res, next) => {
 exports.getExternalApi = getExternalApi;
 exports.getValueBasedonCurrency = getValueBasedonCurrency;
 exports.getHistoricalPrice = getHistoricalPrice;
+exports.getHealthIndex = getHealthIndex;
