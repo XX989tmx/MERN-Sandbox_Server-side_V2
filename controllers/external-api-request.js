@@ -847,7 +847,7 @@ const getHealthIndex = async (req, res, next) => {
   let response;
   try {
     response = await axios.get(
-      "https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=BTC&apikey=NJ8R070MTBSJMEDM"
+      `https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=ETH&apikey=${process.env.ALPHA_ADVANTAGE_API_KEY}`
     );
   } catch (error) {}
 
