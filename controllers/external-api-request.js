@@ -866,7 +866,7 @@ const getHealthIndex = async (req, res, next) => {
   let response;
   try {
     response = await axios.get(
-      `https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=ETH&apikey=${process.env.ALPHA_ADVANTAGE_API_KEY}`
+      `https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=${req.query.cryptoCode}&apikey=${process.env.ALPHA_ADVANTAGE_API_KEY}`
     );
   } catch (error) {}
 
@@ -874,8 +874,38 @@ const getHealthIndex = async (req, res, next) => {
   console.log(response.data);
 
   let data = response.data;
+  console.log(data["Crypto Rating (FCAS)"]);
+  let symbol = data["Crypto Rating (FCAS)"]["1. symbol"];
+  let name = data["Crypto Rating (FCAS)"]["2. name"];
+  let fcasRating = data["Crypto Rating (FCAS)"]["3. fcas rating"];
+  let fcasScore = data["Crypto Rating (FCAS)"]["4. fcas score"];
+  let developlerScore = data["Crypto Rating (FCAS)"]["5. developer score"];
+  let marketMaturityScore =
+    data["Crypto Rating (FCAS)"]["6. market maturity score"];
+  let utilityScore = data["Crypto Rating (FCAS)"]["7. utility score"];
+  let lastRefreshed = data["Crypto Rating (FCAS)"]["8. last refreshed"];
+  let timezone = data["Crypto Rating (FCAS)"]["9. timezone"];
+  console.log(symbol);
+  console.log(name);
+  console.log(fcasRating);
+  console.log(fcasScore);
+  console.log(developlerScore);
+  console.log(marketMaturityScore);
+  console.log(utilityScore);
+  console.log(lastRefreshed);
+  console.log(timezone);
 
-  res.status(200).json({ data });
+  res.status(200).json({
+    symbol,
+    name,
+    fcasRating,
+    fcasScore,
+    developlerScore,
+    marketMaturityScore,
+    utilityScore,
+    lastRefreshed,
+    timezone,
+  });
 };
 
 // const getVideo = async (params) => {
