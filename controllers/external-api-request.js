@@ -6,6 +6,7 @@ const util = require("util");
 const mongoose = require("mongoose");
 
 const getCryptoTicker = require("../util/crypto-ticker");
+const getBTCIndex = require("../util/getBTCHealthIndex");
 
 const Crypto = require("../models/crypto");
 
@@ -39,6 +40,22 @@ const getExternalApi = async (req, res, next) => {
   //     console.log(err);
   //   });
   //    }
+  // var Rating = getBTCIndex();
+  // console.log(Rating);
+
+  //get fcasRating
+  let BTCHealthIndexResponse;
+  let BTCHealthIndexData;
+  let fcasRating;
+  let fcasScore;
+  try {
+    BTCHealthIndexResponse = await axios.get(
+      `https://www.alphavantage.co/query?function=CRYPTO_RATING&symbol=BTC&apikey=${process.env.ALPHA_ADVANTAGE_API_KEY}`
+    );
+    BTCHealthIndexData = BTCHealthIndexResponse.data;
+    fcasRating = BTCHealthIndexData["Crypto Rating (FCAS)"]["3. fcas rating"];
+    fcasScore = BTCHealthIndexData["Crypto Rating (FCAS)"]["4. fcas score"];
+  } catch (error) {}
 
   const response = await axios.get("https://blockchain.info/ticker");
 
@@ -794,6 +811,8 @@ const getExternalApi = async (req, res, next) => {
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
     lastValueOfEveryCurrency: lastValueOfEveryCurrency,
     currencySymbolOfEveryCurrency: currencySymbolOfEveryCurrency,
+    fcasRating: fcasRating,
+    fcasScore: fcasScore,
   });
 };
 
