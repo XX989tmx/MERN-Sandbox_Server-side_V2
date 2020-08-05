@@ -908,6 +908,64 @@ const getHealthIndex = async (req, res, next) => {
   });
 };
 
+const getExchangeRateBothCurrencyAndCrypto = async (req, res, next) => {
+  
+    let response;
+  try {
+    response = await axios.get(
+      `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${encodeURIComponent(
+        req.query.FromCurrency
+      )}&to_currency=${encodeURIComponent(req.query.ToCurrency)}&apikey=${
+        process.env.ALPHA_ADVANTAGE_API_KEY
+      }`
+    );
+  } catch (error) {}
+
+  let data;
+  data = response.data;
+  console.log(data);
+  console.log(data["Realtime Currency Exchange Rate"]);
+
+  let FromCurrencyCode =
+    data["Realtime Currency Exchange Rate"]["1. From_Currency Code"];
+  let FromCurrencyName =
+    data["Realtime Currency Exchange Rate"]["2. From_Currency Name"];
+
+  let ToCurrencyCode =
+    data["Realtime Currency Exchange Rate"]["3. To_Currency Code"];
+  let ToCurrencyName =
+    data["Realtime Currency Exchange Rate"]["4. To_Currency Name"];
+  let ExchangeRate =
+    data["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
+
+  let LastRefreshed =
+    data["Realtime Currency Exchange Rate"]["6. Last Refreshed"];
+  let TimeZone = data["Realtime Currency Exchange Rate"]["7. Time Zone"];
+  let BidPrice = data["Realtime Currency Exchange Rate"]["8. Bid Price"];
+  let AskPrice = data["Realtime Currency Exchange Rate"]["9. Ask Price"];
+  console.log(FromCurrencyCode);
+  console.log(FromCurrencyName);
+  console.log(ToCurrencyCode);
+  console.log(ToCurrencyName);
+  console.log(ExchangeRate);
+  console.log(LastRefreshed);
+  console.log(TimeZone);
+  console.log(BidPrice);
+  console.log(AskPrice);
+
+  res.json({
+    FromCurrencyCode,
+    FromCurrencyName,
+    ToCurrencyCode,
+    ToCurrencyName,
+    ExchangeRate,
+    LastRefreshed,
+    TimeZone,
+    BidPrice,
+    AskPrice,
+  });
+};
+
 // const getVideo = async (params) => {
 //   let response;
 //   let responseData;
@@ -925,3 +983,4 @@ exports.getExternalApi = getExternalApi;
 exports.getValueBasedonCurrency = getValueBasedonCurrency;
 exports.getHistoricalPrice = getHistoricalPrice;
 exports.getHealthIndex = getHealthIndex;
+exports.getExchangeRateBothCurrencyAndCrypto = getExchangeRateBothCurrencyAndCrypto;
