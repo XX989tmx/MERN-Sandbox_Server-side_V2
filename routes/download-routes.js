@@ -63,6 +63,15 @@ router.get("/mp4/sample-mp4-file.mp4", async (req, res, next) => {
   } catch (error) {}
 });
 
+router.get("/csv/digital_currency_list.csv", async (req, res, next) => {
+  try {
+    await res.download(
+      path.join("downloads", "csvFiles", "digital_currency_list.csv")
+    );
+    console.log("1 file was downloaded.. download was successful");
+  } catch (error) {}
+});
+
 
 
 // router.get("/mp4/sample-mp4-file.mp4", async (req, res, next) => {
