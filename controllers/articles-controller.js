@@ -478,6 +478,38 @@ const getSpecificArticleById = async (req, res, next) => {
   res.json({ article: article.toObject({ getters: true }) });
 };
 
+const sortArticleByPriceOrder = async (req, res, next) => {
+  let results;
+  let formCheapestToHighestPrice;
+  let formHighestToCheapestPrice;
+  if (req.query.q === "CheapestToHighest") {
+    try {
+      // formCheapestToHighestPrice = await Article.aggregate([
+      //   {
+      //     $sort: { price: 1 },
+      //   },
+      // ]);
+      formCheapestToHighestPrice = await Article.find({}).sort({ price: 1 });
+      console.log(formCheapestToHighestPrice);
+      results = formCheapestToHighestPrice;
+    } catch (error) {}
+  } else if (req.query.q === "HighestToCheapest") {
+    try {
+      // formHighestToCheapestPrice = await Article.aggregate([
+      //   {
+      //     $sort: { price: -1 },
+      //   },
+      // ]);
+      formHighestToCheapestPrice = await Article.find({}).sort({ price: -1 });
+      
+      console.log(formHighestToCheapestPrice);
+      results = formHighestToCheapestPrice;
+    } catch (error) {}
+  }
+
+  res.json({ results: results.map(r => r.toObject({getters:true})) });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -539,3 +571,4 @@ exports.countArticlesByCategory = countArticlesByCategory;
 exports.countArticlesByTag = countArticlesByTag;
 exports.allArticles = allArticles;
 exports.getSpecificArticleById = getSpecificArticleById;
+exports.sortArticleByPriceOrder = sortArticleByPriceOrder;
