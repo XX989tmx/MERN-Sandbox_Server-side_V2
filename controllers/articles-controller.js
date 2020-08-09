@@ -510,6 +510,31 @@ const sortArticleByPriceOrder = async (req, res, next) => {
   res.json({ results: results.map(r => r.toObject({getters:true})) });
 };
 
+const sortByDate = async(req, res, next) => {
+  let results;
+  let FromLatestSortedArticle;
+  let FromOldestSortedArticle;
+  if (req.query.date === "FromLatest") {
+    try {
+      FromLatestSortedArticle = await Article.find({}).sort({ _id: -1});
+      console.log(FromLatestSortedArticle);
+      results = FromLatestSortedArticle;
+    } catch (error) {
+      
+    }
+  } else if (req.query.date === "FromOldest") {
+    try {
+      FromOldestSortedArticle = await Article.find({}).sort({ _id: 1 });
+      console.log(FromOldestSortedArticle);
+      results = FromOldestSortedArticle;
+    } catch (error) {
+      
+    }
+  }
+
+  res.json({results: results.map(r => r.toObject({getters: true}))})
+}
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -572,3 +597,4 @@ exports.countArticlesByTag = countArticlesByTag;
 exports.allArticles = allArticles;
 exports.getSpecificArticleById = getSpecificArticleById;
 exports.sortArticleByPriceOrder = sortArticleByPriceOrder;
+exports.sortByDate = sortByDate;
