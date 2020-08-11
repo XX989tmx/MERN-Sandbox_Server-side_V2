@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const Video = require('../models/video');
+const User = require('../models/user');
 
 const getAllVideos = async (req, res, next) => {
     let videos;
@@ -36,6 +37,20 @@ const getVideoById = async (req, res, next) => {
     res.json({ video: video.toObject({getters:true}) });
 };
 
+const getVideosByUserId = async(req, res, next) => {
+  const userId = req.params.userId;
+
+  //my videos = user.videos
+  let userWithVideos = await User.findById(userId).populate("videos");
+  console.log(userWithVideos.videos);
+  console.log(userWithVideos.videos[0]);
+  console.log(userWithVideos.videos[0].title);
+  console.log(userWithVideos.videos[0].src);
+
+
+  res.json({ userWithVideos: userWithVideos.videos.map(v => v.toObject({getters: true})) });
+}
+
 const createNewVideo = async (req, res, next) => {
   const {
     title,
@@ -43,7 +58,8 @@ const createNewVideo = async (req, res, next) => {
     persons,
     src,
     tags,
-    categories
+    categories,
+    userId,
   } = req.body;
 
   const createdVideo = new Video({
@@ -54,13 +70,19 @@ const createNewVideo = async (req, res, next) => {
     tags,
     categories,
     date_created: new Date(Date.now()).toString(),
+    creator: userId,// => user._id
   });
   console.log(createdVideo);
+  let user;
+
+  user = await User.findById(userId);
 
   try {
       const sess = await mongoose.startSession();
       sess.startTransaction();
       await createdVideo.save({ session: sess });
+      user.videos.push(createdVideo);
+      await user.save({ session: sess });
       await sess.commitTransaction();
   } catch (error) {
       
@@ -135,5 +157,6 @@ exports.createNewVideo = createNewVideo;
 exports.getVideoByTags = getVideoByTags;
 exports.getVideoByCategories = getVideoByCategories;
 exports.getVideoByPersons = getVideoByPersons;
+exports.getVideosByUserId = getVideosByUserId;
 
 

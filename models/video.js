@@ -11,6 +11,7 @@ const videoSchema = new Schema({
   categories: [{ type: String, required: true }],
   // genre: [{ type: String, required: true }],
   date_created: { type: String, required: true },
+  creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
   // admin: { type: mongoose.Types.ObjectId, required: true, ref: "Admin" },
   // likes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Like" }],
   // dislikes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Dislike" }],

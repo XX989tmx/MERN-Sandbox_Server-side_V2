@@ -9,6 +9,7 @@ const userSchema = new Schema({
   password: { type: String, required: true, minlength: 6 },
   image: { type: String, required: true },
   articles: [{ type: mongoose.Types.ObjectId, required: true, ref: "Article" }],
+  videos: [{ type: mongoose.Types.ObjectId, required: true, ref: "Video" }],
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,
