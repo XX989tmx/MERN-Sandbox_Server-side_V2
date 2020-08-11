@@ -26,7 +26,24 @@ const getReadingListsByUserId = async (req, res, next) => {
   });
 };
 
-const getCreatorsInformationOfReadingLists = async (req, res, next) => {};
+//readinglist.creator.x
+const getCreatorsInformationOfReadingLists = async (req, res, next) => {
+    const readingListId = req.params.readingListId;
+    
+    let readingListPopulatedWithUser;
+    try {
+        readingListPopulatedWithUser = await ReadingList.findById(
+          readingListId
+        ).populate("creator");
+        console.log(readingListPopulatedWithUser.creator.name);
+         console.log(readingListPopulatedWithUser.creator.email);
+         console.log(readingListPopulatedWithUser.creator.articles[0]);
+    } catch (error) {
+        
+    }
+
+    res.json({ readingListPopulatedWithUser: readingListPopulatedWithUser.toObject({getters: true}) });
+};
 
 const createReadingList = async (req, res, next) => {
   const { name, userId } = req.body;
@@ -56,3 +73,4 @@ const createReadingList = async (req, res, next) => {
 
 exports.createReadingList = createReadingList;
 exports.getReadingListsByUserId = getReadingListsByUserId;
+exports.getCreatorsInformationOfReadingLists = getCreatorsInformationOfReadingLists;

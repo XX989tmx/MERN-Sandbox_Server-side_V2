@@ -7,4 +7,6 @@ router.post("/new", readingListControllers.createReadingList);
 
 router.get("/user/:userId", readingListControllers.getReadingListsByUserId)
 
+router.get("/creator_info/:readingListId", readingListControllers.getCreatorsInformationOfReadingLists)
+
 module.exports = router;
