@@ -10,6 +10,9 @@ const userSchema = new Schema({
   image: { type: String, required: true },
   articles: [{ type: mongoose.Types.ObjectId, required: true, ref: "Article" }],
   videos: [{ type: mongoose.Types.ObjectId, required: true, ref: "Video" }],
+  readingLists: [
+    { type: mongoose.Types.ObjectId, required: true, ref: "ReadingList" },
+  ],
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,

@@ -149,7 +149,7 @@ const getArticleById = async (req, res, next) => {
 const getArticlesByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
-  let userWithArticles;
+  let userWithArticles;// = userPopulatedWithArticlesField
   try {
     userWithArticles = await User.findById(userId).populate("articles");
   } catch (err) {

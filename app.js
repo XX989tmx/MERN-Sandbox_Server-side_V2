@@ -13,6 +13,7 @@ const wishlistsRoutes = require('./routes/wishlists-routes');
 const downloadRoutes = require('./routes/download-routes');
 const zipfileUploadRoutes = require('./routes/zipfile-upload-routes');
 const getExternalApiRoutes = require('./routes/external-api-routes');
+const readingListRoutes = require('./routes/readingList-routes');
 
 const zipUpload = require('./middleware/zip-file-upload');
 const videoRoutes = require('./routes/video-routes');
@@ -46,6 +47,8 @@ app.use("/api/upload", zipfileUploadRoutes);
 app.use("/api/get_external_api", getExternalApiRoutes);
 
 app.use("/api/videos", videoRoutes);
+
+app.use("/api/readingLists", readingListRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
