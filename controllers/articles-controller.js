@@ -151,6 +151,7 @@ const getArticlesByUserId = async (req, res, next) => {
 
   let userWithArticles;// = userPopulatedWithArticlesField
   try {
+    //                     = Article.find({author: userId})
     userWithArticles = await User.findById(userId).populate("articles");
   } catch (err) {
     const error = new HttpError(
