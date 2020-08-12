@@ -607,6 +607,11 @@ const TagCountIndex = async (req, res, next) => {
   responseArray.push(investmentTagIndex);
   console.log(responseArray);
 
+  //数の多い順とABC順の両方作る
+  responseArray.sort((a,b) => {
+    return b.count - a.count;
+  });
+console.log(responseArray);
   // クライアントサイドでは、tag count（アイコン）はprops.countで、tag titleとLink先のembded params(http://3000/api/articles/tags/:tagname)に渡すTagnameは、props.tagnameで行う。tagIndex objectを渡す。
   //   const tagIndex = {
   //     tagName: "politics", // =Article.find({tags: "xx"})
