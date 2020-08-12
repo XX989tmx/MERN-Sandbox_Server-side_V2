@@ -149,7 +149,7 @@ const getArticleById = async (req, res, next) => {
 const getArticlesByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
-  let userWithArticles;// = userPopulatedWithArticlesField
+  let userWithArticles; // = userPopulatedWithArticlesField
   try {
     //                     = Article.find({author: userId})
     userWithArticles = await User.findById(userId).populate("articles");
@@ -502,39 +502,119 @@ const sortArticleByPriceOrder = async (req, res, next) => {
       //   },
       // ]);
       formHighestToCheapestPrice = await Article.find({}).sort({ price: -1 });
-      
+
       console.log(formHighestToCheapestPrice);
       results = formHighestToCheapestPrice;
     } catch (error) {}
   }
 
-  res.json({ results: results.map(r => r.toObject({getters:true})) });
+  res.json({ results: results.map((r) => r.toObject({ getters: true })) });
 };
 
-const sortByDate = async(req, res, next) => {
+const sortByDate = async (req, res, next) => {
   let results;
   let FromLatestSortedArticle;
   let FromOldestSortedArticle;
   if (req.query.date === "FromLatest") {
     try {
-      FromLatestSortedArticle = await Article.find({}).sort({ _id: -1});
+      FromLatestSortedArticle = await Article.find({}).sort({ _id: -1 });
       console.log(FromLatestSortedArticle);
       results = FromLatestSortedArticle;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   } else if (req.query.date === "FromOldest") {
     try {
       FromOldestSortedArticle = await Article.find({}).sort({ _id: 1 });
       console.log(FromOldestSortedArticle);
       results = FromOldestSortedArticle;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
-  res.json({results: results.map(r => r.toObject({getters: true}))})
-}
+  res.json({ results: results.map((r) => r.toObject({ getters: true })) });
+};
+
+const TagCountIndex = async (req, res, next) => {
+  let responseArray = [];
+
+  // politics tag
+  let politicsTagCount;
+  try {
+    politicsTagCount = await Article.find({
+      tags: "politics",
+    }).countDocuments();
+    console.log(politicsTagCount);
+  } catch (error) {}
+
+  const tagIndex = {
+    tagName: "politics", // =Article.find({tags: "xx"})
+    count: politicsTagCount, // tag count. this is show in pop counter in frontend
+  };
+  console.log(tagIndex);
+
+  responseArray.push(tagIndex);
+  console.log(responseArray);
+
+  // business tag
+  let businessTagCount;
+  try {
+    businessTagCount = await Article.find({
+      tags: "business",
+    }).countDocuments();
+    console.log(businessTagCount);
+  } catch (error) {}
+
+  const businessTagIndex = {
+    tagName: "business", // =Article.find({tags: "xx"})
+    count: businessTagCount, // tag count. this is show in pop counter in frontend
+  };
+  console.log(businessTagIndex);
+
+  responseArray.push(businessTagIndex);
+  console.log(responseArray);
+
+  // education tag
+  let educationTagCount;
+  try {
+    educationTagCount = await Article.find({
+      tags: "education",
+    }).countDocuments();
+    console.log(educationTagCount);
+  } catch (error) {}
+
+  const educationTagIndex = {
+    tagName: "education", // =Article.find({tags: "xx"})
+    count: educationTagCount, // tag count. this is show in pop counter in frontend
+  };
+  console.log(educationTagIndex);
+
+  responseArray.push(educationTagIndex);
+  console.log(responseArray);
+
+  // investment tag
+  let investmentTagCount;
+  try {
+    investmentTagCount = await Article.find({
+      tags: "investment",
+    }).countDocuments();
+    console.log(investmentTagCount);
+  } catch (error) {}
+
+  const investmentTagIndex = {
+    tagName: "investment", // =Article.find({tags: "xx"})
+    count: investmentTagCount, // tag count. this is show in pop counter in frontend
+  };
+  console.log(investmentTagIndex);
+
+  responseArray.push(investmentTagIndex);
+  console.log(responseArray);
+
+  // クライアントサイドでは、tag count（アイコン）はprops.countで、tag titleとLink先のembded params(http://3000/api/articles/tags/:tagname)に渡すTagnameは、props.tagnameで行う。tagIndex objectを渡す。
+  //   const tagIndex = {
+  //     tagName: "politics", // =Article.find({tags: "xx"})
+  //     count: politicsTagCount, // tag count. this is show in pop counter in frontend
+  //   };
+
+  res.json({ responseArray });
+};
 
 // const searchQuery = async(req, res, next) => {
 //   let results;
@@ -599,3 +679,5 @@ exports.allArticles = allArticles;
 exports.getSpecificArticleById = getSpecificArticleById;
 exports.sortArticleByPriceOrder = sortArticleByPriceOrder;
 exports.sortByDate = sortByDate;
+
+exports.TagCountIndex = TagCountIndex;
