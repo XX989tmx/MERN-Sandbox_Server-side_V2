@@ -535,6 +535,72 @@ const sortByDate = async (req, res, next) => {
 const TagCountIndex = async (req, res, next) => {
   let responseArray = [];
 
+  // get element(tag) form Article.tag field, and push it to array. = making tagName list.
+  // let article;
+  // try {
+  //   article = await Article.find();
+  // } catch (error) {
+    
+  // };
+  // console.log(article[60].tags[0]);
+
+  // let articleTags = []
+
+  // for (let index = 0; index < article.length; index++) {
+  //   const element = article[index];
+  
+  //     articleTags.push(element.tags[0]);
+    
+
+  //   console.log(articleTags);
+  // }
+
+  // for (let index = 0; index < articleTags.length; index++) {
+  //   // const element = array[index];
+
+  //   if (articleTags[index] === articleTags[index - 1]) {
+  //     articleTags.pop(articleTags[index]);
+  //   }
+  // }
+
+  // roop through tagNameArray and gets count of document matched with each tag. And, make the object with it and push it to response array(use this array for map rendering in react).
+  // for (let index = 0; index < articleTags.length; index++) {
+  //   const articleTagsName = articleTags[index];
+  //   // let articleTagsName = articleTags[i];
+  // let tagCount;
+  // try {
+  //   tagCount = await Article.find({
+  //     tags: articleTagsName,
+  //   }).countDocuments();
+  //   console.log(tagCount);
+  // } catch (error) {}
+
+  // const tagIndex = {
+  //   tagName: articleTagsName,
+  //   count: tagCount,
+  // };
+  // console.log(tagIndex);
+
+  // responseArray.push(tagIndex);
+  // }
+
+  // let newResponseArray;
+  // newResponseArray = [responseArray[0]];
+  // for (let index = 0; index < responseArray.length; index++) {
+  //   if (responseArray[index] != responseArray[index-1]) {
+  //     newResponseArray.push(responseArray[index].tagName);
+  //   }
+    
+  // }
+  // console.log(newResponseArray);
+
+  // for (let index = 0; index < responseArray.length; index++) {
+  //   const element = responseArray[index];
+
+  //   // if (element.tagName === responseArray[index - 1].tagName) {responseArray.;
+  //   // }
+  // }
+
   // politics tag
   let politicsTagCount;
   try {
@@ -607,11 +673,29 @@ const TagCountIndex = async (req, res, next) => {
   responseArray.push(investmentTagIndex);
   console.log(responseArray);
 
+  // society tag
+  let societyTagCount;
+  try {
+    societyTagCount = await Article.find({
+      tags: "society",
+    }).countDocuments();
+    console.log(societyTagCount);
+  } catch (error) {}
+
+  const societyTagIndex = {
+    tagName: "society", // =Article.find({tags: "xx"})
+    count: societyTagCount, // tag count. this is show in pop counter in frontend
+  };
+  console.log(societyTagIndex);
+
+  responseArray.push(societyTagIndex);
+  console.log(responseArray);
+
   //数の多い順とABC順の両方作る
-  responseArray.sort((a,b) => {
+  responseArray.sort((a, b) => {
     return b.count - a.count;
   });
-console.log(responseArray);
+  console.log(responseArray);
   // クライアントサイドでは、tag count（アイコン）はprops.countで、tag titleとLink先のembded params(http://3000/api/articles/tags/:tagname)に渡すTagnameは、props.tagnameで行う。tagIndex objectを渡す。
   //   const tagIndex = {
   //     tagName: "politics", // =Article.find({tags: "xx"})
