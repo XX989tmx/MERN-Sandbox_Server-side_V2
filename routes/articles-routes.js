@@ -17,7 +17,9 @@ router.get("/date_sort", articlesControllers.sortByDate)
 // AND search (k1 and k2)
 //GET 'https:://localhost500/api/articles/all?k1=keyword1&k2=keyword2'
 
-router.get("/tagIndex", articlesControllers.TagCountIndex)
+router.get("/tagIndex", articlesControllers.TagCountIndex);
+
+router.get("/categoryIndex", articlesControllers.categoryCountIndex)
 
 router.get("/:articleId", articlesControllers.getArticleById);
 
