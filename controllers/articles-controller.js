@@ -23,7 +23,9 @@ const allArticles = async (req, res, next) => {
           { content: { $regex: req.query.q, $options: "i" } },
         ],
       };
-      articles = await Article.find(query).sort({ _id: -1 });
+      articles = await Article.find(query)
+        .populate({ path: "author", select: "-password" })
+        .sort({ _id: -1 });
     } catch {}
   } else if (req.query.sort) {
     if (req.query.sort === "oldest") {
@@ -34,63 +36,81 @@ const allArticles = async (req, res, next) => {
             { content: { $regex: req.query.q, $options: "i" } },
           ],
         };
-        articles = await Article.find(query).sort({ _id: 1 });
+        articles = await Article.find(query)
+          .populate({ path: "author", select: "-password" })
+          .sort({ _id: 1 });
         // articles = await Article.find().sort({ date_created: -1 });
       } catch {}
     } else {
       try {
-        articles = await Article.find().sort({ _id: -1 });
+        articles = await Article.find()
+          .populate({ path: "author", select: "-password" })
+          .sort({ _id: -1 });
       } catch {}
     }
   } else if (req.query.categories) {
-    articles = await Article.find({ categories: req.query.categories }).sort({
-      _id: -1,
-    });
+    articles = await Article.find({ categories: req.query.categories })
+      .populate({ path: "author", select: "-password" })
+      .sort({
+        _id: -1,
+      });
   } else if (req.query.tags) {
-    articles = await Article.find({ tags: req.query.tags }).sort({
-      _id: -1,
-    });
+    articles = await Article.find({ tags: req.query.tags })
+      .populate({ path: "author", select: "-password" })
+      .sort({
+        _id: -1,
+      });
   } else if (req.query.price) {
     switch (req.query.price) {
       case "0~499":
-        articles = await Article.find({ price: { $gt: 0, $lte: 499 } }).sort({
-          _id: -1,
-        });
+        articles = await Article.find({ price: { $gt: 0, $lte: 499 } })
+          .populate({ path: "author", select: "-password" })
+          .sort({
+            _id: -1,
+          });
         break;
       case "500~999":
-        articles = await Article.find({ price: { $gte: 500, $lte: 999 } }).sort(
-          {
+        articles = await Article.find({ price: { $gte: 500, $lte: 999 } })
+          .populate({ path: "author", select: "-password" })
+          .sort({
             _id: -1,
-          }
-        );
+          });
         break;
       case "1000~1999":
         articles = await Article.find({
           price: { $gte: 1000, $lte: 1999 },
-        }).sort({
-          _id: -1,
-        });
+        })
+          .populate({ path: "author", select: "-password" })
+          .sort({
+            _id: -1,
+          });
         break;
       case "2000~4999":
         articles = await Article.find({
           price: { $gte: 2000, $lte: 4999 },
-        }).sort({
-          _id: -1,
-        });
+        })
+          .populate({ path: "author", select: "-password" })
+          .sort({
+            _id: -1,
+          });
         break;
       case "5000~9999":
         articles = await Article.find({
           price: { $gte: 5000, $lte: 9999 },
-        }).sort({
-          _id: -1,
-        });
+        })
+          .populate({ path: "author", select: "-password" })
+          .sort({
+            _id: -1,
+          });
         break;
       case "10000~":
         articles = await Article.find({
           price: { $gte: 10000 },
-        }).sort({
-          _id: -1,
-        });
+        })
+          .populate({ path: "author", select: "-password" })
+          .sort({
+            _id: -1,
+          });
         break;
       default:
         break;
@@ -103,7 +123,9 @@ const allArticles = async (req, res, next) => {
           { content: { $regex: req.query.q, $options: "i" } },
         ],
       };
-      articles = await Article.find(query).sort({ _id: -1 });
+      articles = await Article.find(query)
+        .populate({ path: "author", select: "-password" })
+        .sort({ _id: -1 });
     } catch (error) {}
   } else {
     try {
@@ -497,7 +519,9 @@ const sortArticleByPriceOrder = async (req, res, next) => {
       //     $sort: { price: 1 },
       //   },
       // ]);
-      formCheapestToHighestPrice = await Article.find({}).sort({ price: 1 });
+      formCheapestToHighestPrice = await Article.find({})
+        .populate({ path: "author", select: "-password" })
+        .sort({ price: 1 });
       console.log(formCheapestToHighestPrice);
       results = formCheapestToHighestPrice;
     } catch (error) {}
@@ -508,7 +532,9 @@ const sortArticleByPriceOrder = async (req, res, next) => {
       //     $sort: { price: -1 },
       //   },
       // ]);
-      formHighestToCheapestPrice = await Article.find({}).sort({ price: -1 });
+      formHighestToCheapestPrice = await Article.find({})
+        .populate({ path: "author", select: "-password" })
+        .sort({ price: -1 });
 
       console.log(formHighestToCheapestPrice);
       results = formHighestToCheapestPrice;
@@ -524,13 +550,17 @@ const sortByDate = async (req, res, next) => {
   let FromOldestSortedArticle;
   if (req.query.date === "FromLatest") {
     try {
-      FromLatestSortedArticle = await Article.find({}).sort({ _id: -1 });
+      FromLatestSortedArticle = await Article.find({})
+        .populate({ path: "author", select: "-password" })
+        .sort({ _id: -1 });
       console.log(FromLatestSortedArticle);
       results = FromLatestSortedArticle;
     } catch (error) {}
   } else if (req.query.date === "FromOldest") {
     try {
-      FromOldestSortedArticle = await Article.find({}).sort({ _id: 1 });
+      FromOldestSortedArticle = await Article.find({})
+        .populate({ path: "author", select: "-password" })
+        .sort({ _id: 1 });
       console.log(FromOldestSortedArticle);
       results = FromOldestSortedArticle;
     } catch (error) {}
