@@ -397,7 +397,7 @@ const getArticleByCategory = async (req, res, next) => {
   try {
     categoryMatchedArticles = await Article.find({
       categories: categories,
-    }).sort({ _id: -1 });
+    }).populate({path: "author", select: "-password"}).sort({ _id: -1 });
   } catch (error) {}
   console.log(categoryMatchedArticles);
   console.log("category based sorting done.");
@@ -407,6 +407,8 @@ const getArticleByCategory = async (req, res, next) => {
     countByCategory = await Article.count({ categories: categories });
   } catch (error) {}
   console.log(countByCategory);
+  console.log(categoryMatchedArticles[0].author.name);
+  console.log(categoryMatchedArticles[0].populated("author"));
 
   res.json({
     categoryMatchedArticles: categoryMatchedArticles.map((article) =>
