@@ -107,7 +107,10 @@ const allArticles = async (req, res, next) => {
     } catch (error) {}
   } else {
     try {
-      articles = await Article.find().sort({ _id: -1 });
+      articles = await Article.find().populate({path: "author", select:"-password -__v"}).sort({ _id: -1 });
+      console.log(articles);
+      console.log(articles[60].populated("author"));
+      console.log(articles[60].author.name);
     } catch (error) {}
 
     try {
@@ -420,7 +423,8 @@ const getArticleByTag = async (req, res, next) => {
 
   let tagMatchedArticles;
   try {
-    tagMatchedArticles = await Article.find({ tags: tags }).sort({ _id: -1 });
+    tagMatchedArticles = await Article.find({ tags: tags }).populate({path: "author", select: "-password"}).sort({ _id: -1 });
+    console.log(tagMatchedArticles[1].populated("author"));
   } catch (error) {}
   console.log(tagMatchedArticles);
   console.log("tag based sorting done");
