@@ -129,7 +129,9 @@ const allArticles = async (req, res, next) => {
     } catch (error) {}
   } else {
     try {
-      articles = await Article.find().populate({path: "author", select:"-password -__v"}).sort({ _id: -1 });
+      articles = await Article.find()
+        .populate({ path: "author", select: "-password -__v" })
+        .sort({ _id: -1 });
       console.log(articles);
       console.log(articles[60].populated("author"));
       console.log(articles[60].author.name);
@@ -178,7 +180,7 @@ const getArticlesByUserId = async (req, res, next) => {
   let articlesFoundByUserId;
   try {
     //                     = Article.find({author: userId})
-    articlesFoundByUserId = await Article.find({author: userId}).populate({
+    articlesFoundByUserId = await Article.find({ author: userId }).populate({
       path: "author",
       select: "-password",
     });
@@ -201,7 +203,7 @@ const getArticlesByUserId = async (req, res, next) => {
   }
 
   console.log(articlesFoundByUserId[0].populated("author"));
-console.log(articlesFoundByUserId);
+  console.log(articlesFoundByUserId);
   res.json({
     articles: articlesFoundByUserId.map((article) =>
       article.toObject({ getters: true })
@@ -226,7 +228,8 @@ const createArticle = async (req, res, next) => {
     address,
     categories,
     tags,
-    price
+    price,
+    downloadable,
   } = req.body;
 
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
@@ -253,6 +256,7 @@ const createArticle = async (req, res, next) => {
     date_created: new Date(Date.now()).toString(),
     tags: tags,
     price: price,
+    downloadable,
   });
 
   let user;
@@ -433,7 +437,9 @@ const getArticleByCategory = async (req, res, next) => {
   try {
     categoryMatchedArticles = await Article.find({
       categories: categories,
-    }).populate({path: "author", select: "-password"}).sort({ _id: -1 });
+    })
+      .populate({ path: "author", select: "-password" })
+      .sort({ _id: -1 });
   } catch (error) {}
   console.log(categoryMatchedArticles);
   console.log("category based sorting done.");
@@ -461,7 +467,9 @@ const getArticleByTag = async (req, res, next) => {
 
   let tagMatchedArticles;
   try {
-    tagMatchedArticles = await Article.find({ tags: tags }).populate({path: "author", select: "-password"}).sort({ _id: -1 });
+    tagMatchedArticles = await Article.find({ tags: tags })
+      .populate({ path: "author", select: "-password" })
+      .sort({ _id: -1 });
     console.log(tagMatchedArticles[1].populated("author"));
   } catch (error) {}
   console.log(tagMatchedArticles);
@@ -514,7 +522,10 @@ const getSpecificArticleById = async (req, res, next) => {
 
   let article;
   try {
-    article = await Article.findById(articleId).populate({path: "author", select: "-password"});
+    article = await Article.findById(articleId).populate({
+      path: "author",
+      select: "-password",
+    });
   } catch (error) {}
   console.log(article);
   console.log(article.populated("author"));
@@ -837,6 +848,26 @@ const categoryCountIndex = async (req, res, next) => {
   });
 };
 
+const DownloadableOrNot = async (req, res, next) => {
+  if (!!req.query.downloadable) {
+    if (req.query.downloadable === "Downloadable") {
+      try {
+        articles = await Article.find({ downloadable: true })
+          .populate({ path: "author", select: "-password" })
+          .sort({ _id: -1 });
+      } catch (error) {}
+    } else if (req.query.downloadable === "WebOnly") {
+      try {
+        articles = await Article.find({ downloadable: false })
+          .populate({ path: "author", select: "-password" })
+          .sort({ _id: -1 });
+      } catch (error) {}
+    }
+  }
+
+  res.json({ articles: articles.map((a) => a.toObject({ getters: true })) });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -903,3 +934,4 @@ exports.sortByDate = sortByDate;
 
 exports.TagCountIndex = TagCountIndex;
 exports.categoryCountIndex = categoryCountIndex;
+exports.DownloadableOrNot = DownloadableOrNot;

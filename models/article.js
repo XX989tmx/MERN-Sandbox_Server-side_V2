@@ -19,6 +19,7 @@ const articleSchema = new Schema({
   date_created: { type: String, required: true },
   tags: [{ type: String, required: true }],
   price: { type: Number, required: true },
+  downloadable: { type: Boolean, required: true },
   // review: { type: Number, required: true },
 });
 

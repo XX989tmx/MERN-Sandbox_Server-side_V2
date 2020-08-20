@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get("/all", articlesControllers.allArticles);
 router.get("/price_sort", articlesControllers.sortArticleByPriceOrder)
-router.get("/date_sort", articlesControllers.sortByDate)
+router.get("/date_sort", articlesControllers.sortByDate);
+router.get("/downloadable", articlesControllers.DownloadableOrNot)
 //GET 'https:://localhost500/api/articles/all?q=query'
 
 // OR search (k1 or k2)
