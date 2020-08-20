@@ -219,7 +219,15 @@ const createArticle = async (req, res, next) => {
     );
   }
 
-  const { title, content, author, address, categories, tags, price } = req.body;
+  const {
+    title,
+    content,
+    author,
+    address,
+    categories,
+    tags,
+    price
+  } = req.body;
 
   fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   console.log('The "article title" was appended to file!');

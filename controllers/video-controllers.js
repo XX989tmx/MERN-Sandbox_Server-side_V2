@@ -60,7 +60,9 @@ const createNewVideo = async (req, res, next) => {
     tags,
     categories,
     userId,
+    duration,
   } = req.body;
+  console.log(duration);
 
   const createdVideo = new Video({
     title,
@@ -70,7 +72,8 @@ const createNewVideo = async (req, res, next) => {
     tags,
     categories,
     date_created: new Date(Date.now()).toString(),
-    creator: userId,// => user._id
+    creator: userId, // => user._id
+    duration,
   });
   console.log(createdVideo);
   let user;

@@ -17,6 +17,7 @@ router.post(
     check("src").not().isEmpty(),
     check("tags").not().isEmpty(),
     check("categories").not().isEmpty(),
+    check("duration").not().isEmpty(),
   ],
   videoControllers.createNewVideo
 );
