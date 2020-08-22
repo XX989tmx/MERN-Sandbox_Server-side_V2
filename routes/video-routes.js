@@ -18,6 +18,8 @@ router.post(
     check("tags").not().isEmpty(),
     check("categories").not().isEmpty(),
     check("duration").not().isEmpty(),
+    check("hd").not().isEmpty(),
+    check("is4k").not().isEmpty(),
   ],
   videoControllers.createNewVideo
 );

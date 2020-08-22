@@ -13,6 +13,8 @@ const videoSchema = new Schema({
   date_created: { type: String, required: true },
   creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
   duration: { type: String, required: true },
+  hd: { type: Boolean, required: true },
+  is4k: { type: Boolean, required: true },
   // admin: { type: mongoose.Types.ObjectId, required: true, ref: "Admin" },
   // likes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Like" }],
   // dislikes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Dislike" }],
