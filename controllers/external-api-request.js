@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 
 const getCryptoTicker = require("../util/crypto-ticker");
 const getBTCIndex = require("../util/getBTCHealthIndex");
+const CryptoCurrency = require("../models/crypto-currency");
 
 const Crypto = require("../models/crypto");
 
@@ -42,6 +43,11 @@ const getExternalApi = async (req, res, next) => {
   //    }
   // var Rating = getBTCIndex();
   // console.log(Rating);
+
+  let previousCurrencyPrice;
+  try {
+    previousCurrencyPrice = await CryptoCurrency.findOne().sort({ _id: -1 });
+  } catch (error) {}
 
   //get fcasRating
   let BTCHealthIndexResponse;
@@ -771,6 +777,66 @@ const getExternalApi = async (req, res, next) => {
     last_TWD,
   };
 
+  let priceDifferenceBetweenPreviousAndLatest = {
+    JPY: lastValueOfEveryCurrency.last_JPY - previousCurrencyPrice.last_JPY,
+    USD: lastValueOfEveryCurrency.last_USD - previousCurrencyPrice.last_USD,
+    AUD: lastValueOfEveryCurrency.last_AUD - previousCurrencyPrice.last_AUD,
+    BRL: lastValueOfEveryCurrency.last_BRL - previousCurrencyPrice.last_BRL,
+    CAD: lastValueOfEveryCurrency.last_CAD - previousCurrencyPrice.last_CAD,
+    CHF: lastValueOfEveryCurrency.last_CHF - previousCurrencyPrice.last_CHF,
+    CLP: lastValueOfEveryCurrency.last_CLP - previousCurrencyPrice.last_CLP,
+    CNY: lastValueOfEveryCurrency.last_CNY - previousCurrencyPrice.last_CNY,
+    DKK: lastValueOfEveryCurrency.last_DKK - previousCurrencyPrice.last_DKK,
+    EUR: lastValueOfEveryCurrency.last_EUR - previousCurrencyPrice.last_EUR,
+    GBP: lastValueOfEveryCurrency.last_GBP - previousCurrencyPrice.last_GBP,
+    HKD: lastValueOfEveryCurrency.last_HKD - previousCurrencyPrice.last_HKD,
+    INR: lastValueOfEveryCurrency.last_INR - previousCurrencyPrice.last_INR,
+    ISK: lastValueOfEveryCurrency.last_ISK - previousCurrencyPrice.last_ISK,
+    KRW: lastValueOfEveryCurrency.last_KRW - previousCurrencyPrice.last_KRW,
+    NZD: lastValueOfEveryCurrency.last_NZD - previousCurrencyPrice.last_NZD,
+    PLN: lastValueOfEveryCurrency.last_PLN - previousCurrencyPrice.last_PLN,
+    RUB: lastValueOfEveryCurrency.last_RUB - previousCurrencyPrice.last_RUB,
+    SEK: lastValueOfEveryCurrency.last_SEK - previousCurrencyPrice.last_SEK,
+    SGD: lastValueOfEveryCurrency.last_SGD - previousCurrencyPrice.last_SGD,
+    THB: lastValueOfEveryCurrency.last_THB - previousCurrencyPrice.last_THB,
+    TRY: lastValueOfEveryCurrency.last_TRY - previousCurrencyPrice.last_TRY,
+    TWD: lastValueOfEveryCurrency.last_TWD - previousCurrencyPrice.last_TWD,
+  };
+
+  const cryptoLastPriceAll = new CryptoCurrency({
+    last_JPY: lastValueOfEveryCurrency.last_JPY,
+    last_USD: lastValueOfEveryCurrency.last_USD,
+    last_AUD: lastValueOfEveryCurrency.last_AUD,
+    last_BRL: lastValueOfEveryCurrency.last_BRL,
+    last_CAD: lastValueOfEveryCurrency.last_CAD,
+    last_CHF: lastValueOfEveryCurrency.last_CHF,
+    last_CLP: lastValueOfEveryCurrency.last_CLP,
+    last_CNY: lastValueOfEveryCurrency.last_CNY,
+    last_DKK: lastValueOfEveryCurrency.last_DKK,
+    last_EUR: lastValueOfEveryCurrency.last_EUR,
+    last_GBP: lastValueOfEveryCurrency.last_GBP,
+    last_HKD: lastValueOfEveryCurrency.last_HKD,
+    last_INR: lastValueOfEveryCurrency.last_INR,
+    last_ISK: lastValueOfEveryCurrency.last_ISK,
+    last_KRW: lastValueOfEveryCurrency.last_KRW,
+    last_NZD: lastValueOfEveryCurrency.last_NZD,
+    last_PLN: lastValueOfEveryCurrency.last_PLN,
+    last_RUB: lastValueOfEveryCurrency.last_RUB,
+    last_SEK: lastValueOfEveryCurrency.last_SEK,
+    last_SGD: lastValueOfEveryCurrency.last_SGD,
+    last_THB: lastValueOfEveryCurrency.last_THB,
+    last_TRY: lastValueOfEveryCurrency.last_TRY,
+    last_TWD: lastValueOfEveryCurrency.last_TWD,
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await cryptoLastPriceAll.save({ session: sess });
+    await sess.commitTransaction();
+    console.log("Saving TWD data to database was successful.");
+  } catch (error) {}
+
   var currencySymbolOfEveryCurrency = {
     symbol_JPY,
     symbol_USD,
@@ -806,6 +872,7 @@ const getExternalApi = async (req, res, next) => {
   console.log(util.isString(symbol_HKD));
   console.log(util.isString(new Date(Date.now()).toString()));
   // console.log(Number.isInteger(last_HKD));
+  console.log(priceDifferenceBetweenPreviousAndLatest);
 
   res.json({
     exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
@@ -813,6 +880,7 @@ const getExternalApi = async (req, res, next) => {
     currencySymbolOfEveryCurrency: currencySymbolOfEveryCurrency,
     fcasRating: fcasRating,
     fcasScore: fcasScore,
+    priceDifferenceBetweenPreviousAndLatest,
   });
 };
 
@@ -909,8 +977,7 @@ const getHealthIndex = async (req, res, next) => {
 };
 
 const getExchangeRateBothCurrencyAndCrypto = async (req, res, next) => {
-  
-    let response;
+  let response;
   try {
     response = await axios.get(
       `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${encodeURIComponent(
