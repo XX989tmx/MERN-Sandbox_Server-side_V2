@@ -875,7 +875,7 @@ const getExternalApi = async (req, res, next) => {
   console.log(priceDifferenceBetweenPreviousAndLatest);
 
   res.json({
-    exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
+    // exchange_rate: `${JPY},${USD},${AUD},${BRL},${CAD},${CHF},${CLP},${CNY},${DKK},${EUR},${GBP},${HKD},${INR},${ISK},${KRW},${NZD},${PLN},${RUB},${SEK},${SGD},${THB},${TRY},${TWD}`,
     lastValueOfEveryCurrency: lastValueOfEveryCurrency,
     currencySymbolOfEveryCurrency: currencySymbolOfEveryCurrency,
     fcasRating: fcasRating,
