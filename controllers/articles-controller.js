@@ -598,23 +598,36 @@ const TagCountIndex = async (req, res, next) => {
   let responseArray = [];
 
   // get element(tag) form Article.tag field, and push it to array. = making tagName list.
-  // let article;
-  // try {
-  //   article = await Article.find();
-  // } catch (error) {
+  let article;
+  try {
+    article = await Article.find();
+  } catch (error) {
 
-  // };
+  };
   // console.log(article[60].tags[0]);
 
-  // let articleTags = []
+  let articleTags = []
 
-  // for (let index = 0; index < article.length; index++) {
-  //   const element = article[index];
+  for (let index = 0; index < article.length; index++) {
+    const element = article[index];
 
-  //     articleTags.push(element.tags[0]);
+      articleTags.push(element.tags[0]);
 
-  //   console.log(articleTags);
-  // }
+    console.log(articleTags);
+  }
+
+  // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
+  let noDeplicateTagArray = articleTags.reduce(function (
+    accumulator,
+    currentValue
+  ) {
+    if (accumulator.indexOf(currentValue) === -1) {
+      accumulator.push(currentValue);
+    }
+    return accumulator;
+  },
+  []);
+  console.log(noDeplicateTagArray);
 
   // for (let index = 0; index < articleTags.length; index++) {
   //   // const element = array[index];
@@ -625,25 +638,26 @@ const TagCountIndex = async (req, res, next) => {
   // }
 
   // roop through tagNameArray and gets count of document matched with each tag. And, make the object with it and push it to response array(use this array for map rendering in react).
-  // for (let index = 0; index < articleTags.length; index++) {
-  //   const articleTagsName = articleTags[index];
-  //   // let articleTagsName = articleTags[i];
-  // let tagCount;
-  // try {
-  //   tagCount = await Article.find({
-  //     tags: articleTagsName,
-  //   }).countDocuments();
-  //   console.log(tagCount);
-  // } catch (error) {}
+  for (let index = 0; index < noDeplicateTagArray.length; index++) {
+    const articleTagsName = noDeplicateTagArray[index];
+    // let articleTagsName = articleTags[i];
+    let tagCount;
+    try {
+      tagCount = await Article.find({
+        tags: articleTagsName,
+      }).countDocuments();
+      console.log(tagCount);
+    } catch (error) {}
 
-  // const tagIndex = {
-  //   tagName: articleTagsName,
-  //   count: tagCount,
-  // };
-  // console.log(tagIndex);
+    const tagIndex = {
+      tagName: articleTagsName,
+      count: tagCount,
+    };
+    console.log(tagIndex);
 
-  // responseArray.push(tagIndex);
-  // }
+    responseArray.push(tagIndex);
+    console.log(responseArray);
+  }
 
   // let newResponseArray;
   // newResponseArray = [responseArray[0]];
@@ -662,95 +676,95 @@ const TagCountIndex = async (req, res, next) => {
   //   // }
   // }
 
-  // politics tag
-  let politicsTagCount;
-  try {
-    politicsTagCount = await Article.find({
-      tags: "politics",
-    }).countDocuments();
-    console.log(politicsTagCount);
-  } catch (error) {}
+  // // politics tag
+  // let politicsTagCount;
+  // try {
+  //   politicsTagCount = await Article.find({
+  //     tags: "politics",
+  //   }).countDocuments();
+  //   console.log(politicsTagCount);
+  // } catch (error) {}
 
-  const tagIndex = {
-    tagName: "politics", // =Article.find({tags: "xx"})
-    count: politicsTagCount, // tag count. this is show in pop counter in frontend
-  };
-  console.log(tagIndex);
+  // const tagIndex = {
+  //   tagName: "politics", // =Article.find({tags: "xx"})
+  //   count: politicsTagCount, // tag count. this is show in pop counter in frontend
+  // };
+  // console.log(tagIndex);
 
-  responseArray.push(tagIndex);
-  console.log(responseArray);
+  // responseArray.push(tagIndex);
+  // console.log(responseArray);
 
-  // business tag
-  let businessTagCount;
-  try {
-    businessTagCount = await Article.find({
-      tags: "business",
-    }).countDocuments();
-    console.log(businessTagCount);
-  } catch (error) {}
+  // // business tag
+  // let businessTagCount;
+  // try {
+  //   businessTagCount = await Article.find({
+  //     tags: "business",
+  //   }).countDocuments();
+  //   console.log(businessTagCount);
+  // } catch (error) {}
 
-  const businessTagIndex = {
-    tagName: "business", // =Article.find({tags: "xx"})
-    count: businessTagCount, // tag count. this is show in pop counter in frontend
-  };
-  console.log(businessTagIndex);
+  // const businessTagIndex = {
+  //   tagName: "business", // =Article.find({tags: "xx"})
+  //   count: businessTagCount, // tag count. this is show in pop counter in frontend
+  // };
+  // console.log(businessTagIndex);
 
-  responseArray.push(businessTagIndex);
-  console.log(responseArray);
+  // responseArray.push(businessTagIndex);
+  // console.log(responseArray);
 
-  // education tag
-  let educationTagCount;
-  try {
-    educationTagCount = await Article.find({
-      tags: "education",
-    }).countDocuments();
-    console.log(educationTagCount);
-  } catch (error) {}
+  // // education tag
+  // let educationTagCount;
+  // try {
+  //   educationTagCount = await Article.find({
+  //     tags: "education",
+  //   }).countDocuments();
+  //   console.log(educationTagCount);
+  // } catch (error) {}
 
-  const educationTagIndex = {
-    tagName: "education", // =Article.find({tags: "xx"})
-    count: educationTagCount, // tag count. this is show in pop counter in frontend
-  };
-  console.log(educationTagIndex);
+  // const educationTagIndex = {
+  //   tagName: "education", // =Article.find({tags: "xx"})
+  //   count: educationTagCount, // tag count. this is show in pop counter in frontend
+  // };
+  // console.log(educationTagIndex);
 
-  responseArray.push(educationTagIndex);
-  console.log(responseArray);
+  // responseArray.push(educationTagIndex);
+  // console.log(responseArray);
 
-  // investment tag
-  let investmentTagCount;
-  try {
-    investmentTagCount = await Article.find({
-      tags: "investment",
-    }).countDocuments();
-    console.log(investmentTagCount);
-  } catch (error) {}
+  // // investment tag
+  // let investmentTagCount;
+  // try {
+  //   investmentTagCount = await Article.find({
+  //     tags: "investment",
+  //   }).countDocuments();
+  //   console.log(investmentTagCount);
+  // } catch (error) {}
 
-  const investmentTagIndex = {
-    tagName: "investment", // =Article.find({tags: "xx"})
-    count: investmentTagCount, // tag count. this is show in pop counter in frontend
-  };
-  console.log(investmentTagIndex);
+  // const investmentTagIndex = {
+  //   tagName: "investment", // =Article.find({tags: "xx"})
+  //   count: investmentTagCount, // tag count. this is show in pop counter in frontend
+  // };
+  // console.log(investmentTagIndex);
 
-  responseArray.push(investmentTagIndex);
-  console.log(responseArray);
+  // responseArray.push(investmentTagIndex);
+  // console.log(responseArray);
 
-  // society tag
-  let societyTagCount;
-  try {
-    societyTagCount = await Article.find({
-      tags: "society",
-    }).countDocuments();
-    console.log(societyTagCount);
-  } catch (error) {}
+  // // society tag
+  // let societyTagCount;
+  // try {
+  //   societyTagCount = await Article.find({
+  //     tags: "society",
+  //   }).countDocuments();
+  //   console.log(societyTagCount);
+  // } catch (error) {}
 
-  const societyTagIndex = {
-    tagName: "society", // =Article.find({tags: "xx"})
-    count: societyTagCount, // tag count. this is show in pop counter in frontend
-  };
-  console.log(societyTagIndex);
+  // const societyTagIndex = {
+  //   tagName: "society", // =Article.find({tags: "xx"})
+  //   count: societyTagCount, // tag count. this is show in pop counter in frontend
+  // };
+  // console.log(societyTagIndex);
 
-  responseArray.push(societyTagIndex);
-  console.log(responseArray);
+  // responseArray.push(societyTagIndex);
+  // console.log(responseArray);
 
   //数の多い順とABC順の両方作る
   responseArray.sort((a, b) => {
