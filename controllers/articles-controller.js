@@ -15,6 +15,7 @@ const allArticles = async (req, res, next) => {
   // const query = req.query.q;
   let articles;
   let query = {};
+  let TagArray;
   if (req.query.q && req.query.and === "true") {
     try {
       query = {
@@ -135,8 +136,28 @@ const allArticles = async (req, res, next) => {
       console.log(articles);
       console.log(articles[60].populated("author"));
       console.log(articles[60].author.name);
-    } catch (error) {}
 
+      
+    } catch (error) {}
+    let articleTags = [];
+
+    for (let index = 0; index < articles.length; index++) {
+      const element = articles[index];
+
+      articleTags.push(element.tags[0]);
+
+      console.log(articleTags);
+    }
+
+    // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
+
+    TagArray = articleTags.reduce(function (accumulator, currentValue) {
+      if (accumulator.indexOf(currentValue) === -1) {
+        accumulator.push(currentValue);
+      }
+      return accumulator;
+    }, []);
+    console.log(TagArray);
     try {
       count = await Article.count();
     } catch (error) {}
@@ -145,6 +166,7 @@ const allArticles = async (req, res, next) => {
 
   res.json({
     articles: articles.map((a) => a.toObject({ getters: true })),
+    TagArray: TagArray,
   });
 };
 
@@ -601,17 +623,15 @@ const TagCountIndex = async (req, res, next) => {
   let article;
   try {
     article = await Article.find();
-  } catch (error) {
-
-  };
+  } catch (error) {}
   // console.log(article[60].tags[0]);
 
-  let articleTags = []
+  let articleTags = [];
 
   for (let index = 0; index < article.length; index++) {
     const element = article[index];
 
-      articleTags.push(element.tags[0]);
+    articleTags.push(element.tags[0]);
 
     console.log(articleTags);
   }
@@ -781,134 +801,134 @@ const TagCountIndex = async (req, res, next) => {
 };
 
 const categoryCountIndex = async (req, res, next) => {
-        let responseArray = [];
+  let responseArray = [];
 
-        let article;
-        try {
-          article = await Article.find();
-        } catch (error) {}
+  let article;
+  try {
+    article = await Article.find();
+  } catch (error) {}
 
-        let articleCategories = [];
+  let articleCategories = [];
 
-        for (let index = 0; index < article.length; index++) {
-          const element = article[index];
+  for (let index = 0; index < article.length; index++) {
+    const element = article[index];
 
-          articleCategories.push(element.categories[0]);
+    articleCategories.push(element.categories[0]);
 
-          console.log(articleCategories);
-        };
+    console.log(articleCategories);
+  }
 
-        let noDeplicateCategoriesArray = articleCategories.reduce(function (
-          accumulator,
-          currentValue
-        ) {
-          if (accumulator.indexOf(currentValue) === -1) {
-            accumulator.push(currentValue);
-          }
-          return accumulator;
-        },
-        []);
-        console.log(noDeplicateCategoriesArray);
+  let noDeplicateCategoriesArray = articleCategories.reduce(function (
+    accumulator,
+    currentValue
+  ) {
+    if (accumulator.indexOf(currentValue) === -1) {
+      accumulator.push(currentValue);
+    }
+    return accumulator;
+  },
+  []);
+  console.log(noDeplicateCategoriesArray);
 
-        for (let index = 0; index < noDeplicateCategoriesArray.length; index++) {
-          const articleCategoriesName = noDeplicateCategoriesArray[index];
-          // let articleTagsName = articleTags[i];
-          let CategoryCount;
-          try {
-            CategoryCount = await Article.find({
-              categories: articleCategoriesName,
-            }).countDocuments();
-            console.log(CategoryCount);
-          } catch (error) {}
+  for (let index = 0; index < noDeplicateCategoriesArray.length; index++) {
+    const articleCategoriesName = noDeplicateCategoriesArray[index];
+    // let articleTagsName = articleTags[i];
+    let CategoryCount;
+    try {
+      CategoryCount = await Article.find({
+        categories: articleCategoriesName,
+      }).countDocuments();
+      console.log(CategoryCount);
+    } catch (error) {}
 
-          const CategoryIndex = {
-            categoryName: articleCategoriesName,
-            count: CategoryCount,
-          };
-          console.log(CategoryIndex);
+    const CategoryIndex = {
+      categoryName: articleCategoriesName,
+      count: CategoryCount,
+    };
+    console.log(CategoryIndex);
 
-          responseArray.push(CategoryIndex);
-          console.log(responseArray);
-        }
+    responseArray.push(CategoryIndex);
+    console.log(responseArray);
+  }
 
-        // // politics category
-        // let politicsCategoryCount;
-        // try {
-        //   politicsCategoryCount = await Article.find({
-        //     categories: "politics",
-        //   }).countDocuments();
-        //   console.log(politicsCategoryCount);
-        // } catch (error) {}
+  // // politics category
+  // let politicsCategoryCount;
+  // try {
+  //   politicsCategoryCount = await Article.find({
+  //     categories: "politics",
+  //   }).countDocuments();
+  //   console.log(politicsCategoryCount);
+  // } catch (error) {}
 
-        // const politicsCategoryIndex = {
-        //   categoryName: "politics",
-        //   count: politicsCategoryCount,
-        // };
-        // console.log(politicsCategoryIndex);
+  // const politicsCategoryIndex = {
+  //   categoryName: "politics",
+  //   count: politicsCategoryCount,
+  // };
+  // console.log(politicsCategoryIndex);
 
-        // responseArray.push(politicsCategoryIndex);
+  // responseArray.push(politicsCategoryIndex);
 
-        // // business category
-        // let businessCategoryCount;
-        // try {
-        //   businessCategoryCount = await Article.find({
-        //     categories: "business",
-        //   }).countDocuments();
-        //   console.log(businessCategoryCount);
-        // } catch (error) {}
+  // // business category
+  // let businessCategoryCount;
+  // try {
+  //   businessCategoryCount = await Article.find({
+  //     categories: "business",
+  //   }).countDocuments();
+  //   console.log(businessCategoryCount);
+  // } catch (error) {}
 
-        // const businessCategoryIndex = {
-        //   categoryName: "business",
-        //   count: businessCategoryCount,
-        // };
-        // console.log(businessCategoryIndex);
+  // const businessCategoryIndex = {
+  //   categoryName: "business",
+  //   count: businessCategoryCount,
+  // };
+  // console.log(businessCategoryIndex);
 
-        // responseArray.push(businessCategoryIndex);
+  // responseArray.push(businessCategoryIndex);
 
-        // // education category
-        // let educationCategoryCount;
-        // try {
-        //   educationCategoryCount = await Article.find({
-        //     categories: "education",
-        //   }).countDocuments();
-        //   console.log(educationCategoryCount);
-        // } catch (error) {}
+  // // education category
+  // let educationCategoryCount;
+  // try {
+  //   educationCategoryCount = await Article.find({
+  //     categories: "education",
+  //   }).countDocuments();
+  //   console.log(educationCategoryCount);
+  // } catch (error) {}
 
-        // const educationCategoryIndex = {
-        //   categoryName: "education",
-        //   count: educationCategoryCount,
-        // };
-        // console.log(educationCategoryIndex);
+  // const educationCategoryIndex = {
+  //   categoryName: "education",
+  //   count: educationCategoryCount,
+  // };
+  // console.log(educationCategoryIndex);
 
-        // responseArray.push(educationCategoryIndex);
+  // responseArray.push(educationCategoryIndex);
 
-        // // investment category
-        // let investmentCategoryCount;
-        // try {
-        //   investmentCategoryCount = await Article.find({
-        //     categories: "investment",
-        //   }).countDocuments();
-        //   console.log(investmentCategoryCount);
-        // } catch (error) {}
+  // // investment category
+  // let investmentCategoryCount;
+  // try {
+  //   investmentCategoryCount = await Article.find({
+  //     categories: "investment",
+  //   }).countDocuments();
+  //   console.log(investmentCategoryCount);
+  // } catch (error) {}
 
-        // const investmentCategoryIndex = {
-        //   categoryName: "investment",
-        //   count: investmentCategoryCount,
-        // };
-        // console.log(investmentCategoryIndex);
+  // const investmentCategoryIndex = {
+  //   categoryName: "investment",
+  //   count: investmentCategoryCount,
+  // };
+  // console.log(investmentCategoryIndex);
 
-        // responseArray.push(investmentCategoryIndex);
+  // responseArray.push(investmentCategoryIndex);
 
-        //des sort
-        responseArray.sort((a, b) => {
-          return b.count - a.count;
-        });
-        console.log(responseArray);
+  //des sort
+  responseArray.sort((a, b) => {
+    return b.count - a.count;
+  });
+  console.log(responseArray);
 
-        res.json({
-          responseArray,
-        });
-      };;
+  res.json({
+    responseArray,
+  });
+};
 
 const DownloadableOrNot = async (req, res, next) => {
   if (!!req.query.downloadable) {
