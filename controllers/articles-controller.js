@@ -16,6 +16,7 @@ const allArticles = async (req, res, next) => {
   let articles;
   let query = {};
   let TagArray;
+  let CategoryArray;
   if (req.query.q && req.query.and === "true") {
     try {
       query = {
@@ -139,6 +140,8 @@ const allArticles = async (req, res, next) => {
 
       
     } catch (error) {}
+
+    //tagList
     let articleTags = [];
 
     for (let index = 0; index < articles.length; index++) {
@@ -158,6 +161,28 @@ const allArticles = async (req, res, next) => {
       return accumulator;
     }, []);
     console.log(TagArray);
+
+    //categoryList
+    let articleCategories = [];
+
+    for (let index = 0; index < articles.length; index++) {
+      const element = articles[index];
+
+      articleCategories.push(element.categories[0]);
+
+      console.log(articleCategories);
+    }
+
+    // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
+
+    CategoryArray = articleCategories.reduce(function (accumulator, currentValue) {
+      if (accumulator.indexOf(currentValue) === -1) {
+        accumulator.push(currentValue);
+      }
+      return accumulator;
+    }, []);
+    console.log(CategoryArray);
+
     try {
       count = await Article.count();
     } catch (error) {}
@@ -167,6 +192,7 @@ const allArticles = async (req, res, next) => {
   res.json({
     articles: articles.map((a) => a.toObject({ getters: true })),
     TagArray: TagArray,
+    CategoryArray: CategoryArray,
   });
 };
 
