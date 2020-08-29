@@ -141,47 +141,47 @@ const allArticles = async (req, res, next) => {
       
     } catch (error) {}
 
-    //tagList
-    let articleTags = [];
+    // //tagList
+    // let articleTags = [];
 
-    for (let index = 0; index < articles.length; index++) {
-      const element = articles[index];
+    // for (let index = 0; index < articles.length; index++) {
+    //   const element = articles[index];
 
-      articleTags.push(element.tags[0]);
+    //   articleTags.push(element.tags[0]);
 
-      console.log(articleTags);
-    }
+    //   console.log(articleTags);
+    // }
 
-    // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
+    // // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
 
-    TagArray = articleTags.reduce(function (accumulator, currentValue) {
-      if (accumulator.indexOf(currentValue) === -1) {
-        accumulator.push(currentValue);
-      }
-      return accumulator;
-    }, []);
-    console.log(TagArray);
+    // TagArray = articleTags.reduce(function (accumulator, currentValue) {
+    //   if (accumulator.indexOf(currentValue) === -1) {
+    //     accumulator.push(currentValue);
+    //   }
+    //   return accumulator;
+    // }, []);
+    // console.log(TagArray);
 
-    //categoryList
-    let articleCategories = [];
+    // //categoryList
+    // let articleCategories = [];
 
-    for (let index = 0; index < articles.length; index++) {
-      const element = articles[index];
+    // for (let index = 0; index < articles.length; index++) {
+    //   const element = articles[index];
 
-      articleCategories.push(element.categories[0]);
+    //   articleCategories.push(element.categories[0]);
 
-      console.log(articleCategories);
-    }
+    //   console.log(articleCategories);
+    // }
 
-    // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
+    // // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
 
-    CategoryArray = articleCategories.reduce(function (accumulator, currentValue) {
-      if (accumulator.indexOf(currentValue) === -1) {
-        accumulator.push(currentValue);
-      }
-      return accumulator;
-    }, []);
-    console.log(CategoryArray);
+    // CategoryArray = articleCategories.reduce(function (accumulator, currentValue) {
+    //   if (accumulator.indexOf(currentValue) === -1) {
+    //     accumulator.push(currentValue);
+    //   }
+    //   return accumulator;
+    // }, []);
+    // console.log(CategoryArray);
 
     try {
       count = await Article.count();
@@ -191,8 +191,8 @@ const allArticles = async (req, res, next) => {
 
   res.json({
     articles: articles.map((a) => a.toObject({ getters: true })),
-    TagArray: TagArray,
-    CategoryArray: CategoryArray,
+    // TagArray: TagArray,
+    // CategoryArray: CategoryArray,
   });
 };
 
