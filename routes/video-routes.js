@@ -3,13 +3,18 @@ const router = express.Router();
 
 const { check } = require("express-validator");
 
+
+
 const videoControllers = require("../controllers/video-controllers");
 const video = require("../models/video");
+const fileUpload = require("../middleware/file-upload");
+
 
 router.get("/index", videoControllers.getAllVideos);
 
 router.post(
   "/new",
+  fileUpload.single("image"),
   [
     check("title").not().isEmpty(),
     check("description").not().isEmpty(),

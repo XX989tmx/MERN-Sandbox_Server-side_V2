@@ -78,6 +78,7 @@ const createNewVideo = async (req, res, next) => {
     duration,
     hd,
     is4k,
+    image: req.file.path,
   });
   console.log(createdVideo);
   let user;
@@ -91,7 +92,7 @@ const createNewVideo = async (req, res, next) => {
     user.videos.push(createdVideo);
     await user.save({ session: sess });
     await sess.commitTransaction();
-  } catch (error) {}
+  } catch (error) {console.log(error);}
 
   res.json({ createdVideo });
 };
