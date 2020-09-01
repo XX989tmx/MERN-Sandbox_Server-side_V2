@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
-
+const multer = require("multer");
 const Video = require("../models/video");
 const User = require("../models/user");
+const aws = require("aws-sdk");
+const fs = require("fs");
 
 const getAllVideos = async (req, res, next) => {
   let videos;
@@ -66,6 +68,49 @@ const createNewVideo = async (req, res, next) => {
   } = req.body;
   console.log(duration);
 
+  aws.config.setPromisesDependency();
+  aws.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+  });
+
+  const s3 = new aws.S3();
+  let params = {
+    ACL: "public-read",
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Body: fs.createReadStream(req.file.path),
+    Key: req.file.originalname,
+  };
+  console.log(params.KEY);
+  let url = `https://${
+    process.env.AWS_BUCKET_NAME
+  }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
+  // let locationUrl;
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.log("Error occured while trying to upload to S3 bucket", err);
+    }
+
+    if (data) {
+      // fs.unlinkSync(req.file.path); // Empty temp folder
+      // console.log(data);
+      // console.log(data.Location);
+      console.log(data.Location);
+
+      // let newUser = new Users({ ...req.body, avatar: locationUrl });
+      // newUser
+      //   .save()
+      //   .then((user) => {
+      //     res.json({ message: "User created successfully", user });
+      //   })
+      //   .catch((err) => {
+      //     console.log("Error occured while trying to save to DB");
+      //   });
+    }
+  });
+
   const createdVideo = new Video({
     title,
     description,
@@ -78,9 +123,9 @@ const createNewVideo = async (req, res, next) => {
     duration,
     hd,
     is4k,
-    image: req.file.path,
+    image: url,
   });
-  console.log(createdVideo);
+
   let user;
 
   user = await User.findById(userId);
@@ -92,8 +137,9 @@ const createNewVideo = async (req, res, next) => {
     user.videos.push(createdVideo);
     await user.save({ session: sess });
     await sess.commitTransaction();
-  } catch (error) {console.log(error);}
-
+  } catch (error) {
+    console.log(error);
+  }
   res.json({ createdVideo });
 };
 
