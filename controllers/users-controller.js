@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 const UserDetailInfo = require("../models/user-detail-info");
-
+const aws = require("aws-sdk");
 const fs = require("fs");
 const path = require("path");
 const user = require("../models/user");
@@ -82,10 +82,53 @@ const signup = async (req, res, next) => {
     return next(error);
   }
 
+  aws.config.setPromisesDependency();
+  aws.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+  });
+
+  const s3 = new aws.S3();
+  let params = {
+    ACL: "public-read",
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Body: fs.createReadStream(req.file.path),
+    Key: req.file.originalname,
+  };
+  console.log(params.KEY);
+  let url = `https://${
+    process.env.AWS_BUCKET_NAME
+  }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
+  // let locationUrl;
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.log("Error occured while trying to upload to S3 bucket", err);
+    }
+
+    if (data) {
+      // fs.unlinkSync(req.file.path); // Empty temp folder
+      // console.log(data);
+      // console.log(data.Location);
+      console.log(data.Location);
+
+      // let newUser = new Users({ ...req.body, avatar: locationUrl });
+      // newUser
+      //   .save()
+      //   .then((user) => {
+      //     res.json({ message: "User created successfully", user });
+      //   })
+      //   .catch((err) => {
+      //     console.log("Error occured while trying to save to DB");
+      //   });
+    }
+  });
+
   const createdUser = new User({
     name: name,
     email: email,
-    image: req.file.path,
+    image: url,
     password: hashedPassword,
     articles: [],
   });
