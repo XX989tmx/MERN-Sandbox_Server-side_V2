@@ -43,7 +43,7 @@ router.get(
 );
 
 
-router.delete("/:videoId", videoControllers.deleteVideo);
+
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);
@@ -57,5 +57,7 @@ router.patch(
   ],
   videoControllers.updateVideo
 );
+
+router.delete("/:videoId", videoControllers.deleteVideo);
 
 module.exports = router;

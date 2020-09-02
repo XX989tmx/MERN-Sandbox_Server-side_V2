@@ -192,6 +192,14 @@ const deleteVideo = async (req, res, next) => {
     console.log(error);
   }
 
+  if (video.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this video.",
+      401
+    );
+    return next(error);
+  }
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -200,6 +208,10 @@ const deleteVideo = async (req, res, next) => {
     await video.creator.save({ session: sess });
     await sess.commitTransaction();
   } catch (error) {}
+
+  console.log('Video Deletion Done');
+
+  res.status(200).json({message:"Deleted Video"})
 };
 
 const getVideoByTags = async (req, res, next) => {
