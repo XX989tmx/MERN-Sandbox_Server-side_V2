@@ -1,5 +1,7 @@
-const fs = require("fs");
+
 const path = require("path");
+const aws = require("aws-sdk");
+const fs = require("fs");
 
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
@@ -285,6 +287,49 @@ const createArticle = async (req, res, next) => {
   // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), content);
   // console.log('The "article content" was appended to file!');
 
+  aws.config.setPromisesDependency();
+  aws.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+  });
+
+  const s3 = new aws.S3();
+  let params = {
+    ACL: "public-read",
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Body: fs.createReadStream(req.file.path),
+    Key: req.file.originalname,
+  };
+  console.log(params.KEY);
+  let url = `https://${
+    process.env.AWS_BUCKET_NAME
+  }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
+  // let locationUrl;
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.log("Error occured while trying to upload to S3 bucket", err);
+    }
+
+    if (data) {
+      // fs.unlinkSync(req.file.path); // Empty temp folder
+      // console.log(data);
+      // console.log(data.Location);
+      console.log(data.Location);
+
+      // let newUser = new Users({ ...req.body, avatar: locationUrl });
+      // newUser
+      //   .save()
+      //   .then((user) => {
+      //     res.json({ message: "User created successfully", user });
+      //   })
+      //   .catch((err) => {
+      //     console.log("Error occured while trying to save to DB");
+      //   });
+    }
+  });
+
   let coordinates;
   try {
     coordinates = await getCoordsForAddress(address);
@@ -297,7 +342,7 @@ const createArticle = async (req, res, next) => {
     content: content,
     address: address,
     location: coordinates,
-    image: req.file.path,
+    image: url,
     author: author,
     wishlists: [],
     categories: categories,
