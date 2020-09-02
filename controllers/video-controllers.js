@@ -4,6 +4,8 @@ const Video = require("../models/video");
 const User = require("../models/user");
 const aws = require("aws-sdk");
 const fs = require("fs");
+const HttpError = require("../models/http-error");
+const jwt = require("jsonwebtoken");
 
 const getAllVideos = async (req, res, next) => {
   let videos;
@@ -143,6 +145,63 @@ const createNewVideo = async (req, res, next) => {
   res.json({ createdVideo });
 };
 
+const updateVideo = async (req, res, next) => {
+  const { title, description, persons } = req.body;
+  const videoId = req.params.videoId;
+
+  let video;
+  try {
+    video = await Video.findById(videoId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (video.creator.toString() !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to edit this article.",
+      401
+    );
+    return next(error);
+  }
+
+  video.title = title;
+  video.description = description;
+  video.persons = persons;
+
+  try {
+    await video.save();
+  } catch (error) {
+    console.log(error);
+    // const error = new HttpError(
+    //   "Something went wrong, could not update article.",
+    //   500
+    // );
+    // return next(error);
+  }
+
+  res.status(200).json({ video: video.toObject({ getters: true }) });
+};
+
+const deleteVideo = async (req, res, next) => {
+  const videoId = req.params.videoId;
+
+  let video;
+  try {
+    video = await Video.findById(videoId).populate("creator");
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await video.remove({ session: sess });
+    video.creator.videos.pull(video);
+    await video.creator.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (error) {}
+};
+
 const getVideoByTags = async (req, res, next) => {
   const tags = req.params.tags;
 
@@ -200,3 +259,5 @@ exports.getVideoByTags = getVideoByTags;
 exports.getVideoByCategories = getVideoByCategories;
 exports.getVideoByPersons = getVideoByPersons;
 exports.getVideosByUserId = getVideosByUserId;
+exports.updateVideo = updateVideo;
+exports.deleteVideo = deleteVideo;

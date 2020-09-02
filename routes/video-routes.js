@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
+const checkAuth = require("../middleware/check-auth");
 const { check } = require("express-validator");
-
-
 
 const videoControllers = require("../controllers/video-controllers");
 const video = require("../models/video");
 const fileUpload = require("../middleware/file-upload");
-
 
 router.get("/index", videoControllers.getAllVideos);
 
@@ -43,6 +40,22 @@ router.get(
 router.get(
   "/get_video_by_persons/:persons",
   videoControllers.getVideoByPersons
+);
+
+
+router.delete("/:videoId", videoControllers.deleteVideo);
+
+// ここより前はauth無しでアクセス可能
+router.use(checkAuth);
+// ここより下はauthentication必須
+router.patch(
+  "/:videoId",
+  [
+    check("title").not().isEmpty(),
+    check("description").isLength({ min: 5 }),
+    check("persons").not().isEmpty(),
+  ],
+  videoControllers.updateVideo
 );
 
 module.exports = router;
