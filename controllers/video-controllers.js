@@ -150,7 +150,17 @@ const createNewVideo = async (req, res, next) => {
 };
 
 const updateVideo = async (req, res, next) => {
-  const { title, description, persons } = req.body;
+  const {
+    title,
+    description,
+    persons,
+    src,
+    tags,
+    categories,
+    duration,
+    hd,
+    is4k,
+  } = req.body;
   const videoId = req.params.videoId;
 
   let video;
@@ -171,6 +181,12 @@ const updateVideo = async (req, res, next) => {
   video.title = title;
   video.description = description;
   video.persons = persons;
+  video.src = src;
+  video.tags = tags;
+  video.categories = categories;
+  video.duration = duration;
+  video.hd = hd;
+  video.is4k = is4k;
 
   try {
     await video.save();

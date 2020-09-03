@@ -54,6 +54,12 @@ router.patch(
     check("title").not().isEmpty(),
     check("description").isLength({ min: 5 }),
     check("persons").not().isEmpty(),
+    check("src").not().isEmpty(),
+    check("tags").not().isEmpty(),
+    check("categories").not().isEmpty(),
+    check("duration").not().isEmpty(),
+    check("hd").not().isEmpty(),
+    check("is4k").not().isEmpty(),
   ],
   videoControllers.updateVideo
 );
