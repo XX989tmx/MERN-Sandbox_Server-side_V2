@@ -40,18 +40,22 @@ const getVideoById = async (req, res, next) => {
 
 const getVideosByUserId = async (req, res, next) => {
   const userId = req.params.userId;
+  console.log(userId);
 
   //my videos = user.videos
-  let userWithVideos = await User.findById(userId).populate("videos");
-  console.log(userWithVideos.videos);
-  console.log(userWithVideos.videos[0]);
-  console.log(userWithVideos.videos[0].title);
-  console.log(userWithVideos.videos[0].src);
+  let videosWithUser;
+  try {
+    videosWithUser = await Video.find({ creator: userId }).populate({
+      path: "creator",
+      select: "-password",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(videosWithUser);
 
   res.json({
-    userWithVideos: userWithVideos.videos.map((v) =>
-      v.toObject({ getters: true })
-    ),
+    videosWithUser: videosWithUser.map((v) => v.toObject({ getters: true })),
   });
 };
 
@@ -209,9 +213,9 @@ const deleteVideo = async (req, res, next) => {
     await sess.commitTransaction();
   } catch (error) {}
 
-  console.log('Video Deletion Done');
+  console.log("Video Deletion Done");
 
-  res.status(200).json({message:"Deleted Video"})
+  res.status(200).json({ message: "Deleted Video" });
 };
 
 const getVideoByTags = async (req, res, next) => {
