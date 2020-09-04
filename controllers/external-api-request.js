@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 const getCryptoTicker = require("../util/crypto-ticker");
 const getBTCIndex = require("../util/getBTCHealthIndex");
 const CryptoCurrency = require("../models/crypto-currency");
-
+const FiatCurrencyCodes = require("../models/FiatCurrencyCodes");
+const CryptoCurrencyCodes = require('../models/CryptoCurrencyCodes');
 const Crypto = require("../models/crypto");
 
 const getExternalApi = async (req, res, next) => {
@@ -1033,6 +1034,36 @@ const getExchangeRateBothCurrencyAndCrypto = async (req, res, next) => {
   });
 };
 
+const fetchFiatCodesAndCryptoCodes = async (req, res, next) => {
+  let fiatCurrencyCodes;
+  try {
+    fiatCurrencyCodes = await FiatCurrencyCodes.find();
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(fiatCurrencyCodes);
+
+  let cryptoCurrencyCodes;
+  try {
+    cryptoCurrencyCodes = await CryptoCurrencyCodes.find();
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(cryptoCurrencyCodes);
+
+  res.json({
+    // cryptoCurrencyCodes: cryptoCurrencyCodes.map((c) =>
+    //   c.toObject({ getters: true })
+    // ),
+    fiatCurrencyCodes: fiatCurrencyCodes.map((f) =>
+      f.toObject({ getters: true })
+    ),
+    cryptoCurrencyCodes: cryptoCurrencyCodes.map((c) =>
+      c.toObject({ getters: true })
+    ),
+  });
+};
+
 // const getVideo = async (params) => {
 //   let response;
 //   let responseData;
@@ -1051,3 +1082,4 @@ exports.getValueBasedonCurrency = getValueBasedonCurrency;
 exports.getHistoricalPrice = getHistoricalPrice;
 exports.getHealthIndex = getHealthIndex;
 exports.getExchangeRateBothCurrencyAndCrypto = getExchangeRateBothCurrencyAndCrypto;
+exports.fetchFiatCodesAndCryptoCodes = fetchFiatCodesAndCryptoCodes;

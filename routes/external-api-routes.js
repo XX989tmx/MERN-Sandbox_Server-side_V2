@@ -11,6 +11,8 @@ router.get(
   getExternalApiControllers.getExchangeRateBothCurrencyAndCrypto
 );
 
+router.get("/crypto_currency/fetchFiatCodesAndCryptoCodes",getExternalApiControllers.fetchFiatCodesAndCryptoCodes);
+
 router.get("/crypto_currency/historical_data", getExternalApiControllers.getHistoricalPrice);
 
 router.get("/crypto_currency_data/ranking");
