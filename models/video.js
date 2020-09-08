@@ -17,6 +17,7 @@ const videoSchema = new Schema({
   is4k: { type: Boolean, required: true },
   image: { type: String, required: true },
   views: { type: Number, required: true },
+  liked: { type: Number, required: true },
   // admin: { type: mongoose.Types.ObjectId, required: true, ref: "Admin" },
   // likes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Like" }],
   // dislikes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Dislike" }],

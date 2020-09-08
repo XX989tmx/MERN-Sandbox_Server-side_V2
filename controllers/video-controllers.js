@@ -130,7 +130,8 @@ const createNewVideo = async (req, res, next) => {
     hd,
     is4k,
     image: url,
-    views:0,
+    views: 0,
+    liked:0,
   });
 
   let user;
@@ -309,6 +310,26 @@ const addViewCount = async (req, res, next) => {
   res.json({message:'add views count + 1'})
 };
 
+const addLikeToVideo = async(req,res,next) => {
+  const videoId = req.params.videoId;
+  let existingVideo;
+  try {
+    existingVideo = await Video.findById(videoId);
+  } catch (error) {}
+
+  const likedCount = existingVideo.liked;
+  const updatedLikedCount = likedCount + 1;
+
+  try {
+    await Video.findByIdAndUpdate(
+      { _id: videoId },
+      { liked: updatedLikedCount }
+    );
+  } catch (error) {}
+
+  res.json({ message: "add views count + 1" });
+}
+
 exports.getAllVideos = getAllVideos;
 exports.getVideoById = getVideoById;
 exports.createNewVideo = createNewVideo;
@@ -319,3 +340,4 @@ exports.getVideosByUserId = getVideosByUserId;
 exports.updateVideo = updateVideo;
 exports.deleteVideo = deleteVideo;
 exports.addViewCount = addViewCount;
+exports.addLikeToVideo = addLikeToVideo; 
