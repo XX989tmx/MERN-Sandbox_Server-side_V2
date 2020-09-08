@@ -291,10 +291,8 @@ const addViewCount = async (req, res, next) => {
   const videoId = req.params.videoId;
   let existingVideo;
   try {
-    existingVideo = await Video.findById(videoId); 
-  } catch (error) {
-    
-  }
+    existingVideo = await Video.findById(videoId);
+  } catch (error) {}
 
   const videoView = existingVideo.views;
   const updatedViewCount = videoView + 1;
@@ -304,14 +302,12 @@ const addViewCount = async (req, res, next) => {
       { _id: videoId },
       { views: updatedViewCount }
     );
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 
-  res.json({message:'add views count + 1'})
+  res.json({ message: "add views count + 1" });
 };
 
-const addLikeToVideo = async(req,res,next) => {
+const addLikeToVideo = async (req, res, next) => {
   const videoId = req.params.videoId;
   let existingVideo;
   try {
@@ -329,7 +325,7 @@ const addLikeToVideo = async(req,res,next) => {
   } catch (error) {}
 
   res.json({ message: "add views count + 1" });
-}
+};
 
 const addDislikeToVideo = async (req, res, next) => {
   const videoId = req.params.videoId;
@@ -351,6 +347,19 @@ const addDislikeToVideo = async (req, res, next) => {
   res.json({ message: "add views count + 1" });
 };
 
+const addCommentToVideo = async (req, res, next) => {
+  const videoId = req.params.videoId;
+  const { comment } = req.body;
+  let existingVideo;
+  try {
+    existingVideo = await Video.findById(videoId);
+  } catch (error) {}
+  existingVideo.comments.push(comment);
+  existingVideo.save();
+
+  res.json({ existingVideoComments: existingVideo.comments });
+};
+
 exports.getAllVideos = getAllVideos;
 exports.getVideoById = getVideoById;
 exports.createNewVideo = createNewVideo;
@@ -361,5 +370,7 @@ exports.getVideosByUserId = getVideosByUserId;
 exports.updateVideo = updateVideo;
 exports.deleteVideo = deleteVideo;
 exports.addViewCount = addViewCount;
-exports.addLikeToVideo = addLikeToVideo; 
-exports.addDislikeToVideo = addDislikeToVideo; 
+exports.addLikeToVideo = addLikeToVideo;
+exports.addDislikeToVideo = addDislikeToVideo;
+
+exports.addCommentToVideo = addCommentToVideo;

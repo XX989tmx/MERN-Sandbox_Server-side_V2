@@ -19,6 +19,7 @@ const videoSchema = new Schema({
   views: { type: Number, required: true },
   liked: { type: Number, required: true },
   disliked: { type: Number, required: true },
+  comments: [{ type: String}],
   // admin: { type: mongoose.Types.ObjectId, required: true, ref: "Admin" },
   // likes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Like" }],
   // dislikes: [{ type: mongoose.Types.ObjectId, required: true, ref: "Dislike" }],
