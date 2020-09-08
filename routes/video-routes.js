@@ -30,6 +30,8 @@ router.get("/:videoId/addViewCount",videoControllers.addViewCount)
 
 router.get("/:videoId/addLikeToVideo",videoControllers.addLikeToVideo);
 
+router.get("/:videoId/addDislikeToVideo",videoControllers.addDislikeToVideo);
+
 router.get("/:videoId", videoControllers.getVideoById);
 
 router.get("/user/:userId", videoControllers.getVideosByUserId);
