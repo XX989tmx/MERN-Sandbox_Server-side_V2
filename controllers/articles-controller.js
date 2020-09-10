@@ -1,4 +1,3 @@
-
 const path = require("path");
 const aws = require("aws-sdk");
 const fs = require("fs");
@@ -139,8 +138,6 @@ const allArticles = async (req, res, next) => {
       console.log(articles);
       console.log(articles[60].populated("author"));
       console.log(articles[60].author.name);
-
-      
     } catch (error) {}
 
     // //tagList
@@ -273,7 +270,14 @@ const createArticle = async (req, res, next) => {
 
   const {
     title,
+    heading,
     content,
+    heading2,
+    content2,
+    heading3,
+    content3,
+    heading4,
+    content4,
     author,
     address,
     categories,
@@ -339,7 +343,14 @@ const createArticle = async (req, res, next) => {
 
   const createdArticle = new Article({
     title: title,
+    heading:heading,
     content: content,
+    heading2: heading2,
+    content2: content2,
+    heading3: heading3,
+    content3: content3,
+    heading4: heading4,
+    content4: content4,
     address: address,
     location: coordinates,
     image: url,
