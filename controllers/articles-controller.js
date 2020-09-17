@@ -284,7 +284,37 @@ const createArticle = async (req, res, next) => {
     tags,
     price,
     downloadable,
+    referenceSiteName1,
+    referenceSiteName2,
+    referenceSiteName3,
+    referenceSiteLink1,
+    referenceSiteLink2,
+    referenceSiteLink3,
   } = req.body;
+
+  let referenceSiteArray = [];
+  if (referenceSiteName1 && referenceSiteLink1) {
+  const site1 = {
+    name: referenceSiteName1,
+    link: referenceSiteLink1,
+  };
+  referenceSiteArray.push(site1);
+  };
+  if (referenceSiteName2 && referenceSiteLink2) {
+  const site2 = {
+    name: referenceSiteName2,
+    link: referenceSiteLink2,
+  };
+  referenceSiteArray.push(site2);
+  };
+  if (referenceSiteName3 && referenceSiteLink3) {
+  const site3 = {
+    name: referenceSiteName3,
+    link: referenceSiteLink3,
+  };
+  referenceSiteArray.push(site3);
+  };
+  console.log(referenceSiteArray);
 
   // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   // console.log('The "article title" was appended to file!');
@@ -343,7 +373,7 @@ const createArticle = async (req, res, next) => {
 
   const createdArticle = new Article({
     title: title,
-    heading:heading,
+    heading: heading,
     content: content,
     heading2: heading2,
     content2: content2,
@@ -353,6 +383,7 @@ const createArticle = async (req, res, next) => {
     content4: content4,
     address: address,
     location: coordinates,
+    referenceSites: [],
     image: url,
     author: author,
     wishlists: [],
@@ -362,6 +393,13 @@ const createArticle = async (req, res, next) => {
     price: price,
     downloadable,
   });
+  for (let index = 0; index < referenceSiteArray.length; index++) {
+    const site = referenceSiteArray[index];
+    createdArticle.referenceSites.push({ name: site.name, link: site.link });
+  };
+  // console.log(createdArticle.referenceSites[0].name);
+  // console.log(createdArticle.referenceSites[0].link);
+  // console.log(createdArticle.referenceSites[1].link);
 
   let user;
 
