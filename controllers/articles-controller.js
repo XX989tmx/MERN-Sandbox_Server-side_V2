@@ -278,6 +278,18 @@ const createArticle = async (req, res, next) => {
     content3,
     heading4,
     content4,
+    heading5,
+    content5,
+    heading6,
+    content6,
+    heading7,
+    content7,
+    heading8,
+    content8,
+    heading9,
+    content9,
+    heading10,
+    content10,
     author,
     address,
     categories,
@@ -294,27 +306,109 @@ const createArticle = async (req, res, next) => {
 
   let referenceSiteArray = [];
   if (referenceSiteName1 && referenceSiteLink1) {
-  const site1 = {
-    name: referenceSiteName1,
-    link: referenceSiteLink1,
-  };
-  referenceSiteArray.push(site1);
-  };
+    const site1 = {
+      name: referenceSiteName1,
+      link: referenceSiteLink1,
+    };
+    referenceSiteArray.push(site1);
+  }
   if (referenceSiteName2 && referenceSiteLink2) {
-  const site2 = {
-    name: referenceSiteName2,
-    link: referenceSiteLink2,
-  };
-  referenceSiteArray.push(site2);
-  };
+    const site2 = {
+      name: referenceSiteName2,
+      link: referenceSiteLink2,
+    };
+    referenceSiteArray.push(site2);
+  }
   if (referenceSiteName3 && referenceSiteLink3) {
-  const site3 = {
-    name: referenceSiteName3,
-    link: referenceSiteLink3,
-  };
-  referenceSiteArray.push(site3);
-  };
+    const site3 = {
+      name: referenceSiteName3,
+      link: referenceSiteLink3,
+    };
+    referenceSiteArray.push(site3);
+  }
   console.log(referenceSiteArray);
+
+  let contentsArray = [];
+  if (heading && content) {
+    const c1 = {
+      heading: heading,
+      content: content,
+    };
+
+    contentsArray.push(c1);
+  }
+
+  if (heading2 && content2) {
+    const c2 = {
+      heading: heading2,
+      content: content2,
+    };
+    contentsArray.push(c2);
+  }
+
+  if (heading3 && content3) {
+    const c3 = {
+      heading: heading3,
+      content: content3,
+    };
+    contentsArray.push(c3);
+  }
+
+  if (heading4 && content4) {
+    const c4 = {
+      heading: heading4,
+      content: content4,
+    };
+    contentsArray.push(c4);
+  }
+
+  if (heading5 && content5) {
+    const c5 = {
+      heading: heading5,
+      content: content5,
+    };
+    contentsArray.push(c5);
+  }
+
+  if (heading6 && content6) {
+    const c6 = {
+      heading: heading6,
+      content: content6,
+    };
+    contentsArray.push(c6);
+  }
+
+  if (heading7 && content7) {
+    const c7 = {
+      heading: heading7,
+      content: content7,
+    };
+    contentsArray.push(c7);
+  }
+
+  if (heading8 && content8) {
+    const c8 = {
+      heading: heading8,
+      content: content8,
+    };
+    contentsArray.push(c8);
+  }
+
+  if (heading9 && content9) {
+    const c9 = {
+      heading: heading9,
+      content: content9,
+    };
+    contentsArray.push(c9);
+  }
+
+  if (heading10 && content10) {
+    const c10 = {
+      heading: heading10,
+      content: content10,
+    };
+    contentsArray.push(c10);
+  }
 
   // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), title);
   // console.log('The "article title" was appended to file!');
@@ -373,14 +467,15 @@ const createArticle = async (req, res, next) => {
 
   const createdArticle = new Article({
     title: title,
-    heading: heading,
-    content: content,
-    heading2: heading2,
-    content2: content2,
-    heading3: heading3,
-    content3: content3,
-    heading4: heading4,
-    content4: content4,
+    contents: [],
+    // heading: heading,
+    // content: content,
+    // heading2: heading2,
+    // content2: content2,
+    // heading3: heading3,
+    // content3: content3,
+    // heading4: heading4,
+    // content4: content4,
     address: address,
     location: coordinates,
     referenceSites: [],
@@ -396,7 +491,15 @@ const createArticle = async (req, res, next) => {
   for (let index = 0; index < referenceSiteArray.length; index++) {
     const site = referenceSiteArray[index];
     createdArticle.referenceSites.push({ name: site.name, link: site.link });
-  };
+  }
+
+  for (let index = 0; index < contentsArray.length; index++) {
+    const element = contentsArray[index];
+    createdArticle.contents.push({
+      heading: element.heading,
+      content: element.content,
+    });
+  }
   // console.log(createdArticle.referenceSites[0].name);
   // console.log(createdArticle.referenceSites[0].link);
   // console.log(createdArticle.referenceSites[1].link);

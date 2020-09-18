@@ -4,14 +4,14 @@ const Schema = mongoose.Schema;
 
 const articleSchema = new Schema({
   title: { type: String, required: true },
-  heading: { type: String, required: true },
-  content: { type: String, required: true },
-  heading2: { type: String, required: true },
-  content2: { type: String, required: true },
-  heading3: { type: String, required: true },
-  content3: { type: String, required: true },
-  heading4: { type: String, required: true },
-  content4: { type: String, required: true },
+  // heading: { type: String, required: true },
+  contents: [{ heading:{ type: String },content: { type: String } }],
+  // heading2: { type: String, required: true },
+  // content2: { type: String, required: true },
+  // heading3: { type: String, required: true },
+  // content3: { type: String, required: true },
+  // heading4: { type: String, required: true },
+  // content4: { type: String, required: true },
   image: { type: String, required: true },
   address: { type: String, required: true },
   location: {
@@ -20,8 +20,8 @@ const articleSchema = new Schema({
   },
   referenceSites: [
     {
-      name: { type: String},
-      link: { type: String},
+      name: { type: String },
+      link: { type: String },
     },
   ],
   author: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
