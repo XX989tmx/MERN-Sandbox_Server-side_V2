@@ -12,7 +12,7 @@ const articleSchema = new Schema({
   // content3: { type: String, required: true },
   // heading4: { type: String, required: true },
   // content4: { type: String, required: true },
-  image: { type: String, required: true },
+  images: [{ type: String }],
   address: { type: String, required: true },
   location: {
     lat: { type: Number, required: true },

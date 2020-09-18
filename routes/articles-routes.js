@@ -54,7 +54,7 @@ router.use(checkAuth);
 
 router.post(
   "/",
-  fileUpload.single("image"),
+  fileUpload.array("images"),
   [
     check("title").not().isEmpty(),
     // check("content").isLength({ min: 5 }),

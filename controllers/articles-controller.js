@@ -12,7 +12,7 @@ const Article = require("../models/article");
 const User = require("../models/user");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 const referenceSitesHandler = require("../modules/controllers-modules/reference-sites-handler");
-const externalSitesHandler = require('../modules/controllers-modules/external-sites-handler');
+const externalSitesHandler = require("../modules/controllers-modules/external-sites-handler");
 
 const allArticles = async (req, res, next) => {
   // const query = req.query.q;
@@ -316,7 +316,6 @@ const createArticle = async (req, res, next) => {
     externalSitesLink5,
   } = req.body;
 
-  
   const externalSitesArray = externalSitesHandler(
     externalSitesName1,
     externalSitesName2,
@@ -330,7 +329,6 @@ const createArticle = async (req, res, next) => {
     externalSitesLink5
   );
 
-  
   console.log(externalSitesArray);
 
   const referenceSiteArray = referenceSitesHandler(
@@ -430,6 +428,8 @@ const createArticle = async (req, res, next) => {
   // console.log('The "article title" was appended to file!');
   // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), content);
   // console.log('The "article content" was appended to file!');
+  const file = req.files;
+  console.log(file);
 
   aws.config.setPromisesDependency();
   aws.config.update({
@@ -439,40 +439,52 @@ const createArticle = async (req, res, next) => {
   });
 
   const s3 = new aws.S3();
-  let params = {
-    ACL: "public-read",
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Body: fs.createReadStream(req.file.path),
-    Key: req.file.filename,
-  };
-  console.log(params.KEY);
-  let url = `https://${
-    process.env.AWS_BUCKET_NAME
-  }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
+  let imageUrlArray = [];
+  for (let index = 0; index < file.length; index++) {
+    const element = file[index];
+    let params = {
+      ACL: "public-read",
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Body: fs.createReadStream(element.path),
+      Key: element.filename,
+    };
+
+    let url = `https://${
+      process.env.AWS_BUCKET_NAME
+    }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
+    imageUrlArray.push(url);
+    console.log(url);
+    console.log(imageUrlArray);
+
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.log("Error occured while trying to upload to S3 bucket", err);
+      }
+
+      if (data) {
+        // fs.unlinkSync(req.file.path); // Empty temp folder
+        // console.log(data);
+        // console.log(data.Location);
+        console.log(data.Location);
+
+        // let newUser = new Users({ ...req.body, avatar: locationUrl });
+        // newUser
+        //   .save()
+        //   .then((user) => {
+        //     res.json({ message: "User created successfully", user });
+        //   })
+        //   .catch((err) => {
+        //     console.log("Error occured while trying to save to DB");
+        //   });
+      }
+    });
+  }
+    
+
+
+  // console.log(params.KEY);
+  console.log(imageUrlArray);
   // let locationUrl;
-
-  s3.upload(params, (err, data) => {
-    if (err) {
-      console.log("Error occured while trying to upload to S3 bucket", err);
-    }
-
-    if (data) {
-      // fs.unlinkSync(req.file.path); // Empty temp folder
-      // console.log(data);
-      // console.log(data.Location);
-      console.log(data.Location);
-
-      // let newUser = new Users({ ...req.body, avatar: locationUrl });
-      // newUser
-      //   .save()
-      //   .then((user) => {
-      //     res.json({ message: "User created successfully", user });
-      //   })
-      //   .catch((err) => {
-      //     console.log("Error occured while trying to save to DB");
-      //   });
-    }
-  });
 
   let coordinates;
   try {
@@ -496,7 +508,7 @@ const createArticle = async (req, res, next) => {
     location: coordinates,
     referenceSites: [],
     externalSites: [],
-    image: url,
+    images: [],
     author: author,
     wishlists: [],
     categories: categories,
@@ -525,6 +537,11 @@ const createArticle = async (req, res, next) => {
       link: element.link,
     });
   }
+  for (let index = 0; index < imageUrlArray.length; index++) {
+    const element = imageUrlArray[index];
+    createdArticle.images.push(element);
+  }
+  console.log(createdArticle.images);
   // console.log(createdArticle.referenceSites[0].name);
   // console.log(createdArticle.referenceSites[0].link);
   // console.log(createdArticle.referenceSites[1].link);
