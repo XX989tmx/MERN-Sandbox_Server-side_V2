@@ -94,7 +94,7 @@ const signup = async (req, res, next) => {
     ACL: "public-read",
     Bucket: process.env.AWS_BUCKET_NAME,
     Body: fs.createReadStream(req.file.path),
-    Key: req.file.originalname,
+    Key: req.file.filename,
   };
   console.log(params.KEY);
   let url = `https://${
