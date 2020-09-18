@@ -137,9 +137,9 @@ const allArticles = async (req, res, next) => {
       articles = await Article.find()
         .populate({ path: "author", select: "-password -__v" })
         .sort({ _id: -1 });
-      console.log(articles);
-      console.log(articles[60].populated("author"));
-      console.log(articles[60].author.name);
+      // console.log(articles);
+      // console.log(articles[60].populated("author"));
+      // console.log(articles[60].author.name);
     } catch (error) {}
 
     // //tagList
@@ -187,7 +187,7 @@ const allArticles = async (req, res, next) => {
     try {
       count = await Article.count();
     } catch (error) {}
-    console.log(count);
+    // console.log(count);
   }
 
   res.json({
@@ -728,16 +728,16 @@ const getArticleByCategory = async (req, res, next) => {
       .populate({ path: "author", select: "-password" })
       .sort({ _id: -1 });
   } catch (error) {}
-  console.log(categoryMatchedArticles);
-  console.log("category based sorting done.");
+  // console.log(categoryMatchedArticles);
+  // console.log("category based sorting done.");
 
   let countByCategory;
   try {
     countByCategory = await Article.count({ categories: categories });
   } catch (error) {}
-  console.log(countByCategory);
-  console.log(categoryMatchedArticles[0].author.name);
-  console.log(categoryMatchedArticles[0].populated("author"));
+  // console.log(countByCategory);
+  // console.log(categoryMatchedArticles[0].author.name);
+  // console.log(categoryMatchedArticles[0].populated("author"));
 
   res.json({
     categoryMatchedArticles: categoryMatchedArticles.map((article) =>
@@ -759,14 +759,14 @@ const getArticleByTag = async (req, res, next) => {
       .sort({ _id: -1 });
     console.log(tagMatchedArticles[1].populated("author"));
   } catch (error) {}
-  console.log(tagMatchedArticles);
-  console.log("tag based sorting done");
+  // console.log(tagMatchedArticles);
+  // console.log("tag based sorting done");
 
   let countByTag;
   try {
     countByTag = await Article.count({ tags: tags });
   } catch (error) {}
-  console.log(countByTag);
+  // console.log(countByTag);
 
   res.json({
     tagMatchedArticles: tagMatchedArticles.map((article) =>
@@ -783,8 +783,8 @@ const countArticlesByCategory = async (req, res, next) => {
   try {
     countByCategory = await Article.count({ categories: categories });
   } catch (error) {}
-  console.log(countByCategory);
-  console.log("extracting data was succsessfull");
+  // console.log(countByCategory);
+  // console.log("extracting data was succsessfull");
 
   res.json({ countByCategory: countByCategory });
 };
@@ -796,8 +796,8 @@ const countArticlesByTag = async (req, res, next) => {
   try {
     countByTag = await Article.count({ tags: tags });
   } catch (error) {}
-  console.log(countByTag);
-  console.log("extracting data was succsessfull");
+  // console.log(countByTag);
+  // console.log("extracting data was succsessfull");
 
   res.json({ countByTag: countByTag });
 };
@@ -814,8 +814,8 @@ const getSpecificArticleById = async (req, res, next) => {
       select: "-password",
     });
   } catch (error) {}
-  console.log(article);
-  console.log(article.populated("author"));
+  // console.log(article);
+  // console.log(article.populated("author"));
 
   res.json({ article: article.toObject({ getters: true }) });
 };
@@ -898,7 +898,7 @@ const TagCountIndex = async (req, res, next) => {
 
     articleTags.push(element.tags[0]);
 
-    console.log(articleTags);
+    // console.log(articleTags);
   }
 
   // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
@@ -912,7 +912,7 @@ const TagCountIndex = async (req, res, next) => {
     return accumulator;
   },
   []);
-  console.log(noDeplicateTagArray);
+  // console.log(noDeplicateTagArray);
 
   // for (let index = 0; index < articleTags.length; index++) {
   //   // const element = array[index];
@@ -931,17 +931,17 @@ const TagCountIndex = async (req, res, next) => {
       tagCount = await Article.find({
         tags: articleTagsName,
       }).countDocuments();
-      console.log(tagCount);
+      // console.log(tagCount);
     } catch (error) {}
 
     const tagIndex = {
       tagName: articleTagsName,
       count: tagCount,
     };
-    console.log(tagIndex);
+    // console.log(tagIndex);
 
     responseArray.push(tagIndex);
-    console.log(responseArray);
+    // console.log(responseArray);
   }
 
   // let newResponseArray;
@@ -1055,7 +1055,7 @@ const TagCountIndex = async (req, res, next) => {
   responseArray.sort((a, b) => {
     return b.count - a.count;
   });
-  console.log(responseArray);
+  // console.log(responseArray);
   // クライアントサイドでは、tag count（アイコン）はprops.countで、tag titleとLink先のembded params(http://3000/api/articles/tags/:tagname)に渡すTagnameは、props.tagnameで行う。tagIndex objectを渡す。
   //   const tagIndex = {
   //     tagName: "politics", // =Article.find({tags: "xx"})
@@ -1080,7 +1080,7 @@ const categoryCountIndex = async (req, res, next) => {
 
     articleCategories.push(element.categories[0]);
 
-    console.log(articleCategories);
+    // console.log(articleCategories);
   }
 
   let noDeplicateCategoriesArray = articleCategories.reduce(function (
@@ -1093,7 +1093,7 @@ const categoryCountIndex = async (req, res, next) => {
     return accumulator;
   },
   []);
-  console.log(noDeplicateCategoriesArray);
+  // console.log(noDeplicateCategoriesArray);
 
   for (let index = 0; index < noDeplicateCategoriesArray.length; index++) {
     const articleCategoriesName = noDeplicateCategoriesArray[index];
@@ -1103,17 +1103,17 @@ const categoryCountIndex = async (req, res, next) => {
       CategoryCount = await Article.find({
         categories: articleCategoriesName,
       }).countDocuments();
-      console.log(CategoryCount);
+      // console.log(CategoryCount);
     } catch (error) {}
 
     const CategoryIndex = {
       categoryName: articleCategoriesName,
       count: CategoryCount,
     };
-    console.log(CategoryIndex);
+    // console.log(CategoryIndex);
 
     responseArray.push(CategoryIndex);
-    console.log(responseArray);
+    // console.log(responseArray);
   }
 
   // // politics category
@@ -1188,7 +1188,7 @@ const categoryCountIndex = async (req, res, next) => {
   responseArray.sort((a, b) => {
     return b.count - a.count;
   });
-  console.log(responseArray);
+  // console.log(responseArray);
 
   res.json({
     responseArray,
