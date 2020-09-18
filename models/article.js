@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const articleSchema = new Schema({
   title: { type: String, required: true },
   // heading: { type: String, required: true },
-  contents: [{ heading:{ type: String },content: { type: String } }],
+  contents: [{ heading: { type: String }, content: { type: String } }],
   // heading2: { type: String, required: true },
   // content2: { type: String, required: true },
   // heading3: { type: String, required: true },
@@ -19,6 +19,12 @@ const articleSchema = new Schema({
     lng: { type: Number, required: true },
   },
   referenceSites: [
+    {
+      name: { type: String },
+      link: { type: String },
+    },
+  ],
+  externalSites: [
     {
       name: { type: String },
       link: { type: String },
