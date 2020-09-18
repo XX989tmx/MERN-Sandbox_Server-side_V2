@@ -251,8 +251,8 @@ const getArticlesByUserId = async (req, res, next) => {
     );
   }
 
-  console.log(articlesFoundByUserId[0].populated("author"));
-  console.log(articlesFoundByUserId);
+  // console.log(articlesFoundByUserId[0].populated("author"));
+  // console.log(articlesFoundByUserId);
   res.json({
     articles: articlesFoundByUserId.map((article) =>
       article.toObject({ getters: true })
@@ -329,7 +329,7 @@ const createArticle = async (req, res, next) => {
     externalSitesLink5
   );
 
-  console.log(externalSitesArray);
+  // console.log(externalSitesArray);
 
   const referenceSiteArray = referenceSitesHandler(
     referenceSiteName1,
@@ -340,7 +340,7 @@ const createArticle = async (req, res, next) => {
     referenceSiteLink3
   );
 
-  console.log(referenceSiteArray);
+  // console.log(referenceSiteArray);
 
   let contentsArray = [];
   if (heading && content) {
@@ -429,7 +429,7 @@ const createArticle = async (req, res, next) => {
   // fs.appendFileSync(path.join("downloads", "txtFiles", "sample.txt"), content);
   // console.log('The "article content" was appended to file!');
   const file = req.files;
-  console.log(file);
+  // console.log(file);
 
   aws.config.setPromisesDependency();
   aws.config.update({
@@ -453,8 +453,8 @@ const createArticle = async (req, res, next) => {
       process.env.AWS_BUCKET_NAME
     }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`;
     imageUrlArray.push(url);
-    console.log(url);
-    console.log(imageUrlArray);
+    // console.log(url);
+    // console.log(imageUrlArray);
 
     s3.upload(params, (err, data) => {
       if (err) {
@@ -483,7 +483,7 @@ const createArticle = async (req, res, next) => {
 
 
   // console.log(params.KEY);
-  console.log(imageUrlArray);
+  // console.log(imageUrlArray);
   // let locationUrl;
 
   let coordinates;
@@ -541,7 +541,7 @@ const createArticle = async (req, res, next) => {
     const element = imageUrlArray[index];
     createdArticle.images.push(element);
   }
-  console.log(createdArticle.images);
+  // console.log(createdArticle.images);
   // console.log(createdArticle.referenceSites[0].name);
   // console.log(createdArticle.referenceSites[0].link);
   // console.log(createdArticle.referenceSites[1].link);
@@ -563,7 +563,7 @@ const createArticle = async (req, res, next) => {
     return next(error);
   }
 
-  console.log(user);
+  // console.log(user);
 
   try {
     const sess = await mongoose.startSession();
