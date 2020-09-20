@@ -1215,6 +1215,31 @@ const DownloadableOrNot = async (req, res, next) => {
   res.json({ articles: articles.map((a) => a.toObject({ getters: true })) });
 };
 
+const articlesBySameAuthorExceptTheCurrentOne = async (req, res, next) => {
+  const articleId = req.params.articleId;
+  const authorId = req.params.authorId;
+
+  //same authors all of the other articles.
+  let usersAllArticle;
+  usersAllArticle = await Article.find({ author: authorId });
+
+  //the current article which is being rendered now and want to exclude from 'same author's articles' recommendation.
+  let articleToExclude;
+  articleToExclude = await Article.findById(articleId);
+
+  const articlesExceptTheCurrentOne = usersAllArticle.filter((a) => {
+    return a.id !== articleToExclude.id;
+  });
+  console.log(articlesExceptTheCurrentOne);
+
+  res.json({
+    //これをspecificArticleの下のエリアに表示すればいい。必要なら最大数を10とかにLimitかける
+    articlesExceptTheCurrentOne: articlesExceptTheCurrentOne.map((a) =>
+      a.toObject({ getters: true })
+    ),
+  });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1282,3 +1307,4 @@ exports.sortByDate = sortByDate;
 exports.TagCountIndex = TagCountIndex;
 exports.categoryCountIndex = categoryCountIndex;
 exports.DownloadableOrNot = DownloadableOrNot;
+exports.articlesBySameAuthorExceptTheCurrentOne = articlesBySameAuthorExceptTheCurrentOne;

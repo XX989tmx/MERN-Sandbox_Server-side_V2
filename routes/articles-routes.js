@@ -27,6 +27,11 @@ router.get("/:articleId", articlesControllers.getArticleById);
 router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
 router.get(
+  "/get_same_authors_articles/:articleId/:authorId",
+  articlesControllers.articlesBySameAuthorExceptTheCurrentOne
+);
+
+router.get(
   "/push_article_to_wishlist/:articleId/:wishlistId",
   articlesControllers.pushArticleToWishlist
 );
