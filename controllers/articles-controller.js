@@ -479,8 +479,6 @@ const createArticle = async (req, res, next) => {
       }
     });
   }
-    
-
 
   // console.log(params.KEY);
   // console.log(imageUrlArray);
@@ -1240,19 +1238,16 @@ const articlesBySameAuthorExceptTheCurrentOne = async (req, res, next) => {
   });
 };
 
-const averagePriceOfThisUsersArticles = async(req,res,next) => {
+const averagePriceOfThisUsersArticles = async (req, res, next) => {
   const userId = req.params.userId;
 
-  
   let sumOfPrice;
   let averagePriceOfThisUsersArticles;
-  
+
   let articles;
   try {
-    articles = await Article.find({author:userId})
-  } catch (error) {
-    
-  };
+    articles = await Article.find({ author: userId });
+  } catch (error) {}
 
   let count = articles.length;
   console.log(count);
@@ -1268,15 +1263,47 @@ const averagePriceOfThisUsersArticles = async(req,res,next) => {
       }, 0);
     function getAverage(sum, count) {
       return sum / count;
-    };
+    }
     console.log(sumOfPrice);
     averagePriceOfThisUsersArticles = getAverage(sumOfPrice, count);
   } else {
-    return
+    return;
   }
   console.log(averagePriceOfThisUsersArticles);
 
   res.json({ averagePriceOfThisUsersArticles, sumOfPrice, count });
+};
+const getAllImagesOfUsersArticles = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let articles;
+  try {
+    articles = await Article.find({ author: userId });
+  } catch (error) {}
+
+  let array = [];
+  // function concatImageArray(images) {
+  //   return array.concat(images)
+  // }
+  let imagesArray;
+  let imagesCount;
+
+  // if (Array.isArray(articles)) {
+  imagesArray = articles
+    .map(function (elm, index) {
+      console.log(elm.images);
+      return elm.images;
+    })
+    .reduce(function (prev, current) {
+      return prev + current;
+    }, [])
+    .split(",");
+  console.log(imagesArray);
+  imagesCount = imagesArray.length;
+  // console.log(imagesCount);
+  // }
+
+  res.json({ imagesArray, imagesCount });
 };
 
 // const searchQuery = async(req, res, next) => {
@@ -1349,3 +1376,5 @@ exports.DownloadableOrNot = DownloadableOrNot;
 exports.articlesBySameAuthorExceptTheCurrentOne = articlesBySameAuthorExceptTheCurrentOne;
 
 exports.averagePriceOfThisUsersArticles = averagePriceOfThisUsersArticles;
+
+exports.getAllImagesOfUsersArticles = getAllImagesOfUsersArticles;
