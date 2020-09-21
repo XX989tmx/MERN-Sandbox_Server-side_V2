@@ -26,6 +26,8 @@ router.get("/:articleId", articlesControllers.getArticleById);
 
 router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
+router.get("/averagePriceOfThisUsersArticles/:userId",articlesControllers.averagePriceOfThisUsersArticles);
+
 router.get(
   "/get_same_authors_articles/:articleId/:authorId",
   articlesControllers.articlesBySameAuthorExceptTheCurrentOne

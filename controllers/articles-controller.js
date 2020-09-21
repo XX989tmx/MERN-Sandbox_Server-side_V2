@@ -1240,6 +1240,45 @@ const articlesBySameAuthorExceptTheCurrentOne = async (req, res, next) => {
   });
 };
 
+const averagePriceOfThisUsersArticles = async(req,res,next) => {
+  const userId = req.params.userId;
+
+  
+  let sumOfPrice;
+  let averagePriceOfThisUsersArticles;
+  
+  let articles;
+  try {
+    articles = await Article.find({author:userId})
+  } catch (error) {
+    
+  };
+
+  let count = articles.length;
+  console.log(count);
+
+  if (Array.isArray(articles)) {
+    sumOfPrice = articles
+      .map(function (elm, index) {
+        console.log(elm.price);
+        return elm.price;
+      })
+      .reduce(function (previousValue, currentValue) {
+        return previousValue + currentValue;
+      }, 0);
+    function getAverage(sum, count) {
+      return sum / count;
+    };
+    console.log(sumOfPrice);
+    averagePriceOfThisUsersArticles = getAverage(sumOfPrice, count);
+  } else {
+    return
+  }
+  console.log(averagePriceOfThisUsersArticles);
+
+  res.json({ averagePriceOfThisUsersArticles, sumOfPrice });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1308,3 +1347,5 @@ exports.TagCountIndex = TagCountIndex;
 exports.categoryCountIndex = categoryCountIndex;
 exports.DownloadableOrNot = DownloadableOrNot;
 exports.articlesBySameAuthorExceptTheCurrentOne = articlesBySameAuthorExceptTheCurrentOne;
+
+exports.averagePriceOfThisUsersArticles = averagePriceOfThisUsersArticles;
