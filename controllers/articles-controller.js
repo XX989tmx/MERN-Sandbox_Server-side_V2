@@ -1276,7 +1276,7 @@ const averagePriceOfThisUsersArticles = async(req,res,next) => {
   }
   console.log(averagePriceOfThisUsersArticles);
 
-  res.json({ averagePriceOfThisUsersArticles, sumOfPrice });
+  res.json({ averagePriceOfThisUsersArticles, sumOfPrice, count });
 };
 
 // const searchQuery = async(req, res, next) => {
