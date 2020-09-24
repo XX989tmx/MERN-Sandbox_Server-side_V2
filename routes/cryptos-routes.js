@@ -9,5 +9,6 @@ router.get(
   "/currencies/:queryName",
   cryptosControllers.getSpecificCurrencyInfoByName
 );
+router.get("/currencies/:queryName/ratings",cryptosControllers.getSpecificCurrencyRatingByName);
 
 module.exports = router;
