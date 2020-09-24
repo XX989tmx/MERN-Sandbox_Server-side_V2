@@ -257,7 +257,7 @@ const getCryptoIndex = async (req, res, next) => {
 
 const getSpecificCurrencyInfoByName = async (req, res, next) => {
     //this is not currency.name, but currency.queryName. 
-  const currencyName = req.params.currencyName;
+  const queryName = req.params.queryName;
 
   let cryptoArray = [];
 
@@ -511,7 +511,7 @@ const getSpecificCurrencyInfoByName = async (req, res, next) => {
 
 
   const matchedCurrency = cryptoArray.filter(function (v,i) {
-      return v.queryName === currencyName;
+      return v.queryName === queryName;
   })
 
   res.json({matchedCurrency:matchedCurrency})
