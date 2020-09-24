@@ -4,7 +4,8 @@ const getCryptoIndex = async (req, res, next) => {
   let cryptoArray = [];
 
   const bitcoin = new CryptoCurrency(
-    "Bitcoin","Bitcoin",
+    "Bitcoin",
+    "Bitcoin",
     "BTC",
     "$10,518.90",
     "7,673.88 %",
@@ -28,7 +29,7 @@ const getCryptoIndex = async (req, res, next) => {
     "https://bitcoin.org/",
     "https://github.com/bitcoin/",
     "https://bitcoin.org/bitcoin.pdf",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/1.png",
     "AA",
     "85.51",
     "892"
@@ -72,7 +73,7 @@ const getCryptoIndex = async (req, res, next) => {
     "https://www.ethereum.org/",
     "https://github.com/ethereum",
     "https://github.com/ethereum/wiki/wiki/White-Paper",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/1027.png",
     "A",
     "72.14",
     "972"
@@ -107,7 +108,7 @@ const getCryptoIndex = async (req, res, next) => {
     "https://tether.to/",
     "no data",
     "https://tether.to/wp-content/uploads/2016/06/TetherWhitePaper.pdf",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/825.png",
     "no data",
     "no data",
     "781"
@@ -287,7 +288,7 @@ const getSpecificCurrencyInfoByName = async (req, res, next) => {
     "https://bitcoin.org/",
     "https://github.com/bitcoin/",
     "https://bitcoin.org/bitcoin.pdf",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/1.png",
     "AA",
     "85.51",
     "892"
@@ -331,7 +332,7 @@ const getSpecificCurrencyInfoByName = async (req, res, next) => {
     "https://www.ethereum.org/",
     "https://github.com/ethereum",
     "https://github.com/ethereum/wiki/wiki/White-Paper",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/1027.png",
     "A",
     "72.14",
     "972"
@@ -366,7 +367,7 @@ const getSpecificCurrencyInfoByName = async (req, res, next) => {
     "https://tether.to/",
     "no data",
     "https://tether.to/wp-content/uploads/2016/06/TetherWhitePaper.pdf",
-    "https://test-images-b.s3.amazonaws.com/08053423-e53a-4c9a-8186-dbe6bb4bca93.jpeg",
+    "https://s2.coinmarketcap.com/static/img/coins/32x32/825.png",
     "no data",
     "no data",
     "781"
