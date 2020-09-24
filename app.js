@@ -18,6 +18,8 @@ const readingListRoutes = require('./routes/readingList-routes');
 const zipUpload = require('./middleware/zip-file-upload');
 const videoRoutes = require('./routes/video-routes');
 
+const cryptosRoutes = require('./routes/cryptos-routes');
+
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.use("/api/download", downloadRoutes);
 app.use("/api/upload", zipfileUploadRoutes);
 
 app.use("/api/get_external_api", getExternalApiRoutes);
+
+app.use("/api/cryptos", cryptosRoutes);
 
 app.use("/api/videos", videoRoutes);
 

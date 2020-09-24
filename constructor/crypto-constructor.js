@@ -322,3 +322,6 @@ const binance = new CryptoCurrency(
 
 cryptoArray.push(binance);
 console.log(cryptoArray[cryptoArray.length - 1]);
+
+
+module.exports = CryptoCurrency;
