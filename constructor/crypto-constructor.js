@@ -1,6 +1,7 @@
 class CryptoCurrency {
   constructor(
     name,
+    queryName,
     code,
     price,
     roi,
@@ -30,6 +31,7 @@ class CryptoCurrency {
     fcasRating
   ) {
     this.name = name;
+    this.queryName = queryName; 
     this.code = code;
     this.price = price;
     this.roi = roi;
@@ -322,6 +324,5 @@ const binance = new CryptoCurrency(
 
 cryptoArray.push(binance);
 console.log(cryptoArray[cryptoArray.length - 1]);
-
 
 module.exports = CryptoCurrency;

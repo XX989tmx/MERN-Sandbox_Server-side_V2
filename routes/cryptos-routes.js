@@ -5,4 +5,6 @@ const cryptosControllers = require('../controllers/cryptos-controllers');
 
 router.get("/index",cryptosControllers.getCryptoIndex);
 
+router.get("/currencies/:currencyName",cryptosControllers.getSpecificCurrencyInfoByName)
+
 module.exports = router;
