@@ -694,7 +694,7 @@ CoinMarketCapCrypto.create(array).then((docs) => {
 
 // Connect MongoDB at default port 27017.
 mongoose.connect(
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-7slh6.mongodb.net/test?retryWrites=true&w=majority`,
+  `mongodb+srv://adminx:adminx@cluster0-7slh6.mongodb.net/mern?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useCreateIndex: true,
