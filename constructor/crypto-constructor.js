@@ -1,3 +1,7 @@
+const getExchangeRateDataFromAPI = require("../util/get-exchange-rate-data-from-api");
+const getFcasScoreFromAPI = require("../util/get-fcas-score-from-api");
+
+
 class CryptoCurrency {
   constructor(object) {
     (this.name = object.name),
@@ -90,12 +94,26 @@ class CryptoCurrency {
     this.article_paragraph10 = object.article.paragraph10;
   }
 
-  getTotalSupply () {
+  getFcasScore() {
+    return getFcasScoreFromAPI(this.code);
+  }
+  getFcasScoreFromCode(code) {
+    return getFcasScoreFromAPI(code);
+  }
+
+  // getExchangeRate () {
+  //   return getExchangeRateDataFromAPI(this.code,'USD');
+  // }a
+  getExchangeRateFromCode (FromCurrency,ToCurrency) {
+    return getExchangeRateDataFromAPI(FromCurrency, ToCurrency);
+  }
+
+  getTotalSupply() {
     return this.totalSupply;
   }
 
-  getWebsites () {
-    return this.website
+  getWebsites() {
+    return this.website;
   }
   // let cryptoArray = [];
 
@@ -343,108 +361,110 @@ class CryptoCurrency {
   // console.log(cryptoArray[cryptoArray.length - 1]);
 }
 
-
 const obj = {
-    price: { usd: '358.79', btc: '0.03327610', eth: '' },
-    marketCap: { usd: '40,499,412,753', btc: '3,754,185', eth: '', bnb: '' },
-    a24hourVolume: {
-      usd: '13,804,428,060',
-      self_code: '38,451,081',
-      btc: '1,279,633',
-      eth: '',
-      bnb: ''
-    },
-    report: {
-      report_list: [Array],
-      heading: 'Ethereum Report Highlights',
-      paragraph: "Ethereum is fundamentally stronger than it's ever been. Despite all of the criticism it continues to be the number one project by development activity, with a massive developer community. The project is in a good position to not only maintain its spot as the number one platform for smart contracts, but grow its dominance in the coming quarter.",
-      score: 'B+',
-      updated_at: 'Feb 28, 2020',
-      market_opportunity: '9.0',
-      underlying_technology: '7.5',
-      ecosystem_structure: '9.5',
-      core_team: '8.0',
-      token_economics: '8.0',
-      token_performance: '6.5',
-      roadmap_progress: '6.5'
-    },
-    tokenInsightRating: {
-      score: 'A',
-      score_string: 'Stable Outlook',
-      industry: 'Smart Contract Platform',
-      rating_description: 'TokenInsight ratings follow a specialized rating system (where AAA is the highest rating) to represent the quality and risk of Cryptocurrency projects based on Team, Project, and Ecosystem metrics.'
-    },
-    article: {
-      paragraph1: [Array],
-      paragraph2: [Array],
-      paragraph3: [Array],
-      paragraph4: [Array],
-      paragraph5: [Array],
-      paragraph6: [Array],
-      paragraph7: [],
-      paragraph8: [],
-      paragraph9: [],
-      paragraph10: [],
-      heading1: 'What Is Ethereum (ETH)?',
-      heading2: 'Who Are the Founders of Ethereum?',
-      heading3: 'What Makes Ethereum Unique?',
-      heading4: 'How Many Ethereum (ETH) Coins Are There In Circulation?',
-      heading5: 'How Is the Ethereum Network Secured?',
-      heading6: 'Where Can You Buy Ethereum (ETH)?',
-      heading7: '',
-      heading8: '',
-      heading9: '',
-      heading10: ''
-    },
-    website: [ 'https://www.ethereum.org/' ],
-    announcement: [ 'https://bitcointalk.org/index.php?topic=428589.0' ],
-    explorer: [
-      'https://blockchain.coinmarketcap.com/chain/ethereum',
-      'https://etherscan.io/',
-      'https://ethplorer.io/',
-      'https://blockchair.com/ethereum',
-      'https://eth.tokenview.com/en/blocklist'
-    ],
-    message_board: [ 'https://forum.ethereum.org/' ],
-    chat: [ 'https://gitter.im/orgs/ethereum/rooms' ],
-    sourceCode: [ 'https://github.com/ethereum' ],
-    technicalDocumentation: [ 'https://github.com/ethereum/wiki/wiki/White-Paper' ],
-    tags: [ 'Coin', 'Mineable', 'PoW', 'Smart Contracts', 'Binance Chain' ],
-    _id: "5f7445ead172f6199951e318",
-    name: 'Ethereum',
-    queryName: 'Ethereum',
-    code: 'ETH',
-    roi: '9000',
-    marketRank: '2',
-    circulatingSupply: '112,801,157',
-    totalSupply: '112,801,157',
-    maxSupply: '',
-    allTimeHigh: '1,432.88',
-    allTimeLow: '0.420897',
-    a52weekHigh: '487.21',
-    a52weekLow: '95.18',
-    a90dayHigh: '487.21',
-    a90dayLow: '352.15',
-    a30dayHigh: '487.21',
-    a30dayLow: '352.15',
-    a7dayHigh: '366.43',
-    a7dayLow: '352.15',
-    a24hourHigh: '359.04',
-    a24hourLow: '352.15',
-    yesterdaysHigh: '366.89',
-    yesterdaysLow: '354.83',
-    yesterdaysOpen: '357.31',
-    yesterdaysClose: '354.95',
-    yesterdaysChange: '-2.36',
-    yesterdaysVolume: '12,102,509,266',
-    icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
-    dynamicPerformanceScore: '71.54',
-    fcasRatingInitial: 'S',
-    fcasScore: '971',
-    __v: 0
-  };
+  price: { usd: "358.79", btc: "0.03327610", eth: "" },
+  marketCap: { usd: "40,499,412,753", btc: "3,754,185", eth: "", bnb: "" },
+  a24hourVolume: {
+    usd: "13,804,428,060",
+    self_code: "38,451,081",
+    btc: "1,279,633",
+    eth: "",
+    bnb: "",
+  },
+  report: {
+    report_list: [Array],
+    heading: "Ethereum Report Highlights",
+    paragraph:
+      "Ethereum is fundamentally stronger than it's ever been. Despite all of the criticism it continues to be the number one project by development activity, with a massive developer community. The project is in a good position to not only maintain its spot as the number one platform for smart contracts, but grow its dominance in the coming quarter.",
+    score: "B+",
+    updated_at: "Feb 28, 2020",
+    market_opportunity: "9.0",
+    underlying_technology: "7.5",
+    ecosystem_structure: "9.5",
+    core_team: "8.0",
+    token_economics: "8.0",
+    token_performance: "6.5",
+    roadmap_progress: "6.5",
+  },
+  tokenInsightRating: {
+    score: "A",
+    score_string: "Stable Outlook",
+    industry: "Smart Contract Platform",
+    rating_description:
+      "TokenInsight ratings follow a specialized rating system (where AAA is the highest rating) to represent the quality and risk of Cryptocurrency projects based on Team, Project, and Ecosystem metrics.",
+  },
+  article: {
+    paragraph1: [Array],
+    paragraph2: [Array],
+    paragraph3: [Array],
+    paragraph4: [Array],
+    paragraph5: [Array],
+    paragraph6: [Array],
+    paragraph7: [],
+    paragraph8: [],
+    paragraph9: [],
+    paragraph10: [],
+    heading1: "What Is Ethereum (ETH)?",
+    heading2: "Who Are the Founders of Ethereum?",
+    heading3: "What Makes Ethereum Unique?",
+    heading4: "How Many Ethereum (ETH) Coins Are There In Circulation?",
+    heading5: "How Is the Ethereum Network Secured?",
+    heading6: "Where Can You Buy Ethereum (ETH)?",
+    heading7: "",
+    heading8: "",
+    heading9: "",
+    heading10: "",
+  },
+  website: ["https://www.ethereum.org/"],
+  announcement: ["https://bitcointalk.org/index.php?topic=428589.0"],
+  explorer: [
+    "https://blockchain.coinmarketcap.com/chain/ethereum",
+    "https://etherscan.io/",
+    "https://ethplorer.io/",
+    "https://blockchair.com/ethereum",
+    "https://eth.tokenview.com/en/blocklist",
+  ],
+  message_board: ["https://forum.ethereum.org/"],
+  chat: ["https://gitter.im/orgs/ethereum/rooms"],
+  sourceCode: ["https://github.com/ethereum"],
+  technicalDocumentation: ["https://github.com/ethereum/wiki/wiki/White-Paper"],
+  tags: ["Coin", "Mineable", "PoW", "Smart Contracts", "Binance Chain"],
+  _id: "5f7445ead172f6199951e318",
+  name: "Ethereum",
+  queryName: "Ethereum",
+  code: "ETH",
+  roi: "9000",
+  marketRank: "2",
+  circulatingSupply: "112,801,157",
+  totalSupply: "112,801,157",
+  maxSupply: "",
+  allTimeHigh: "1,432.88",
+  allTimeLow: "0.420897",
+  a52weekHigh: "487.21",
+  a52weekLow: "95.18",
+  a90dayHigh: "487.21",
+  a90dayLow: "352.15",
+  a30dayHigh: "487.21",
+  a30dayLow: "352.15",
+  a7dayHigh: "366.43",
+  a7dayLow: "352.15",
+  a24hourHigh: "359.04",
+  a24hourLow: "352.15",
+  yesterdaysHigh: "366.89",
+  yesterdaysLow: "354.83",
+  yesterdaysOpen: "357.31",
+  yesterdaysClose: "354.95",
+  yesterdaysChange: "-2.36",
+  yesterdaysVolume: "12,102,509,266",
+  icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+  dynamicPerformanceScore: "71.54",
+  fcasRatingInitial: "S",
+  fcasScore: "971",
+  __v: 0,
+};
 
-    console.log(new CryptoCurrency(obj).getTotalSupply()); 
-    console.log(new CryptoCurrency(obj).getWebsites());  
+// console.log(new CryptoCurrency(obj).getTotalSupply());
+// console.log(new CryptoCurrency(obj).getWebsites());
+// console.log(new CryptoCurrency(obj).getExchangeRateFromCode('BTC','NEO'));
 
 module.exports = CryptoCurrency;
