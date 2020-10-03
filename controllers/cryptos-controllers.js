@@ -48,7 +48,9 @@ const getSpecificCurrencyInfoByName = async (req, res, next) => {
   //   return v.queryName === queryName;
   // });
 
-  res.status(200).json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
+  res
+    .status(200)
+    .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
 };
 
 const getSpecificCurrencyRatingByName = async (req, res, next) => {
@@ -76,10 +78,48 @@ const getSpecificCurrencyRatingByName = async (req, res, next) => {
   //   return v.queryName === queryName;
   // });
 
-  res.status(200).json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
+  res
+    .status(200)
+    .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
 };
+
+const getCurrencyByTag = async(req,res,next) => {
+
+  const tag = req.params.tag;
+
+  let crypto;
+  try {
+    crypto = await CoinMarketCapCrypto.find({ tags: tag });
+  } catch (error) {
+    console.log(error);
+  }
+
+  //console log
+  console.log(crypto);
+  console.log(crypto.length);
+  console.log(Array.isArray(crypto));
+  for (let index = 0; index < crypto.length; index++) {
+    const element = crypto[index];
+    console.log(element.tags);
+  }
+
+  // case no data found
+  if (!crypto) {
+    const error = new HttpError(
+      "No Data Found For the Specified Currency",
+      500
+    );
+    return next(error);
+  }
+
+  
+  res
+    .status(200)
+    .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
+}
 
 exports.getCryptoIndex = getCryptoIndex;
 
 exports.getSpecificCurrencyInfoByName = getSpecificCurrencyInfoByName;
 exports.getSpecificCurrencyRatingByName = getSpecificCurrencyRatingByName;
+exports.getCurrencyByTag = getCurrencyByTag;
