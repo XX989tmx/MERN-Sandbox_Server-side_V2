@@ -16,5 +16,6 @@ router.get(
   cryptosControllers.getSpecificCurrencyRatingByName
 );
 router.get("/currencies/:queryName/historicalData",cryptosControllers.getSpecificCurrencyWithHistoricalData);
+router.get("/currencies/:queryName/market_pairs",cryptosControllers.getSpecificCurrencyAndMarketPairs);
 
 module.exports = router;
