@@ -10,7 +10,7 @@ const fcasRatingAndScoreSchema = new mongoose.Schema({
   marketMaturityScore: { type: String },
   utilityScore: { type: String },
   lastRefreshed: { type: String },
-  timezone: { type: Date },
+  timezone: { type: String },
 });
 
 //Export the model

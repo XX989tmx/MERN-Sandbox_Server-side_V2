@@ -1,6 +1,7 @@
 const { default: Axios } = require("axios");
 const mongoose = require("mongoose");
 const coinmarketcapCrypto = require("../../models/coinmarketcap-crypto");
+const FcasRatingAndScore = require("../../models/FcasRatingAndScore");
 
 async function crypto(params) {
   let cryptos;
@@ -38,18 +39,32 @@ async function crypto(params) {
     utilityScore = data["Crypto Rating (FCAS)"]["7. utility score"];
     lastRefreshed = data["Crypto Rating (FCAS)"]["8. last refreshed"];
     timezone = data["Crypto Rating (FCAS)"]["9. timezone"];
-    fcasArray.push({
-      data,
-      symbol,
-      name,
-      fcasRating,
-      fcasScore,
-      developlerScore,
-      marketMaturityScore,
-      utilityScore,
-      lastRefreshed,
-      timezone,
+
+    const newFcas = new FcasRatingAndScore({
+      symbol: String(symbol),
+      name: String(name),
+      fcasRating: String(fcasRating),
+      fcasScore: String(fcasScore),
+      developlerScore: String(developlerScore),
+      marketMaturityScore: String(marketMaturityScore),
+      utilityScore: String(utilityScore),
+      lastRefreshed: new Date(lastRefreshed).toISOString(),
+      timezone: String(timezone),
     });
+    newFcas.save();
+
+    // fcasArray.push({
+    //   data,
+    //   symbol,
+    //   name,
+    //   fcasRating,
+    //   fcasScore,
+    //   developlerScore,
+    //   marketMaturityScore,
+    //   utilityScore,
+    //   lastRefreshed,
+    //   timezone,
+    // });
 
     const updatedCrypto = await coinmarketcapCrypto.findOneAndUpdate(
       { code: code },
@@ -61,11 +76,11 @@ async function crypto(params) {
   console.log(response);
   console.log(response.data);
 
-//   for (let index = 0; index < cryptos.length; index++) {
-//     const element = cryptos[index];
-//     element.fcasScore = fcasArray[index].fcasScore;
-//     element.save();
-//   }
+  //   for (let index = 0; index < cryptos.length; index++) {
+  //     const element = cryptos[index];
+  //     element.fcasScore = fcasArray[index].fcasScore;
+  //     element.save();
+  //   }
 
   return cryptos;
 }
