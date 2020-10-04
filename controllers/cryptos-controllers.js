@@ -5,7 +5,7 @@ const HttpError = require("../models/http-error");
 const getCryptoIndex = async (req, res, next) => {
   let cryptos;
   try {
-    cryptos = await CoinMarketCapCrypto.find({}, "-article");
+    cryptos = await CoinMarketCapCrypto.find({}, "-article").sort({ _id: 1 });
   } catch (error) {
     console.log(error);
   }
@@ -152,7 +152,7 @@ const getSpecificCurrencyWithHistoricalData = async (req, res, next) => {
     .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
 };
 
-const getSpecificCurrencyAndMarketPairs = async(req,res,next) => {
+const getSpecificCurrencyAndMarketPairs = async (req, res, next) => {
   const queryName = req.params.queryName;
 
   let crypto;
@@ -180,14 +180,13 @@ const getSpecificCurrencyAndMarketPairs = async(req,res,next) => {
   //   return v.queryName === queryName;
   // });
   if (!!crypto) {
-     console.log("market pairs");
+    console.log("market pairs");
   }
- 
 
   res
     .status(200)
     .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
-}
+};
 
 exports.getCryptoIndex = getCryptoIndex;
 
