@@ -48,7 +48,7 @@ async function crypto(params) {
       developlerScore: String(developlerScore),
       marketMaturityScore: String(marketMaturityScore),
       utilityScore: String(utilityScore),
-      lastRefreshed: new Date(lastRefreshed).toISOString(),
+      lastRefreshed: String(lastRefreshed),
       timezone: String(timezone),
     });
     newFcas.save();
