@@ -68,7 +68,7 @@ const coinmarketcapCrypto = require("../../models/coinmarketcap-crypto");
       const docWithBasicRating = await coinmarketcapCrypto.find({
         fcasScore: String(BfcasSocre),
       });
-      BasicRatedCryptoArray.push(docWithBasicRating);
+      BasicRatedCryptoArray.push(docWithBasicRating.pop());
     }
 
     let CautionRatedCryptoArray = [];
@@ -77,7 +77,7 @@ const coinmarketcapCrypto = require("../../models/coinmarketcap-crypto");
       const docWithCautionRating = await coinmarketcapCrypto.find({
         fcasScore: String(CfcasSocre),
       });
-      CautionRatedCryptoArray.push(docWithCautionRating);
+      CautionRatedCryptoArray.push(docWithCautionRating.pop());
     }
 
     let FragileRatedCryptoArray = [];
@@ -86,7 +86,7 @@ const coinmarketcapCrypto = require("../../models/coinmarketcap-crypto");
       const docWithFragileRating = await coinmarketcapCrypto.find({
         fcasScore: String(FfcasSocre),
       });
-      FragileRatedCryptoArray.push(docWithFragileRating);
+      FragileRatedCryptoArray.push(docWithFragileRating.pop());
     }
 })()
 
