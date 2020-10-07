@@ -1337,7 +1337,16 @@ const getTop5MostViewedArticles = async (req, res, next) => {
   let articles;
   try {
     // top 5 most viewed articles
-    articles = await Article.find({}).sort({ viewCount: -1 }).limit(5);
+    articles = await Article.find(
+      {},
+      "-contents -location -referenceSites -externalSites"
+    )
+      .populate({
+        path: "author",
+        select: "-password",
+      })
+      .sort({ viewCount: -1 })
+      .limit(5);
   } catch (error) {
     console.log(error);
   }
