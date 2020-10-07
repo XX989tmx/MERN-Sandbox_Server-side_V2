@@ -8,9 +8,9 @@ const checkAuth = require("../middleware/check-auth");
 const router = express.Router();
 
 router.get("/all", articlesControllers.allArticles);
-router.get("/price_sort", articlesControllers.sortArticleByPriceOrder)
+router.get("/price_sort", articlesControllers.sortArticleByPriceOrder);
 router.get("/date_sort", articlesControllers.sortByDate);
-router.get("/downloadable", articlesControllers.DownloadableOrNot)
+router.get("/downloadable", articlesControllers.DownloadableOrNot);
 //GET 'https:://localhost500/api/articles/all?q=query'
 
 // OR search (k1 or k2)
@@ -18,17 +18,28 @@ router.get("/downloadable", articlesControllers.DownloadableOrNot)
 // AND search (k1 and k2)
 //GET 'https:://localhost500/api/articles/all?k1=keyword1&k2=keyword2'
 
+router.get(
+  "/top5MostViewedArticles",
+  articlesControllers.getTop5MostViewedArticles
+);
+
 router.get("/tagIndex", articlesControllers.TagCountIndex);
 
-router.get("/categoryIndex", articlesControllers.categoryCountIndex)
+router.get("/categoryIndex", articlesControllers.categoryCountIndex);
 
 router.get("/:articleId", articlesControllers.getArticleById);
 
 router.get("/user/:userId", articlesControllers.getArticlesByUserId);
 
-router.get("/averagePriceOfThisUsersArticles/:userId",articlesControllers.averagePriceOfThisUsersArticles);
+router.get(
+  "/averagePriceOfThisUsersArticles/:userId",
+  articlesControllers.averagePriceOfThisUsersArticles
+);
 
-router.get("/getAllImagesOfUsersArticles/:userId",articlesControllers.getAllImagesOfUsersArticles);
+router.get(
+  "/getAllImagesOfUsersArticles/:userId",
+  articlesControllers.getAllImagesOfUsersArticles
+);
 
 router.get(
   "/get_same_authors_articles/:articleId/:authorId",
@@ -55,9 +66,17 @@ router.get(
   articlesControllers.countArticlesByTag
 );
 
-router.get("/get_specific_article_by_id/:articleId", articlesControllers.getSpecificArticleById);
+router.get(
+  "/get_specific_article_by_id/:articleId",
+  articlesControllers.getSpecificArticleById
+);
 
-router.get("/:articleId/addViewCount",articlesControllers.addViewCountToArticle);
+router.get(
+  "/:articleId/addViewCount",
+  articlesControllers.addViewCountToArticle
+);
+
+
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);

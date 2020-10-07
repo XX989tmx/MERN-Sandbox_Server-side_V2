@@ -1326,9 +1326,28 @@ const addViewCountToArticle = async (req, res, next) => {
       { _id: articleId },
       { viewCount: updatedViewCount }
     );
-  } catch (error) {console.log(error);}
+  } catch (error) {
+    console.log(error);
+  }
 
   res.json({ message: "add views count + 1" });
+};
+
+const getTop5MostViewedArticles = async (req, res, next) => {
+  let articles;
+  try {
+    // top 5 most viewed articles
+    articles = await Article.find({}).sort({ viewCount: -1 }).limit(5);
+  } catch (error) {
+    console.log(error);
+  }
+  for (let index = 0; index < articles.length; index++) {
+    const element = articles[index];
+    console.log(element.viewCount);
+  }
+  console.log(articles.length);
+
+  res.json({ articles: articles.map((a) => a.toObject({ getters: true })) });
 };
 
 // const searchQuery = async(req, res, next) => {
@@ -1404,3 +1423,5 @@ exports.averagePriceOfThisUsersArticles = averagePriceOfThisUsersArticles;
 
 exports.getAllImagesOfUsersArticles = getAllImagesOfUsersArticles;
 exports.addViewCountToArticle = addViewCountToArticle;
+
+exports.getTop5MostViewedArticles = getTop5MostViewedArticles;
