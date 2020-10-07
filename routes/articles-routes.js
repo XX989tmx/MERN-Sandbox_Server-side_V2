@@ -55,7 +55,9 @@ router.get(
   articlesControllers.countArticlesByTag
 );
 
-router.get("/get_specific_article_by_id/:articleId", articlesControllers.getSpecificArticleById)
+router.get("/get_specific_article_by_id/:articleId", articlesControllers.getSpecificArticleById);
+
+router.get("/:articleId/addViewCount",articlesControllers.addViewCountToArticle);
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);

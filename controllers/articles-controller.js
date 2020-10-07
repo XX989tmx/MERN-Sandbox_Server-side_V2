@@ -491,6 +491,8 @@ const createArticle = async (req, res, next) => {
     return next(error);
   }
 
+  let RandomizedInitialViewCounts = Math.floor(Math.random() * 100000 + 1);
+
   const createdArticle = new Article({
     title: title,
     contents: [],
@@ -514,6 +516,7 @@ const createArticle = async (req, res, next) => {
     tags: tags,
     price: price,
     downloadable,
+    viewCount: RandomizedInitialViewCounts,
   });
   for (let index = 0; index < referenceSiteArray.length; index++) {
     const site = referenceSiteArray[index];
@@ -1306,6 +1309,28 @@ const getAllImagesOfUsersArticles = async (req, res, next) => {
   res.json({ imagesArray, imagesCount });
 };
 
+const addViewCountToArticle = async (req, res, next) => {
+  const articleId = req.params.articleId;
+  let existingArticle;
+  try {
+    existingArticle = await Article.findById(articleId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  const currentViewCount = existingArticle.viewCount;
+  const updatedViewCount = currentViewCount + 1;
+
+  try {
+    await Article.findByIdAndUpdate(
+      { _id: articleId },
+      { viewCount: updatedViewCount }
+    );
+  } catch (error) {console.log(error);}
+
+  res.json({ message: "add views count + 1" });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1378,3 +1403,4 @@ exports.articlesBySameAuthorExceptTheCurrentOne = articlesBySameAuthorExceptTheC
 exports.averagePriceOfThisUsersArticles = averagePriceOfThisUsersArticles;
 
 exports.getAllImagesOfUsersArticles = getAllImagesOfUsersArticles;
+exports.addViewCountToArticle = addViewCountToArticle;

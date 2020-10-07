@@ -39,6 +39,7 @@ const articleSchema = new Schema({
   tags: [{ type: String, required: true }],
   price: { type: Number, required: true },
   downloadable: { type: Boolean, required: true },
+  viewCount: { type: Number, required: true },
   // review: { type: Number, required: true },
 });
 
