@@ -9,6 +9,8 @@ const fileUpload = require("../middleware/file-upload");
 
 router.get("/index", videoControllers.getAllVideos);
 
+router.get("/get_related_videos/:videoId",videoControllers.getRelatedVideo)
+
 router.post("/:videoId/addComment",videoControllers.addCommentToVideo)
 
 router.post(

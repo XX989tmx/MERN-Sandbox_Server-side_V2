@@ -360,6 +360,35 @@ const addCommentToVideo = async (req, res, next) => {
   res.json({ existingVideoComments: existingVideo.comments });
 };
 
+const getRelatedVideo = async (req, res, next) => {
+  const videoId = req.params.videoId;
+
+  let existingVideos;
+  try {
+    existingVideos = await Video.find({}).sort({ _id: 1 });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(existingVideos.length);
+
+  const videosExceptTheCurrentOne = existingVideos.filter(function (v, i) {
+    return v.id !== videoId;
+  });
+
+  console.log(videosExceptTheCurrentOne.length);
+  console.log(videosExceptTheCurrentOne);
+
+  const relatedVideosArrayCapped20 = videosExceptTheCurrentOne.slice(0, 20);
+
+  console.log(relatedVideosArrayCapped20.length);
+
+  res.status(200).json({
+    relatedVideosArrayCapped20: relatedVideosArrayCapped20.map((r) =>
+      r.toObject({ getters: true })
+    ),
+  });
+};
+
 exports.getAllVideos = getAllVideos;
 exports.getVideoById = getVideoById;
 exports.createNewVideo = createNewVideo;
@@ -374,3 +403,4 @@ exports.addLikeToVideo = addLikeToVideo;
 exports.addDislikeToVideo = addDislikeToVideo;
 
 exports.addCommentToVideo = addCommentToVideo;
+exports.getRelatedVideo = getRelatedVideo;
