@@ -188,7 +188,7 @@ const getSpecificCurrencyAndMarketPairs = async (req, res, next) => {
     .json({ crypto: crypto.map((v) => v.toObject({ getters: true })) });
 };
 
-const categorizeCryptoThroughFcasRank = async(req,res,next) => {
+const categorizeCryptoThroughFcasRank = async (req, res, next) => {
   const _5ArraySortedBasedOnFcasScore = await (async function (params) {
     const fcasScoreArray = await (async function IFFY(params) {
       let cryptos = await CoinMarketCapCrypto.find({}); // CoinbaeCrypto Mongo Docs
@@ -203,29 +203,49 @@ const categorizeCryptoThroughFcasRank = async(req,res,next) => {
       return fcasScoreArray;
     })();
 
-    const Superb = fcasScoreArray.filter((v, i) => {
-      return v >= 900 && v <= 1000;
-    });
+    const Superb = fcasScoreArray
+      .filter((v, i) => {
+        return v >= 900 && v <= 1000;
+      })
+      .sort((a, b) => {
+        return b - a;
+      });
     console.log(Superb);
 
-    const Attractive = fcasScoreArray.filter((v, i) => {
-      return v >= 750 && v <= 899;
-    });
+    const Attractive = fcasScoreArray
+      .filter((v, i) => {
+        return v >= 750 && v <= 899;
+      })
+      .sort((a, b) => {
+        return b - a;
+      });
     console.log(Attractive);
 
-    const Basic = fcasScoreArray.filter((v, i) => {
-      return v >= 650 && v <= 749;
-    });
+    const Basic = fcasScoreArray
+      .filter((v, i) => {
+        return v >= 650 && v <= 749;
+      })
+      .sort((a, b) => {
+        return b - a;
+      });
     console.log(Basic);
 
-    const Caution = fcasScoreArray.filter((v, i) => {
-      return v >= 500 && v <= 649;
-    });
+    const Caution = fcasScoreArray
+      .filter((v, i) => {
+        return v >= 500 && v <= 649;
+      })
+      .sort((a, b) => {
+        return b - a;
+      });
     console.log(Caution);
 
-    const Fragile = fcasScoreArray.filter((v, i) => {
-      return v < 500;
-    });
+    const Fragile = fcasScoreArray
+      .filter((v, i) => {
+        return v < 500;
+      })
+      .sort((a, b) => {
+        return b - a;
+      });
     console.log(Fragile);
 
     //contains only Superb rated crypto docs
@@ -290,9 +310,8 @@ const categorizeCryptoThroughFcasRank = async(req,res,next) => {
     return _5ArraySortedBasedOnFcasScore;
   })();
 
-
   res.status(200).json({ _5ArraySortedBasedOnFcasScore });
-}
+};
 
 exports.getCryptoIndex = getCryptoIndex;
 
@@ -301,4 +320,4 @@ exports.getSpecificCurrencyRatingByName = getSpecificCurrencyRatingByName;
 exports.getCurrencyByTag = getCurrencyByTag;
 exports.getSpecificCurrencyWithHistoricalData = getSpecificCurrencyWithHistoricalData;
 exports.getSpecificCurrencyAndMarketPairs = getSpecificCurrencyAndMarketPairs;
-exports.categorizeCryptoThroughFcasRank = categorizeCryptoThroughFcasRank; 
+exports.categorizeCryptoThroughFcasRank = categorizeCryptoThroughFcasRank;
