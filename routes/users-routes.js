@@ -47,6 +47,11 @@ router.get(
   usersControllers.getAllOfTheArticleCommentsOfThisUser
 );
 
+router.get(
+  "/getArticleCommentsOfFollowingOfYou/:userId",
+  usersControllers.getArticleCommentsOfFollowingOfYou
+);
+
 router.post(
   "/signup",
   fileUpload.single("image"),
