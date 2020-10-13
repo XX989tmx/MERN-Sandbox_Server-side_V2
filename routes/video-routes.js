@@ -9,9 +9,14 @@ const fileUpload = require("../middleware/file-upload");
 
 router.get("/index", videoControllers.getAllVideos);
 
-router.get("/get_related_videos/:videoId",videoControllers.getRelatedVideo)
+router.get("/get_related_videos/:videoId", videoControllers.getRelatedVideo);
 
-router.post("/:videoId/addComment",videoControllers.addCommentToVideo)
+router.post("/:videoId/addComment", videoControllers.addCommentToVideo);
+
+router.get(
+  "/getVideosOfPeopleYouAreFollowing/:userId",
+  videoControllers.getVideosOfPeopleYouAreFollowing
+);
 
 router.post(
   "/new",
@@ -30,11 +35,11 @@ router.post(
   videoControllers.createNewVideo
 );
 
-router.get("/:videoId/addViewCount",videoControllers.addViewCount)
+router.get("/:videoId/addViewCount", videoControllers.addViewCount);
 
-router.get("/:videoId/addLikeToVideo",videoControllers.addLikeToVideo);
+router.get("/:videoId/addLikeToVideo", videoControllers.addLikeToVideo);
 
-router.get("/:videoId/addDislikeToVideo",videoControllers.addDislikeToVideo);
+router.get("/:videoId/addDislikeToVideo", videoControllers.addDislikeToVideo);
 
 router.get("/:videoId", videoControllers.getVideoById);
 
@@ -51,9 +56,6 @@ router.get(
   "/get_video_by_persons/:persons",
   videoControllers.getVideoByPersons
 );
-
-
-
 
 // ここより前はauth無しでアクセス可能
 router.use(checkAuth);

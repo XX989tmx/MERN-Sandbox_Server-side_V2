@@ -389,6 +389,24 @@ const getRelatedVideo = async (req, res, next) => {
   });
 };
 
+const getVideosOfPeopleYouAreFollowing = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate({
+      path: "following",
+      populate: "videos",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(user);
+
+  res.json({ user });
+};
+
 exports.getAllVideos = getAllVideos;
 exports.getVideoById = getVideoById;
 exports.createNewVideo = createNewVideo;
@@ -404,3 +422,4 @@ exports.addDislikeToVideo = addDislikeToVideo;
 
 exports.addCommentToVideo = addCommentToVideo;
 exports.getRelatedVideo = getRelatedVideo;
+exports.getVideosOfPeopleYouAreFollowing = getVideosOfPeopleYouAreFollowing;
