@@ -450,6 +450,24 @@ const getFollowedByOfFollowedByOfYou = async (req, res, next) => {
   res.json({ user });
 };
 
+const getFollowingOfFollowedByOfYou = async (req, res, next) => {
+  // = user.followedBy.following; except you
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate({
+      path: "followedBy",
+      populate: "following",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(user);
+
+  res.json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -462,3 +480,4 @@ exports.getUsersFollowingYou = getUsersFollowingYou;
 exports.getFollowingOfFollowingOfYou = getFollowingOfFollowingOfYou;
 exports.getFollowedByOfFollowingOfYou = getFollowedByOfFollowingOfYou;
 exports.getFollowedByOfFollowedByOfYou = getFollowedByOfFollowedByOfYou;
+exports.getFollowingOfFollowedByOfYou = getFollowingOfFollowedByOfYou;

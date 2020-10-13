@@ -37,6 +37,11 @@ router.get(
   usersControllers.getFollowedByOfFollowedByOfYou
 );
 
+router.get(
+  "/getFollowingOfFollowedByOfYou/:userId",
+  usersControllers.getFollowingOfFollowedByOfYou
+);
+
 router.post(
   "/signup",
   fileUpload.single("image"),
