@@ -468,6 +468,19 @@ const getFollowingOfFollowedByOfYou = async (req, res, next) => {
   res.json({ user });
 };
 
+const getAllOfTheArticleCommentsOfThisUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate("article_comments");
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(user);
+
+  res.json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -481,3 +494,4 @@ exports.getFollowingOfFollowingOfYou = getFollowingOfFollowingOfYou;
 exports.getFollowedByOfFollowingOfYou = getFollowedByOfFollowingOfYou;
 exports.getFollowedByOfFollowedByOfYou = getFollowedByOfFollowedByOfYou;
 exports.getFollowingOfFollowedByOfYou = getFollowingOfFollowedByOfYou;
+exports.getAllOfTheArticleCommentsOfThisUser = getAllOfTheArticleCommentsOfThisUser;

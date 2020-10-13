@@ -42,7 +42,10 @@ router.get(
   usersControllers.getFollowingOfFollowedByOfYou
 );
 
-
+router.get(
+  "/getAllOfTheArticleCommentsOfThisUser/:userId",
+  usersControllers.getAllOfTheArticleCommentsOfThisUser
+);
 
 router.post(
   "/signup",
