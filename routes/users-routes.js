@@ -8,6 +8,13 @@ const router = express.Router();
 
 router.get("/", usersControllers.getUsers);
 
+router.get(
+  "/followOtherUser/:userId/:followingCandidateId",
+  usersControllers.followOtherUser
+);
+
+router.get("/getUsersYouAreFollowing/:userId",usersControllers.getUsersYouAreFollowing)
+
 router.post(
   "/signup",
   fileUpload.single("image"),
@@ -30,13 +37,18 @@ router.post(
     check("shichousonku").not().isEmpty(),
     check("banchi").not().isEmpty(),
     check("name_of_residence").not().isEmpty(),
-    check("phone_number").not().isEmpty()
+    check("phone_number").not().isEmpty(),
   ],
   usersControllers.createUserDetailInfo
 );
 
-router.get("/:userId/user_detail_info/show", usersControllers.showUserDetailInfo);
-router.patch("/:userId/user_detail_info/update", usersControllers.updateUserDetailInfo);
-
+router.get(
+  "/:userId/user_detail_info/show",
+  usersControllers.showUserDetailInfo
+);
+router.patch(
+  "/:userId/user_detail_info/update",
+  usersControllers.updateUserDetailInfo
+);
 
 module.exports = router;

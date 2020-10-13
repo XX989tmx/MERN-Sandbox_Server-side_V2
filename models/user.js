@@ -13,7 +13,9 @@ const userSchema = new Schema({
   readingLists: [
     { type: mongoose.Types.ObjectId, required: true, ref: "ReadingList" },
   ],
-  staredArticles : [{ type: mongoose.Types.ObjectId,  ref: "Article" }]
+  staredArticles: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
+  following: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  followedBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,

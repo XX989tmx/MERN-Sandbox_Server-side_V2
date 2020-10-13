@@ -261,7 +261,6 @@ const createUserDetailInfo = async (req, res, next) => {
   }
 
   res.status(201).json({
-    
     country: createdUserDetailInfo.country,
     zip_code: createdUserDetailInfo.zip_code,
     todoufuken: createdUserDetailInfo.todoufuken,
@@ -297,7 +296,6 @@ const showUserDetailInfo = async (req, res, next) => {
     banchi: existingUserDetailInfo[0].banchi,
     name_of_residence: existingUserDetailInfo[0].name_of_residence,
     phone_number: existingUserDetailInfo[0].phone_number,
-    
   });
 };
 
@@ -318,9 +316,7 @@ const updateUserDetailInfo = async (req, res, next) => {
     existingUserDetailInfo = await UserDetailInfo.find({ user_id: user_id })
       .limit(1)
       .sort({ $natural: -1 });
-  } catch (error) {
-    
-  };
+  } catch (error) {}
 
   existingUserDetailInfo[0].country = country;
   existingUserDetailInfo[0].zip_code = zip_code;
@@ -334,9 +330,7 @@ const updateUserDetailInfo = async (req, res, next) => {
 
   try {
     existingUserDetailInfo[0].save();
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 
   res.json({
     country: existingUserDetailInfo[0].country,
@@ -346,8 +340,47 @@ const updateUserDetailInfo = async (req, res, next) => {
     banchi: existingUserDetailInfo[0].banchi,
     name_of_residence: existingUserDetailInfo[0].name_of_residence,
     phone_number: existingUserDetailInfo[0].phone_number,
-    
   });
+};
+
+const followOtherUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  const followingCandidateId = req.params.followingCandidateId;
+
+  let user; // you
+  let userYouWantToFollow;
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await user.following.push(followingCandidateId);
+  await user.save();
+
+  try {
+    userYouWantToFollow = await User.findById(followingCandidateId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await userYouWantToFollow.followedBy.push(userId);
+  await userYouWantToFollow.save();
+
+  res.status(200).json({ user });
+};
+
+const getUsersYouAreFollowing = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate("following");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.status(200).json({ user });
 };
 
 exports.getUsers = getUsers;
@@ -356,3 +389,5 @@ exports.login = login;
 exports.createUserDetailInfo = createUserDetailInfo;
 exports.showUserDetailInfo = showUserDetailInfo;
 exports.updateUserDetailInfo = updateUserDetailInfo;
+exports.followOtherUser = followOtherUser;
+exports.getUsersYouAreFollowing = getUsersYouAreFollowing;
