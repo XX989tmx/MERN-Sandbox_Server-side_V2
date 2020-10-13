@@ -811,12 +811,14 @@ const getSpecificArticleById = async (req, res, next) => {
 
   let article;
   try {
-    article = await Article.findById(articleId).populate({
-      path: "author",
-      select: "-password",
-    });
+    article = await Article.findById(articleId)
+      .populate({
+        path: "author",
+        select: "-password",
+      })
+      .populate("comments");
   } catch (error) {}
-  // console.log(article);
+  console.log(article);
   // console.log(article.populated("author"));
 
   res.json({ article: article.toObject({ getters: true }) });
