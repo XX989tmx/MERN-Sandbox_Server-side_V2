@@ -414,6 +414,26 @@ const getFollowingOfFollowingOfYou = async (req, res, next) => {
   res.status(200).json({ user });
 };
 
+const getFollowedByOfFollowingOfYou = async (req, res, next) => {
+  // = user.following.followedBy;
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate({
+      path: "following",
+      populate: "followedBy",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  // need to subtract 'you' from user list. user.following.followedBy(except you) is target here.
+
+  console.log(user);
+
+  res.status(200).json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -424,3 +444,4 @@ exports.followOtherUser = followOtherUser;
 exports.getUsersYouAreFollowing = getUsersYouAreFollowing;
 exports.getUsersFollowingYou = getUsersFollowingYou;
 exports.getFollowingOfFollowingOfYou = getFollowingOfFollowingOfYou;
+exports.getFollowedByOfFollowingOfYou = getFollowedByOfFollowingOfYou;
