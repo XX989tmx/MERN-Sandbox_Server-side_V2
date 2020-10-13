@@ -1423,9 +1423,28 @@ const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
     console.log(error);
   }
 
-  console.log(user)
+  console.log(user);
 
   res.status(200).json({ user });
+};
+
+const getStaredArticlesOfPeopleYouAreFollowing = async (req, res, next) => {
+  // get list of articles which are 'stared' by someone you are following. = user.following.staredArticles;
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate({
+      path: "following",
+      populate: "staredArticles",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(user);
+
+  res.json({ user });
 };
 
 // const searchQuery = async(req, res, next) => {
@@ -1506,3 +1525,4 @@ exports.getTop5MostViewedArticles = getTop5MostViewedArticles;
 exports.addArticleToStaredList = addArticleToStaredList;
 exports.getStaredArticles = getStaredArticles;
 exports.getArticlesOfUsersYouAreFollowing = getArticlesOfUsersYouAreFollowing;
+exports.getStaredArticlesOfPeopleYouAreFollowing = getStaredArticlesOfPeopleYouAreFollowing;
