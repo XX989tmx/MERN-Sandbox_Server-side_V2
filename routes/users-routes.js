@@ -13,7 +13,8 @@ router.get(
   usersControllers.followOtherUser
 );
 
-router.get("/getUsersYouAreFollowing/:userId",usersControllers.getUsersYouAreFollowing)
+router.get("/getUsersYouAreFollowing/:userId",usersControllers.getUsersYouAreFollowing);
+router.get("/getUsersFollowingYou/:userId",usersControllers.getUsersFollowingYou)
 
 router.post(
   "/signup",

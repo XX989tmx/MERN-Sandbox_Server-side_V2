@@ -383,6 +383,19 @@ const getUsersYouAreFollowing = async (req, res, next) => {
   res.status(200).json({ user });
 };
 
+const getUsersFollowingYou = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate("followedBy");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.status(200).json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -391,3 +404,4 @@ exports.showUserDetailInfo = showUserDetailInfo;
 exports.updateUserDetailInfo = updateUserDetailInfo;
 exports.followOtherUser = followOtherUser;
 exports.getUsersYouAreFollowing = getUsersYouAreFollowing;
+exports.getUsersFollowingYou = getUsersFollowingYou;
