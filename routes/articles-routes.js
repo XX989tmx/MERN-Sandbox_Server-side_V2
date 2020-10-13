@@ -10,6 +10,8 @@ const router = express.Router();
 router.get("/addArticleToStaredList/:userId/:articleId",articlesControllers.addArticleToStaredList)
 router.get("/getStaredArticles/:userId",articlesControllers.getStaredArticles)
 
+router.get("/getArticlesOfUsersYouAreFollowing/:userId",articlesControllers.getArticlesOfUsersYouAreFollowing)
+
 router.get("/all", articlesControllers.allArticles);
 router.get("/price_sort", articlesControllers.sortArticleByPriceOrder);
 router.get("/date_sort", articlesControllers.sortByDate);

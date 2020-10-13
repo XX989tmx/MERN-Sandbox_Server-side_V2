@@ -1410,6 +1410,24 @@ const getStaredArticles = async (req, res, next) => {
   res.json({ user });
 };
 
+const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate({
+      path: "following",
+      populate: { path: "articles" },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(user)
+
+  res.status(200).json({ user });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1487,3 +1505,4 @@ exports.addViewCountToArticle = addViewCountToArticle;
 exports.getTop5MostViewedArticles = getTop5MostViewedArticles;
 exports.addArticleToStaredList = addArticleToStaredList;
 exports.getStaredArticles = getStaredArticles;
+exports.getArticlesOfUsersYouAreFollowing = getArticlesOfUsersYouAreFollowing;
