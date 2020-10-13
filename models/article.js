@@ -42,6 +42,7 @@ const articleSchema = new Schema({
   viewCount: { type: Number, required: true },
   // review: { type: Number, required: true },
   staredBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  comments: [{ type: mongoose.Types.ObjectId, ref: "ArticleComment" }],
 });
 
 module.exports = mongoose.model("Article", articleSchema);

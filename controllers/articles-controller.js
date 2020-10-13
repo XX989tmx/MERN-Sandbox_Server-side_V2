@@ -13,6 +13,7 @@ const User = require("../models/user");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 const referenceSitesHandler = require("../modules/controllers-modules/reference-sites-handler");
 const externalSitesHandler = require("../modules/controllers-modules/external-sites-handler");
+const ArticleComment = require("../models/article-comment");
 
 const allArticles = async (req, res, next) => {
   // const query = req.query.q;
@@ -1447,6 +1448,48 @@ const getStaredArticlesOfPeopleYouAreFollowing = async (req, res, next) => {
   res.json({ user });
 };
 
+const addCommentsToArticle = async (req, res, next) => {
+  const userId = req.params.userId;
+  const articleId = req.params.articleId;
+  const { comment } = req.body;
+
+  const createdArticleComment = new ArticleComment({
+    user: userId,
+    article: articleId,
+    comment: comment,
+    createdAt: new Date(Date.now()).toString(),
+  });
+
+  await createdArticleComment.save();
+
+  console.log(createdArticleComment);
+
+  let user;
+  let article;
+
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(user);
+  }
+
+  console.log(user);
+
+  await user.article_comments.push(createdArticleComment);
+  await user.save();
+
+  try {
+    article = await Article.findById(articleId);
+  } catch (error) {
+    console.log(error);
+  }
+  await article.comments.push(createdArticleComment);
+  await article.save();
+  console.log(article);
+
+  res.json({ user });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1526,3 +1569,4 @@ exports.addArticleToStaredList = addArticleToStaredList;
 exports.getStaredArticles = getStaredArticles;
 exports.getArticlesOfUsersYouAreFollowing = getArticlesOfUsersYouAreFollowing;
 exports.getStaredArticlesOfPeopleYouAreFollowing = getStaredArticlesOfPeopleYouAreFollowing;
+exports.addCommentsToArticle = addCommentsToArticle;
