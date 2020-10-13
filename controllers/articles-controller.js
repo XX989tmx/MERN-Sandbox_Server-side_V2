@@ -1359,6 +1359,57 @@ const getTop5MostViewedArticles = async (req, res, next) => {
   res.json({ articles: articles.map((a) => a.toObject({ getters: true })) });
 };
 
+const addArticleToStaredList = async (req, res, next) => {
+  const userId = req.params.userId;
+  const articleId = req.params.articleId;
+
+  let user;
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await article.staredBy.push(userId);
+  await article.save();
+
+  // try {
+  //   await (await User.findByIdAndUpdate(userId, { staredArticles: articleId })).save();
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  try {
+    user = await User.findById(userId);
+  } catch (error) {}
+
+  user.staredArticles.push(articleId);
+  await user.save();
+  let updatedUser;
+  try {
+    updatedUser = await User.findById(userId).populate("staredArticles");
+  } catch (error) {}
+
+  res.json({ updatedUser });
+};
+
+const getStaredArticles = async (req, res, next) => {
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate("staredArticles");
+  } catch (error) {}
+
+  const staredArticles = user.staredArticles;
+  console.log(user);
+  // console.log(user.staredArticles[0].title);
+  // console.log(staredArticles.length);
+  // console.log(staredArticles[0].tags);
+
+  res.json({ user });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1434,3 +1485,5 @@ exports.getAllImagesOfUsersArticles = getAllImagesOfUsersArticles;
 exports.addViewCountToArticle = addViewCountToArticle;
 
 exports.getTop5MostViewedArticles = getTop5MostViewedArticles;
+exports.addArticleToStaredList = addArticleToStaredList;
+exports.getStaredArticles = getStaredArticles;

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -41,6 +41,7 @@ const articleSchema = new Schema({
   downloadable: { type: Boolean, required: true },
   viewCount: { type: Number, required: true },
   // review: { type: Number, required: true },
+  staredBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
 });
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model("Article", articleSchema);
