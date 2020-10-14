@@ -17,6 +17,10 @@ const userSchema = new Schema({
   following: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   followedBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   article_comments: [{ type: mongoose.Types.ObjectId, ref: "ArticleComment" }],
+  profile: {
+    type: mongoose.Types.ObjectId,
+    ref: "Profile",
+  },
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,

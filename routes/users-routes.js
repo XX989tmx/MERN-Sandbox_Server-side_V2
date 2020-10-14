@@ -52,6 +52,10 @@ router.get(
   usersControllers.getArticleCommentsOfFollowingOfYou
 );
 
+router.post("/addProfileToUser/:userId", usersControllers.addProfile);
+
+router.get("/getUserWithProfile/:userId", usersControllers.getUserWithProfile);
+
 router.post(
   "/signup",
   fileUpload.single("image"),

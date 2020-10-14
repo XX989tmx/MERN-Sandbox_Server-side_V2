@@ -11,6 +11,7 @@ const aws = require("aws-sdk");
 const fs = require("fs");
 const path = require("path");
 const user = require("../models/user");
+const Profile = require("../models/profile");
 
 // const USERS = [
 //   {
@@ -499,6 +500,71 @@ const getArticleCommentsOfFollowingOfYou = async (req, res, next) => {
   res.json({ user });
 };
 
+const addProfile = async (req, res, next) => {
+  const userId = req.params.userId;
+  const {
+    nickname,
+    introduce_yourself,
+    state,
+    city,
+    things_you_likes,
+    things_you_hates,
+    school,
+    company,
+  } = req.body;
+
+  let things_you_likes_array = things_you_likes.split(",");
+  let things_you_hates_array = things_you_hates.split(",");
+
+  const createdProfile = new Profile({
+    userId: userId,
+    nickname: nickname,
+    introduce_yourself: introduce_yourself,
+    state: state,
+    city: city,
+    things_you_likes: [],
+    things_you_hates: [],
+    school: school,
+    company: company,
+  });
+
+  for (let index = 0; index < things_you_likes_array.length; index++) {
+    const element = things_you_likes_array[index];
+    createdProfile.things_you_likes.push(element);
+  }
+
+  for (let index = 0; index < things_you_hates_array.length; index++) {
+    const element = things_you_hates_array[index];
+    createdProfile.things_you_hates.push(element);
+  }
+
+  await createdProfile.save();
+
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+  user.profile = createdProfile._id;
+  await user.save();
+
+  res.json({ user });
+};
+
+const getUserWithProfile = async (req, res, next) => {
+  const userId = req.params.userId;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate("profile");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -513,4 +579,6 @@ exports.getFollowedByOfFollowingOfYou = getFollowedByOfFollowingOfYou;
 exports.getFollowedByOfFollowedByOfYou = getFollowedByOfFollowedByOfYou;
 exports.getFollowingOfFollowedByOfYou = getFollowingOfFollowedByOfYou;
 exports.getAllOfTheArticleCommentsOfThisUser = getAllOfTheArticleCommentsOfThisUser;
-exports.getArticleCommentsOfFollowingOfYou = getArticleCommentsOfFollowingOfYou; 
+exports.getArticleCommentsOfFollowingOfYou = getArticleCommentsOfFollowingOfYou;
+exports.addProfile = addProfile;
+exports.getUserWithProfile = getUserWithProfile;
