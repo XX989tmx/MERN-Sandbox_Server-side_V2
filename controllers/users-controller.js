@@ -599,7 +599,10 @@ const getSpecificUser = async (req, res, next) => {
     console.log(error);
   }
 
-  res.json({ user });
+  let result = [];
+  result.push(user);
+
+  res.json({ result: result.map((v) => v.toObject({ getters: true })) });
 };
 
 exports.getUsers = getUsers;
