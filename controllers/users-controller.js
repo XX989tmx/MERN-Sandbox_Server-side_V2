@@ -381,7 +381,9 @@ const getUsersYouAreFollowing = async (req, res, next) => {
     console.log(error);
   }
 
-  res.status(200).json({ user });
+  const peopleYouAreFollowing = user.following;
+
+  res.status(200).json({ peopleYouAreFollowing });
 };
 
 const getUsersFollowingYou = async (req, res, next) => {
