@@ -416,7 +416,24 @@ const getFollowingOfFollowingOfYou = async (req, res, next) => {
 
   console.log(user);
 
-  res.status(200).json({ user });
+  //user.following.following
+  const followingOfFollowing = user.following.map((v) => {
+    return v.following;
+  });
+
+  // response array = people whom you are following is following
+  const result = [];
+
+  //accessing following
+  for (let index = 0; index < followingOfFollowing.length; index++) {
+    const element = followingOfFollowing[index];
+    // mapping each user document in following array of user.following and pushing it into result array;
+    element.forEach((v) => {
+      result.push(v);
+    });
+  }
+
+  res.status(200).json({ result });
 };
 
 const getFollowedByOfFollowingOfYou = async (req, res, next) => {
