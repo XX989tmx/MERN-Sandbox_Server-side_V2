@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get("/", usersControllers.getUsers);
 
+router.get("/getSpecificUser/:userId", usersControllers.getSpecificUser);
+
 router.get(
   "/followOtherUser/:userId/:followingCandidateId",
   usersControllers.followOtherUser

@@ -586,6 +586,22 @@ const getUserWithProfile = async (req, res, next) => {
   res.json({ user });
 };
 
+const getSpecificUser = async (req, res, next) => {
+  // 'other' users specific page
+
+  const userId = req.params.userId;
+
+  let user;
+
+  try {
+    user = await User.findById(userId, "-password");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -603,3 +619,4 @@ exports.getAllOfTheArticleCommentsOfThisUser = getAllOfTheArticleCommentsOfThisU
 exports.getArticleCommentsOfFollowingOfYou = getArticleCommentsOfFollowingOfYou;
 exports.addProfile = addProfile;
 exports.getUserWithProfile = getUserWithProfile;
+exports.getSpecificUser = getSpecificUser;
