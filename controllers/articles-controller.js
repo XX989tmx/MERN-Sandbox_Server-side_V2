@@ -1446,9 +1446,9 @@ const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
   for (let index = 0; index < r.length; index++) {
     const element = r[index];
     //mapping each article document in articles array and pushing it into result array
-    element.forEach((v)=>{
+    element.forEach((v) => {
       result.push(v);
-    })
+    });
   }
   console.log(result);
 
@@ -1471,7 +1471,26 @@ const getStaredArticlesOfPeopleYouAreFollowing = async (req, res, next) => {
 
   console.log(user);
 
-  res.json({ user });
+  // user.following.staredArticles
+  const staredArticlesOfFollowing = user.following.map((v) => {
+    return v.staredArticles;
+  });
+
+  //response array
+  const result = [];
+
+  //accessing staredArticles
+  for (let index = 0; index < staredArticlesOfFollowing.length; index++) {
+    const element = staredArticlesOfFollowing[index];
+    // mapping each article document in staredArticles array of following and pushing it into result array
+    element.forEach((v) => {
+      result.push(v);
+    });
+  }
+
+  console.log(result);
+
+  res.json({ result });
 };
 
 const addCommentsToArticle = async (req, res, next) => {
