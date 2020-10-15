@@ -594,7 +594,13 @@ const getSpecificUser = async (req, res, next) => {
   let user;
 
   try {
-    user = await User.findById(userId, "-password");
+    user = await User.findById(userId, "-password")
+      .populate("staredArticles")
+      .populate("articles")
+      .populate("followedBy")
+      .populate("following")
+      .populate("profile")
+      .populate("videos");
   } catch (error) {
     console.log(error);
   }
