@@ -1406,11 +1406,15 @@ const getStaredArticles = async (req, res, next) => {
 
   const staredArticles = user.staredArticles;
   console.log(user);
+  staredArticles.map((v) => {
+    console.log(v);
+  });
+
   // console.log(user.staredArticles[0].title);
   // console.log(staredArticles.length);
   // console.log(staredArticles[0].tags);
 
-  res.json({ user });
+  res.json({ staredArticles });
 };
 
 const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
@@ -1428,7 +1432,27 @@ const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
 
   console.log(user);
 
-  res.status(200).json({ user });
+  // r = user.following.articles
+  const r = user.following.map((v) => {
+    return v.articles;
+  });
+
+  console.log(r.length);
+
+  // response array
+  const result = [];
+
+  //accessing articles array
+  for (let index = 0; index < r.length; index++) {
+    const element = r[index];
+    //mapping each article document in articles array and pushing it into result array
+    element.forEach((v)=>{
+      result.push(v);
+    })
+  }
+  console.log(result);
+
+  res.status(200).json({ result });
 };
 
 const getStaredArticlesOfPeopleYouAreFollowing = async (req, res, next) => {
