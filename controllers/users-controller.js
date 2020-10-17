@@ -368,7 +368,10 @@ const followOtherUser = async (req, res, next) => {
   await userYouWantToFollow.followedBy.push(userId);
   await userYouWantToFollow.save();
 
-  res.status(200).json({ user });
+  const message = `Successfully Followed ${userYouWantToFollow.name}`;
+  
+
+  res.status(200).json({ user, message });
 };
 
 const getUsersYouAreFollowing = async (req, res, next) => {
