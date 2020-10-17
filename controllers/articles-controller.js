@@ -1394,7 +1394,9 @@ const addArticleToStaredList = async (req, res, next) => {
     updatedUser = await User.findById(userId).populate("staredArticles");
   } catch (error) {}
 
-  res.json({ updatedUser });
+  const message = 'successfully stared this article';
+
+  res.json({ updatedUser, message });
 };
 
 const getStaredArticles = async (req, res, next) => {
