@@ -816,7 +816,10 @@ const getSpecificArticleById = async (req, res, next) => {
         path: "author",
         select: "-password",
       })
-      .populate("comments");
+      .populate({
+        path: "comments",
+        populate: { path: "user", select: "-password" },
+      });
   } catch (error) {}
   console.log(article);
   // console.log(article.populated("author"));
@@ -1394,7 +1397,7 @@ const addArticleToStaredList = async (req, res, next) => {
     updatedUser = await User.findById(userId).populate("staredArticles");
   } catch (error) {}
 
-  const message = 'successfully stared this article';
+  const message = "successfully stared this article";
 
   res.json({ updatedUser, message });
 };
