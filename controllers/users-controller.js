@@ -369,7 +369,6 @@ const followOtherUser = async (req, res, next) => {
   await userYouWantToFollow.save();
 
   const message = `Successfully Followed ${userYouWantToFollow.name}`;
-  
 
   res.status(200).json({ user, message });
 };
@@ -603,7 +602,11 @@ const getSpecificUser = async (req, res, next) => {
       .populate("followedBy")
       .populate("following")
       .populate("profile")
-      .populate("videos");
+      .populate("videos")
+      .populate({
+        path: "article_comments",
+        populate: { path: "article", select: "-contents" },
+      });
   } catch (error) {
     console.log(error);
   }
