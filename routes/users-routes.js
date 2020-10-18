@@ -56,6 +56,8 @@ router.get(
 
 router.post("/addProfileToUser/:userId", usersControllers.addProfile);
 
+router.patch("/updateProfile/:userId/:profileId",usersControllers.updateProfile)
+
 router.get("/getUserWithProfile/:userId", usersControllers.getUserWithProfile);
 
 router.post(

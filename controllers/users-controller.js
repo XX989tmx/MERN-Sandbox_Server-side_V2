@@ -617,6 +617,50 @@ const getSpecificUser = async (req, res, next) => {
   res.json({ result: result.map((v) => v.toObject({ getters: true })) });
 };
 
+const updateProfile = async (req, res, next) => {
+  const userId = req.params.userId;
+  const profileId = req.params.profileId;
+  const {
+    nickname,
+    introduce_yourself,
+    state,
+    city,
+    things_you_likes,
+    things_you_hates,
+    school,
+    company,
+  } = req.body;
+
+  let things_you_likes_array = things_you_likes.split(",");
+  let things_you_hates_array = things_you_hates.split(",");
+
+  let existingProfile;
+  try {
+    existingProfile = await Profile.findByIdAndUpdate(
+      profileId,
+      {
+        nickname: nickname,
+        introduce_yourself: introduce_yourself,
+        state: state,
+        city: city,
+        things_you_likes: things_you_likes_array,
+        things_you_hates: things_you_hates_array,
+        school: school,
+        company: company,
+      },
+      (doc) => {
+        return doc;
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log(existingProfile);
+
+  res.json({ existingProfile });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -635,3 +679,4 @@ exports.getArticleCommentsOfFollowingOfYou = getArticleCommentsOfFollowingOfYou;
 exports.addProfile = addProfile;
 exports.getUserWithProfile = getUserWithProfile;
 exports.getSpecificUser = getSpecificUser;
+exports.updateProfile = updateProfile;
