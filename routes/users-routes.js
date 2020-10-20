@@ -54,9 +54,22 @@ router.get(
   usersControllers.getArticleCommentsOfFollowingOfYou
 );
 
+router.get(
+  "/addArticleToVisitedArticleHistories/:userId/:articleId",
+  usersControllers.addsArticleToVisitedArticleHistories
+);
+
+router.get(
+  "/getVisitedArticleHistoriesOfUser/:userId",
+  usersControllers.getVisitedArticleHistoriesOfUser
+);
+
 router.post("/addProfileToUser/:userId", usersControllers.addProfile);
 
-router.patch("/updateProfile/:userId/:profileId",usersControllers.updateProfile)
+router.patch(
+  "/updateProfile/:userId/:profileId",
+  usersControllers.updateProfile
+);
 
 router.get("/getUserWithProfile/:userId", usersControllers.getUserWithProfile);
 

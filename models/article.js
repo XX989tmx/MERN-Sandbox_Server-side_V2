@@ -43,6 +43,7 @@ const articleSchema = new Schema({
   // review: { type: Number, required: true },
   staredBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   comments: [{ type: mongoose.Types.ObjectId, ref: "ArticleComment" }],
+  historiedBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
 });
 
 module.exports = mongoose.model("Article", articleSchema);

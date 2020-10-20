@@ -21,6 +21,7 @@ const userSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: "Profile",
   },
+  article_histories: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,

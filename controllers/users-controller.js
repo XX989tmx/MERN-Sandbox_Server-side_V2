@@ -12,6 +12,7 @@ const fs = require("fs");
 const path = require("path");
 const user = require("../models/user");
 const Profile = require("../models/profile");
+const Article = require("../models/article");
 
 // const USERS = [
 //   {
@@ -661,6 +662,45 @@ const updateProfile = async (req, res, next) => {
   res.json({ existingProfile });
 };
 
+const addsArticleToVisitedArticleHistories = async (req, res, next) => {
+  const userId = req.params.userId;
+  const articleId = req.params.articleId;
+
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await user.article_histories.push(articleId);
+  await user.save();
+
+  await article.historiedBy.push(userId);
+  await article.save();
+
+  res.json({ user });
+};
+
+const getVisitedArticleHistoriesOfUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate("article_histories");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ user });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -680,3 +720,5 @@ exports.addProfile = addProfile;
 exports.getUserWithProfile = getUserWithProfile;
 exports.getSpecificUser = getSpecificUser;
 exports.updateProfile = updateProfile;
+exports.addsArticleToVisitedArticleHistories = addsArticleToVisitedArticleHistories;
+exports.getVisitedArticleHistoriesOfUser = getVisitedArticleHistoriesOfUser;
