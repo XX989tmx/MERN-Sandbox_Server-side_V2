@@ -1540,6 +1540,23 @@ const addCommentsToArticle = async (req, res, next) => {
   res.json({ user });
 };
 
+const getByWhomArticleWasVisited = async (req, res, next) => {
+  // foot print functionality. get by whom article was visited. reverse side of user.articleHistories.
+
+  const articleId = req.params.articleId;
+  let article;
+  try {
+    article = await Article.findById(articleId).populate({
+      path: "historiedBy",
+      select: "-password",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ article });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1620,3 +1637,4 @@ exports.getStaredArticles = getStaredArticles;
 exports.getArticlesOfUsersYouAreFollowing = getArticlesOfUsersYouAreFollowing;
 exports.getStaredArticlesOfPeopleYouAreFollowing = getStaredArticlesOfPeopleYouAreFollowing;
 exports.addCommentsToArticle = addCommentsToArticle;
+exports.getByWhomArticleWasVisited = getByWhomArticleWasVisited;

@@ -40,6 +40,11 @@ router.post(
 //GET 'https:://localhost500/api/articles/all?k1=keyword1&k2=keyword2'
 
 router.get(
+  "/getByWhomArticleWasVisited/:articleId",
+  articlesControllers.getByWhomArticleWasVisited
+);
+
+router.get(
   "/top5MostViewedArticles",
   articlesControllers.getTop5MostViewedArticles
 );
