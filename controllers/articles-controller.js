@@ -1406,7 +1406,10 @@ const getStaredArticles = async (req, res, next) => {
   const userId = req.params.userId;
   let user;
   try {
-    user = await User.findById(userId).populate("staredArticles");
+    user = await User.findById(userId).populate({
+      path: "staredArticles",
+      populate: { path: "author", select: "-password" },
+    });
   } catch (error) {}
 
   const staredArticles = user.staredArticles;
@@ -1419,7 +1422,9 @@ const getStaredArticles = async (req, res, next) => {
   // console.log(staredArticles.length);
   // console.log(staredArticles[0].tags);
 
-  res.json({ staredArticles });
+  res.json({
+    staredArticles: staredArticles.map((v, i) => v.toObject({ getters: true })),
+  });
 };
 
 const getArticlesOfUsersYouAreFollowing = async (req, res, next) => {
