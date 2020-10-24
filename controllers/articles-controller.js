@@ -1462,6 +1462,17 @@ const getStaredArticles = async (req, res, next) => {
       staredArticles = webOnlyFilter(user);
       break;
 
+    case "from-highest-price":
+      const FromHighestPriceFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return b.price - a.price;
+        });
+        return staredArticles;
+      };
+      staredArticles = FromHighestPriceFilter(user);
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
