@@ -1517,6 +1517,17 @@ const getStaredArticles = async (req, res, next) => {
       staredArticles = fromHighestStarCount(user);
       break;
 
+    case "from-lowest-star-count":
+      const fromLowestStarCount = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return a.staredBy.length - b.staredBy.length;
+        });
+        return staredArticles;
+      };
+      staredArticles = fromLowestStarCount(user);
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
