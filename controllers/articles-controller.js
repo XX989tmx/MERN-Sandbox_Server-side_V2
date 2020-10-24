@@ -1473,6 +1473,17 @@ const getStaredArticles = async (req, res, next) => {
       staredArticles = FromHighestPriceFilter(user);
       break;
 
+    case "from-lowest-price":
+      const FromLowestPriceFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return a.price - b.price;
+        });
+        return staredArticles;
+      };
+      staredArticles = FromLowestPriceFilter(user);
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
