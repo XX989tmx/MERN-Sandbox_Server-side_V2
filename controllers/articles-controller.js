@@ -933,7 +933,7 @@ const TagCountIndex = async (req, res, next) => {
   }
 
   console.log(responseArray);
-  
+
   responseArray.sort((a, b) => {
     return b.count - a.count;
   });
@@ -943,23 +943,26 @@ const TagCountIndex = async (req, res, next) => {
 
 const categoryCountIndex = async (req, res, next) => {
   let responseArray = [];
+  ///
 
-  let article;
+  let articles;
   try {
-    article = await Article.find();
+    articles = await Article.find();
   } catch (error) {}
+  // console.log(article[60].tags[0]);
 
-  let articleCategories = [];
+  //list all tag of article documents
+  let c = [];
+  articles.forEach((v) => {
+    for (let i = 0; i < v.categories.length; i++) {
+      const element = v.categories[i];
+      c.push(element);
+    }
+  });
+  console.log(c);
 
-  for (let index = 0; index < article.length; index++) {
-    const element = article[index];
-
-    articleCategories.push(element.categories[0]);
-
-    // console.log(articleCategories);
-  }
-
-  let noDeplicateCategoriesArray = articleCategories.reduce(function (
+  /// remove deplicate from c array
+  let noDeplicateCategoriesArray = c.reduce(function (
     accumulator,
     currentValue
   ) {
@@ -969,96 +972,74 @@ const categoryCountIndex = async (req, res, next) => {
     return accumulator;
   },
   []);
-  // console.log(noDeplicateCategoriesArray);
+  console.log(noDeplicateCategoriesArray);
 
-  for (let index = 0; index < noDeplicateCategoriesArray.length; index++) {
-    const articleCategoriesName = noDeplicateCategoriesArray[index];
-    // let articleTagsName = articleTags[i];
-    let CategoryCount;
-    try {
-      CategoryCount = await Article.find({
-        categories: articleCategoriesName,
-      }).countDocuments();
-      // console.log(CategoryCount);
-    } catch (error) {}
+  // tagIndexArray = [];
 
-    const CategoryIndex = {
-      categoryName: articleCategoriesName,
-      count: CategoryCount,
+  for (let i = 0; i < noDeplicateCategoriesArray.length; i++) {
+    const targetCategory = noDeplicateCategoriesArray[i];
+    const r = articles.filter((v, i) => {
+      return v.categories.includes(targetCategory);
+    });
+    const countOfDocumentIncludeThisCategory = r.length;
+    const categoryIndex = {
+      categoryName: targetCategory,
+      count: countOfDocumentIncludeThisCategory,
     };
-    // console.log(CategoryIndex);
-
-    responseArray.push(CategoryIndex);
-    // console.log(responseArray);
+    responseArray.push(categoryIndex);
   }
 
-  // // politics category
-  // let politicsCategoryCount;
+  console.log(responseArray);
+
+  ///
+
+  // let article;
   // try {
-  //   politicsCategoryCount = await Article.find({
-  //     categories: "politics",
-  //   }).countDocuments();
-  //   console.log(politicsCategoryCount);
+  //   article = await Article.find();
   // } catch (error) {}
 
-  // const politicsCategoryIndex = {
-  //   categoryName: "politics",
-  //   count: politicsCategoryCount,
-  // };
-  // console.log(politicsCategoryIndex);
+  // let articleCategories = [];
 
-  // responseArray.push(politicsCategoryIndex);
+  // for (let index = 0; index < article.length; index++) {
+  //   const element = article[index];
 
-  // // business category
-  // let businessCategoryCount;
-  // try {
-  //   businessCategoryCount = await Article.find({
-  //     categories: "business",
-  //   }).countDocuments();
-  //   console.log(businessCategoryCount);
-  // } catch (error) {}
+  //   articleCategories.push(element.categories[0]);
 
-  // const businessCategoryIndex = {
-  //   categoryName: "business",
-  //   count: businessCategoryCount,
-  // };
-  // console.log(businessCategoryIndex);
+  //   // console.log(articleCategories);
+  // }
 
-  // responseArray.push(businessCategoryIndex);
+  // let noDeplicateCategoriesArray = articleCategories.reduce(function (
+  //   accumulator,
+  //   currentValue
+  // ) {
+  //   if (accumulator.indexOf(currentValue) === -1) {
+  //     accumulator.push(currentValue);
+  //   }
+  //   return accumulator;
+  // },
+  // []);
+  // // console.log(noDeplicateCategoriesArray);
 
-  // // education category
-  // let educationCategoryCount;
-  // try {
-  //   educationCategoryCount = await Article.find({
-  //     categories: "education",
-  //   }).countDocuments();
-  //   console.log(educationCategoryCount);
-  // } catch (error) {}
+  // for (let index = 0; index < noDeplicateCategoriesArray.length; index++) {
+  //   const articleCategoriesName = noDeplicateCategoriesArray[index];
+  //   // let articleTagsName = articleTags[i];
+  //   let CategoryCount;
+  //   try {
+  //     CategoryCount = await Article.find({
+  //       categories: articleCategoriesName,
+  //     }).countDocuments();
+  //     // console.log(CategoryCount);
+  //   } catch (error) {}
 
-  // const educationCategoryIndex = {
-  //   categoryName: "education",
-  //   count: educationCategoryCount,
-  // };
-  // console.log(educationCategoryIndex);
+  //   const CategoryIndex = {
+  //     categoryName: articleCategoriesName,
+  //     count: CategoryCount,
+  //   };
+  //   // console.log(CategoryIndex);
 
-  // responseArray.push(educationCategoryIndex);
-
-  // // investment category
-  // let investmentCategoryCount;
-  // try {
-  //   investmentCategoryCount = await Article.find({
-  //     categories: "investment",
-  //   }).countDocuments();
-  //   console.log(investmentCategoryCount);
-  // } catch (error) {}
-
-  // const investmentCategoryIndex = {
-  //   categoryName: "investment",
-  //   count: investmentCategoryCount,
-  // };
-  // console.log(investmentCategoryIndex);
-
-  // responseArray.push(investmentCategoryIndex);
+  //   responseArray.push(CategoryIndex);
+  //   // console.log(responseArray);
+  // }
 
   //des sort
   responseArray.sort((a, b) => {
