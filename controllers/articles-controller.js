@@ -1416,19 +1416,28 @@ const getStaredArticles = async (req, res, next) => {
 
   switch (query) {
     case "most-viewed":
-      const a = user.staredArticles;
-      staredArticles = a.sort((a, b) => {
-        return b.viewCount - a.viewCount;
-      });
+      const mostViewedFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return b.viewCount - a.viewCount;
+        });
+        return staredArticles;
+      };
+      staredArticles = mostViewedFilter(user);
 
       break;
 
-    // case "least-viewed":
-    //   const a = user.staredArticles;
-    //   staredArticles = a.sort((a, b) => {
-    //     return a.viewCount - b.viewCount;
-    //   });
-    //   break;
+    case "least-viewed":
+      const leastViewedFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return a.viewCount - b.viewCount;
+        });
+        return staredArticles;
+      };
+      staredArticles = leastViewedFilter(user);
+
+      break;
 
     default:
       staredArticles = user.staredArticles;
