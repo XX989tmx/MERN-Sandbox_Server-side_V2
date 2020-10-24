@@ -1451,6 +1451,17 @@ const getStaredArticles = async (req, res, next) => {
 
       break;
 
+    case "web-only":
+      const webOnlyFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.filter((v, i) => {
+          return v.downloadable === false;
+        });
+        return staredArticles;
+      };
+      staredArticles = webOnlyFilter(user);
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
