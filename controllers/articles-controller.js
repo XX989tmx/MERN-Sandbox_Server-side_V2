@@ -892,182 +892,51 @@ const TagCountIndex = async (req, res, next) => {
   let responseArray = [];
 
   // get element(tag) form Article.tag field, and push it to array. = making tagName list.
-  let article;
+  let articles;
   try {
-    article = await Article.find();
+    articles = await Article.find();
   } catch (error) {}
   // console.log(article[60].tags[0]);
 
-  let articleTags = [];
+  //list all tag of article documents
+  let t = [];
+  articles.forEach((v) => {
+    for (let i = 0; i < v.tags.length; i++) {
+      const element = v.tags[i];
+      t.push(element);
+    }
+  });
+  console.log(t);
 
-  for (let index = 0; index < article.length; index++) {
-    const element = article[index];
-
-    articleTags.push(element.tags[0]);
-
-    // console.log(articleTags);
-  }
-
-  // let myArray = ["a", "b", "a", "b", "c", "e", "e", "c", "d", "d", "d", "d"];
-  let noDeplicateTagArray = articleTags.reduce(function (
-    accumulator,
-    currentValue
-  ) {
+  /// remove deplicate from t array
+  let noDeplicateTagArray = t.reduce(function (accumulator, currentValue) {
     if (accumulator.indexOf(currentValue) === -1) {
       accumulator.push(currentValue);
     }
     return accumulator;
-  },
-  []);
-  // console.log(noDeplicateTagArray);
+  }, []);
+  console.log(noDeplicateTagArray);
 
-  // for (let index = 0; index < articleTags.length; index++) {
-  //   // const element = array[index];
+  tagIndexArray = [];
 
-  //   if (articleTags[index] === articleTags[index - 1]) {
-  //     articleTags.pop(articleTags[index]);
-  //   }
-  // }
-
-  // roop through tagNameArray and gets count of document matched with each tag. And, make the object with it and push it to response array(use this array for map rendering in react).
-  for (let index = 0; index < noDeplicateTagArray.length; index++) {
-    const articleTagsName = noDeplicateTagArray[index];
-    // let articleTagsName = articleTags[i];
-    let tagCount;
-    try {
-      tagCount = await Article.find({
-        tags: articleTagsName,
-      }).countDocuments();
-      // console.log(tagCount);
-    } catch (error) {}
-
+  for (let i = 0; i < noDeplicateTagArray.length; i++) {
+    const targetTag = noDeplicateTagArray[i];
+    const r = articles.filter((v, i) => {
+      return v.tags.includes(targetTag);
+    });
+    const countOfDocumentIncludeThisTag = r.length;
     const tagIndex = {
-      tagName: articleTagsName,
-      count: tagCount,
+      tagName: targetTag,
+      count: countOfDocumentIncludeThisTag,
     };
-    // console.log(tagIndex);
-
     responseArray.push(tagIndex);
-    // console.log(responseArray);
   }
 
-  // let newResponseArray;
-  // newResponseArray = [responseArray[0]];
-  // for (let index = 0; index < responseArray.length; index++) {
-  //   if (responseArray[index] != responseArray[index-1]) {
-  //     newResponseArray.push(responseArray[index].tagName);
-  //   }
-
-  // }
-  // console.log(newResponseArray);
-
-  // for (let index = 0; index < responseArray.length; index++) {
-  //   const element = responseArray[index];
-
-  //   // if (element.tagName === responseArray[index - 1].tagName) {responseArray.;
-  //   // }
-  // }
-
-  // // politics tag
-  // let politicsTagCount;
-  // try {
-  //   politicsTagCount = await Article.find({
-  //     tags: "politics",
-  //   }).countDocuments();
-  //   console.log(politicsTagCount);
-  // } catch (error) {}
-
-  // const tagIndex = {
-  //   tagName: "politics", // =Article.find({tags: "xx"})
-  //   count: politicsTagCount, // tag count. this is show in pop counter in frontend
-  // };
-  // console.log(tagIndex);
-
-  // responseArray.push(tagIndex);
-  // console.log(responseArray);
-
-  // // business tag
-  // let businessTagCount;
-  // try {
-  //   businessTagCount = await Article.find({
-  //     tags: "business",
-  //   }).countDocuments();
-  //   console.log(businessTagCount);
-  // } catch (error) {}
-
-  // const businessTagIndex = {
-  //   tagName: "business", // =Article.find({tags: "xx"})
-  //   count: businessTagCount, // tag count. this is show in pop counter in frontend
-  // };
-  // console.log(businessTagIndex);
-
-  // responseArray.push(businessTagIndex);
-  // console.log(responseArray);
-
-  // // education tag
-  // let educationTagCount;
-  // try {
-  //   educationTagCount = await Article.find({
-  //     tags: "education",
-  //   }).countDocuments();
-  //   console.log(educationTagCount);
-  // } catch (error) {}
-
-  // const educationTagIndex = {
-  //   tagName: "education", // =Article.find({tags: "xx"})
-  //   count: educationTagCount, // tag count. this is show in pop counter in frontend
-  // };
-  // console.log(educationTagIndex);
-
-  // responseArray.push(educationTagIndex);
-  // console.log(responseArray);
-
-  // // investment tag
-  // let investmentTagCount;
-  // try {
-  //   investmentTagCount = await Article.find({
-  //     tags: "investment",
-  //   }).countDocuments();
-  //   console.log(investmentTagCount);
-  // } catch (error) {}
-
-  // const investmentTagIndex = {
-  //   tagName: "investment", // =Article.find({tags: "xx"})
-  //   count: investmentTagCount, // tag count. this is show in pop counter in frontend
-  // };
-  // console.log(investmentTagIndex);
-
-  // responseArray.push(investmentTagIndex);
-  // console.log(responseArray);
-
-  // // society tag
-  // let societyTagCount;
-  // try {
-  //   societyTagCount = await Article.find({
-  //     tags: "society",
-  //   }).countDocuments();
-  //   console.log(societyTagCount);
-  // } catch (error) {}
-
-  // const societyTagIndex = {
-  //   tagName: "society", // =Article.find({tags: "xx"})
-  //   count: societyTagCount, // tag count. this is show in pop counter in frontend
-  // };
-  // console.log(societyTagIndex);
-
-  // responseArray.push(societyTagIndex);
-  // console.log(responseArray);
-
-  //数の多い順とABC順の両方作る
+  console.log(responseArray);
+  
   responseArray.sort((a, b) => {
     return b.count - a.count;
   });
-  // console.log(responseArray);
-  // クライアントサイドでは、tag count（アイコン）はprops.countで、tag titleとLink先のembded params(http://3000/api/articles/tags/:tagname)に渡すTagnameは、props.tagnameで行う。tagIndex objectを渡す。
-  //   const tagIndex = {
-  //     tagName: "politics", // =Article.find({tags: "xx"})
-  //     count: politicsTagCount, // tag count. this is show in pop counter in frontend
-  //   };
 
   res.json({ responseArray });
 };
