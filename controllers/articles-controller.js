@@ -1506,6 +1506,17 @@ const getStaredArticles = async (req, res, next) => {
       staredArticles = fromLowestCommentCount(user);
       break;
 
+    case "from-highest-star-count":
+      const fromHighestStarCount = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.sort((a, b) => {
+          return b.staredBy.length - a.staredBy.length;
+        });
+        return staredArticles;
+      };
+      staredArticles = fromHighestStarCount(user);
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
