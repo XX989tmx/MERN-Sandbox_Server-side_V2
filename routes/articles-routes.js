@@ -30,6 +30,7 @@ router.get("/downloadable", articlesControllers.DownloadableOrNot);
 
 router.post(
   "/addCommentsToArticle/:userId/:articleId",
+  [check("comment").not().isEmpty()],
   articlesControllers.addCommentsToArticle
 );
 //GET 'https:://localhost500/api/articles/all?q=query'
