@@ -1406,6 +1406,7 @@ const getStaredArticles = async (req, res, next) => {
   const userId = req.params.userId;
   const query = req.query.q;
   const tag = req.query.tag;
+  const category = req.query.category;
   let user;
   try {
     user = await User.findById(userId).populate({
@@ -1544,6 +1545,17 @@ const getStaredArticles = async (req, res, next) => {
       };
       staredArticles = tagSearch(user);
 
+      break;
+
+    case "category-search":
+      const categorySearch = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.filter((v, i) => {
+          return v.categories.includes(category);
+        });
+        return staredArticles;
+      };
+      staredArticles = categorySearch(user);
       break;
 
     default:
