@@ -1439,6 +1439,18 @@ const getStaredArticles = async (req, res, next) => {
 
       break;
 
+    case "downloadable":
+      const downloadableFilter = (user) => {
+        const a = user.staredArticles;
+        const staredArticles = a.filter((v, i) => {
+          return v.downloadable === true;
+        });
+        return staredArticles;
+      };
+      staredArticles = downloadableFilter(user);
+
+      break;
+
     default:
       staredArticles = user.staredArticles;
       break;
