@@ -1404,6 +1404,7 @@ const addArticleToStaredList = async (req, res, next) => {
 
 const getStaredArticles = async (req, res, next) => {
   const userId = req.params.userId;
+  const query = req.query.q;
   let user;
   try {
     user = await User.findById(userId).populate({
@@ -1411,8 +1412,29 @@ const getStaredArticles = async (req, res, next) => {
       populate: { path: "author", select: "-password" },
     });
   } catch (error) {}
+  let staredArticles;
 
-  const staredArticles = user.staredArticles;
+  switch (query) {
+    case "most-viewed":
+      const a = user.staredArticles;
+      staredArticles = a.sort((a, b) => {
+        return b.viewCount - a.viewCount;
+      });
+
+      break;
+
+    // case "least-viewed":
+    //   const a = user.staredArticles;
+    //   staredArticles = a.sort((a, b) => {
+    //     return a.viewCount - b.viewCount;
+    //   });
+    //   break;
+
+    default:
+      staredArticles = user.staredArticles;
+      break;
+  }
+
   console.log(user);
   staredArticles.map((v) => {
     console.log(v);
