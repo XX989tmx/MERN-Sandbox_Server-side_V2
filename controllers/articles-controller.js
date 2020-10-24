@@ -1405,6 +1405,7 @@ const addArticleToStaredList = async (req, res, next) => {
 const getStaredArticles = async (req, res, next) => {
   const userId = req.params.userId;
   const query = req.query.q;
+  const tag = req.query.tag;
   let user;
   try {
     user = await User.findById(userId).populate({
@@ -1526,6 +1527,23 @@ const getStaredArticles = async (req, res, next) => {
         return staredArticles;
       };
       staredArticles = fromLowestStarCount(user);
+      break;
+
+    case "tag-search":
+      const tagSearch = (user) => {
+        const a = user.staredArticles;
+
+        const staredArticles = a.filter((v, i) => {
+          return v.tags.some((v, i) => v === tag);
+        });
+        // or a.filter((v, i) => {
+        //return v.tags.includes(tag);
+        ///});
+
+        return staredArticles;
+      };
+      staredArticles = tagSearch(user);
+
       break;
 
     default:
