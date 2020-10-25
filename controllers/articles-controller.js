@@ -296,7 +296,11 @@ const createArticle = async (req, res, next) => {
     author,
     address,
     categories,
-    tags,
+    tags1,
+    tags2,
+    tags3,
+    tags4,
+    tags5,
     price,
     downloadable,
     referenceSiteName1,
@@ -342,6 +346,24 @@ const createArticle = async (req, res, next) => {
   );
 
   // console.log(referenceSiteArray);
+
+  let tagsArray = [];
+
+  if (tags1) {
+    tagsArray.push(tags1);
+  }
+  if (tags2) {
+    tagsArray.push(tags2);
+  }
+  if (tags3) {
+    tagsArray.push(tags3);
+  }
+  if (tags4) {
+    tagsArray.push(tags4);
+  }
+  if (tags5) {
+    tagsArray.push(tags5);
+  }
 
   let contentsArray = [];
   if (heading && content) {
@@ -514,11 +536,16 @@ const createArticle = async (req, res, next) => {
     wishlists: [],
     categories: categories,
     date_created: new Date(Date.now()).toString(),
-    tags: tags,
+    tags: tagsArray,
     price: price,
     downloadable,
     viewCount: RandomizedInitialViewCounts,
   });
+  // for (let i = 0; i < tagsArray.length; i++) {
+  //   const element = tagsArray[i];
+  //   createdArticle.tags.push(element);
+  // }
+
   for (let index = 0; index < referenceSiteArray.length; index++) {
     const site = referenceSiteArray[index];
     createdArticle.referenceSites.push({ name: site.name, link: site.link });
