@@ -114,7 +114,7 @@ router.post(
     check("title").not().isEmpty(),
     // check("content").isLength({ min: 5 }),
     check("author").not().isEmpty(),
-    check("categories").not().isEmpty(),
+    check("categories1").not().isEmpty(),
     check("tags1").not().isEmpty(),
   ],
   articlesControllers.createArticle

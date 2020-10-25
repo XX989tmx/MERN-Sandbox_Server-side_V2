@@ -295,7 +295,11 @@ const createArticle = async (req, res, next) => {
     content10,
     author,
     address,
-    categories,
+    categories1,
+    categories2,
+    categories3,
+    categories4,
+    categories5,
     tags1,
     tags2,
     tags3,
@@ -363,6 +367,23 @@ const createArticle = async (req, res, next) => {
   }
   if (tags5) {
     tagsArray.push(tags5);
+  }
+
+  let categoriesArray = [];
+  if (categories1) {
+    categoriesArray.push(categories1);
+  }
+  if (categories2) {
+    categoriesArray.push(categories2);
+  }
+  if (categories3) {
+    categoriesArray.push(categories3);
+  }
+  if (categories4) {
+    categoriesArray.push(categories4);
+  }
+  if (categories5) {
+    categoriesArray.push(categories5);
   }
 
   let contentsArray = [];
@@ -534,7 +555,7 @@ const createArticle = async (req, res, next) => {
     images: [],
     author: author,
     wishlists: [],
-    categories: categories,
+    categories: categoriesArray,
     date_created: new Date(Date.now()).toString(),
     tags: tagsArray,
     price: price,
