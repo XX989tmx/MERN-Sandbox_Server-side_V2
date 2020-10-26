@@ -379,14 +379,21 @@ const getUsersYouAreFollowing = async (req, res, next) => {
 
   let user;
   try {
-    user = await User.findById(userId).populate("following");
+    user = await User.findById(userId).populate({
+      path: "following",
+      select: "-password",
+    });
   } catch (error) {
     console.log(error);
   }
 
   const peopleYouAreFollowing = user.following;
 
-  res.status(200).json({ peopleYouAreFollowing });
+  res.status(200).json({
+    peopleYouAreFollowing: peopleYouAreFollowing.map((v, i) =>
+      v.toObject({ getters: true })
+    ),
+  });
 };
 
 const getUsersFollowingYou = async (req, res, next) => {
