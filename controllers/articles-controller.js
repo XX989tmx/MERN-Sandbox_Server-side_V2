@@ -591,10 +591,72 @@ const createArticle = async (req, res, next) => {
     const element = imageUrlArray[index];
     createdArticle.images.push(element);
   }
+
+  const articleContents = createdArticle.contents;
+
+  function calculateWordCountAndEstimatedReadingTimeOfContent(contents) {
+    //////// purpose of function == takes Article.contents array, and return object consisted from 1 wordCount property and 2 estimatedReadingTime property
+    /// params: contents [];
+    /// return value: {};
+
+    // function calculate estimated time to take for this reading
+    const estimatedReadingTime = (value) => {
+      let wordCount = value.split(/\W+/).length;
+
+      let wordPerSeconds = 2;
+
+      let amountOfSecondsToRead = wordCount / wordPerSeconds;
+      let amountOfMinutesToRead = amountOfSecondsToRead / 60;
+      // console.log(amountOfSecondsToRead);
+      // console.log(amountOfMinutesToRead);
+      return amountOfMinutesToRead;
+    };
+
+    // initialize response object
+    const wordCountAndEstimatedReadingTime = {
+      wordCount: "",
+      estimatedReadingTime: "",
+    };
+
+    //
+    let contentArray = [];
+    let joinedContentString;
+    for (let index = 0; index < contents.length; index++) {
+      const element = contents[index];
+      contentArray.push(element.content);
+      joinedContentString = contentArray.join(" ");
+    }
+
+    const countWord = (joinedContentString) => {
+      const wordCount = joinedContentString.split(/\W+/).length;
+      return wordCount;
+    };
+    const wordCount = countWord(joinedContentString);
+
+    wordCountAndEstimatedReadingTime.wordCount = wordCount;
+
+    const ReadingTime = estimatedReadingTime(joinedContentString);
+    const fixedEstimatedReadingTime = ReadingTime.toFixed(1);
+
+    wordCountAndEstimatedReadingTime.estimatedReadingTime = fixedEstimatedReadingTime;
+
+    return wordCountAndEstimatedReadingTime;
+  }
+  const wordCountAndEstimatedReadingTime = calculateWordCountAndEstimatedReadingTimeOfContent(
+    articleContents
+  );
+  console.log(wordCountAndEstimatedReadingTime);
+
+  createdArticle.wordCount = Number(wordCountAndEstimatedReadingTime.wordCount);
+  createdArticle.estimatedReadingTime = Number(
+    wordCountAndEstimatedReadingTime.estimatedReadingTime
+  );
   // console.log(createdArticle.images);
   // console.log(createdArticle.referenceSites[0].name);
   // console.log(createdArticle.referenceSites[0].link);
   // console.log(createdArticle.referenceSites[1].link);
+
+  console.log(createdArticle);
 
   let user;
 

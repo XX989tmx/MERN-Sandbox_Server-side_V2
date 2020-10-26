@@ -44,6 +44,8 @@ const articleSchema = new Schema({
   staredBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   comments: [{ type: mongoose.Types.ObjectId, ref: "ArticleComment" }],
   historiedBy: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  wordCount: { type: Number },
+  estimatedReadingTime: { type: Number },
 });
 
 module.exports = mongoose.model("Article", articleSchema);
