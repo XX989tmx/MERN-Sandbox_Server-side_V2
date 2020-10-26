@@ -375,6 +375,7 @@ const followOtherUser = async (req, res, next) => {
 };
 
 const getUsersYouAreFollowing = async (req, res, next) => {
+  // get following
   const userId = req.params.userId;
 
   let user;
@@ -397,18 +398,29 @@ const getUsersYouAreFollowing = async (req, res, next) => {
 };
 
 const getUsersFollowingYou = async (req, res, next) => {
+  //get followers
+  // equal to followedBy 
   const userId = req.params.userId;
 
   let user;
   try {
-    user = await User.findById(userId).populate("followedBy");
+    user = await User.findById(userId).populate({
+      path: "followedBy",
+      select: "-password",
+    });
   } catch (error) {
     console.log(error);
   }
 
   const peopleFollowingYou = user.followedBy;
 
-  res.status(200).json({ peopleFollowingYou });
+  res
+    .status(200)
+    .json({
+      peopleFollowingYou: peopleFollowingYou.map((v, i) =>
+        v.toObject({ getters: true })
+      ),
+    });
 };
 
 const getFollowingOfFollowingOfYou = async (req, res, next) => {
