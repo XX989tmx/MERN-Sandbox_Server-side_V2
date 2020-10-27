@@ -27,6 +27,7 @@ router.get("/all", articlesControllers.allArticles);
 router.get("/price_sort", articlesControllers.sortArticleByPriceOrder);
 router.get("/date_sort", articlesControllers.sortByDate);
 router.get("/downloadable", articlesControllers.DownloadableOrNot);
+router.get("/popularitySort", articlesControllers.popularitySort);
 
 router.post(
   "/addCommentsToArticle/:userId/:articleId",

@@ -198,6 +198,68 @@ const allArticles = async (req, res, next) => {
   });
 };
 
+const popularitySort = async (req, res, next) => {
+  const query = req.query.q;
+  let articles;
+  let sortedArticles;
+  try {
+    articles = await Article.find({});
+  } catch (error) {
+    console.log(error);
+  }
+
+  switch (query) {
+    case "most-viewed":
+      function mostViewedFilter(articles) {
+        const sortedArticles = articles.sort((a, b) => {
+          return b.viewCount - a.viewCount;
+        });
+        return sortedArticles;
+      }
+      sortedArticles = mostViewedFilter(articles);
+
+      break;
+
+    case "least-viewed":
+      function leastViewedFilter(articles) {
+        //articles:[];
+        //sortedArticles:[];
+        const sortedArticles = articles.sort((a, b) => {
+          return a.viewCount - b.viewCount;
+        });
+        return sortedArticles;
+      }
+      sortedArticles = leastViewedFilter(articles);
+      break;
+
+    case "most-stared":
+      function mostStaredFilter(articles) {
+        const sortedArticles = articles.sort((a, b) => {
+          return b.staredBy.length - a.staredBy.length;
+        });
+        return sortedArticles;
+      }
+      sortedArticles = mostStaredFilter(articles);
+      break;
+
+    case "least-stared":
+      function leastStared(articles) {
+        const sortedArticles = articles.sort((a, b) => {
+          return a.staredBy.length - b.staredBy.length;
+        });
+        return sortedArticles;
+      }
+      sortedArticles = leastStared(articles);
+      break;
+
+    default:
+      sortedArticles = articles;
+      break;
+  }
+
+  res.json({ sortedArticles });
+};
+
 const getArticleById = async (req, res, next) => {
   const articleId = req.params.articleId;
 
@@ -1753,3 +1815,4 @@ exports.getArticlesOfUsersYouAreFollowing = getArticlesOfUsersYouAreFollowing;
 exports.getStaredArticlesOfPeopleYouAreFollowing = getStaredArticlesOfPeopleYouAreFollowing;
 exports.addCommentsToArticle = addCommentsToArticle;
 exports.getByWhomArticleWasVisited = getByWhomArticleWasVisited;
+exports.popularitySort = popularitySort;
