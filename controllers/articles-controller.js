@@ -262,6 +262,16 @@ const popularitySort = async (req, res, next) => {
       sortedArticles = mostCommented(articles);
       break;
 
+    case "least-commented":
+      function leastCommented(articles) {
+        const sortedArticles = articles.sort((a, b) => {
+          return a.comments.length - b.comments.length;
+        });
+        return sortedArticles;
+      }
+      sortedArticles = leastCommented(articles);
+      break;
+
     default:
       sortedArticles = articles;
       break;
