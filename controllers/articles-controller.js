@@ -1444,6 +1444,54 @@ const addArticleToStaredList = async (req, res, next) => {
   res.json({ updatedUser, message });
 };
 
+const removeArticleFromStaredList = async (req, res, next) => {
+  const userId = req.params.userId;
+  const articleId = req.params.articleId;
+
+  let user;
+  let article;
+  try {
+    article = await Article.findById(articleId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  async function removeArticleIdFromUserStaredArticles(user, articleId) {
+    await user.staredArticles.pull(articleId);
+    await user.save();
+    return user;
+  }
+  const updatedUser = await removeArticleIdFromUserStaredArticles(
+    user,
+    articleId
+  );
+
+  if (updatedUser) {
+    console.log(
+      "article was removed from specified users staredArticles array"
+    );
+  }
+
+  async function removeUserIdFromArticleStaredBy(article, userId) {
+    await article.staredBy.pull(userId);
+    await article.save();
+    return article;
+  }
+  const updatedArticle = await removeUserIdFromArticleStaredBy(article, userId);
+
+  if (updatedArticle) {
+    console.log("user id was removed from specified articles staredBy array");
+  }
+
+  res.status(200).json({ updatedUser, updatedArticle });
+};
+
 const getStaredArticles = async (req, res, next) => {
   const userId = req.params.userId;
   const query = req.query.q;
@@ -1836,3 +1884,4 @@ exports.getStaredArticlesOfPeopleYouAreFollowing = getStaredArticlesOfPeopleYouA
 exports.addCommentsToArticle = addCommentsToArticle;
 exports.getByWhomArticleWasVisited = getByWhomArticleWasVisited;
 exports.popularitySort = popularitySort;
+exports.removeArticleFromStaredList = removeArticleFromStaredList;

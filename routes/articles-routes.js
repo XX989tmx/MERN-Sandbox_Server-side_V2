@@ -13,6 +13,11 @@ router.get(
 );
 router.get("/getStaredArticles/:userId", articlesControllers.getStaredArticles);
 
+router.delete(
+  "/deleteArticleFromStaredList/:userId/:articleId",
+  articlesControllers.removeArticleFromStaredList
+);
+
 router.get(
   "/getArticlesOfUsersYouAreFollowing/:userId",
   articlesControllers.getArticlesOfUsersYouAreFollowing
