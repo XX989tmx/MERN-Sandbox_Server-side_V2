@@ -74,6 +74,20 @@ router.patch(
 router.get("/getUserWithProfile/:userId", usersControllers.getUserWithProfile);
 
 router.post(
+  "/createAddress/:userId",
+  [
+    check("zip_code").not().isEmpty(),
+    check("country").notEmpty(),
+    check("name").notEmpty(),
+    check("todoufuken").notEmpty(),
+    check("address_info1").notEmpty(),
+    check("phone_number").notEmpty(),
+    check("email").normalizeEmail().isEmail(), 
+  ],
+  usersControllers.createAddress
+);
+
+router.post(
   "/signup",
   fileUpload.single("image"),
   [

@@ -13,6 +13,7 @@ const path = require("path");
 const user = require("../models/user");
 const Profile = require("../models/profile");
 const Article = require("../models/article");
+const Address = require("../models/address");
 
 // const USERS = [
 //   {
@@ -399,7 +400,7 @@ const getUsersYouAreFollowing = async (req, res, next) => {
 
 const getUsersFollowingYou = async (req, res, next) => {
   //get followers
-  // equal to followedBy 
+  // equal to followedBy
   const userId = req.params.userId;
 
   let user;
@@ -414,13 +415,11 @@ const getUsersFollowingYou = async (req, res, next) => {
 
   const peopleFollowingYou = user.followedBy;
 
-  res
-    .status(200)
-    .json({
-      peopleFollowingYou: peopleFollowingYou.map((v, i) =>
-        v.toObject({ getters: true })
-      ),
-    });
+  res.status(200).json({
+    peopleFollowingYou: peopleFollowingYou.map((v, i) =>
+      v.toObject({ getters: true })
+    ),
+  });
 };
 
 const getFollowingOfFollowingOfYou = async (req, res, next) => {
@@ -720,6 +719,48 @@ const getVisitedArticleHistoriesOfUser = async (req, res, next) => {
   res.json({ user });
 };
 
+const createAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  const {
+    zip_code,
+    country,
+    name,
+    todoufuken,
+    address_info1,
+    address_info2,
+    phone_number,
+    email,
+    company,
+  } = req.body;
+
+  const createdAddress = new Address({
+    user: userId,
+    zip_code: Number(zip_code),
+    country,
+    name,
+    todoufuken,
+    address_info1,
+    address_info2,
+    phone_number: Number(phone_number),
+    email,
+    company,
+  });
+
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  user.addresses.push(createdAddress._id);
+
+  await createdAddress.save();
+  await user.save();
+
+  res.status(200).json({ user, createdAddress });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -741,3 +782,4 @@ exports.getSpecificUser = getSpecificUser;
 exports.updateProfile = updateProfile;
 exports.addsArticleToVisitedArticleHistories = addsArticleToVisitedArticleHistories;
 exports.getVisitedArticleHistoriesOfUser = getVisitedArticleHistoriesOfUser;
+exports.createAddress = createAddress;
