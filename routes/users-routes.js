@@ -89,6 +89,20 @@ router.post(
 
 router.get("/getAllAddress/:userId", usersControllers.getAllAddress);
 
+router.patch(
+  "/updateAddress/:userId/:addressId",
+  [
+    check("zip_code").notEmpty(),
+    check("country").notEmpty(),
+    check("name").notEmpty(),
+    check("todoufuken").notEmpty(),
+    check("address_info1").notEmpty(),
+    check("phone_number").notEmpty(),
+    check("email").normalizeEmail().isEmail(),
+  ],
+  usersControllers.updateAddress
+);
+
 router.delete(
   "/deleteAddress/:userId/:addressId",
   usersControllers.deleteAddress

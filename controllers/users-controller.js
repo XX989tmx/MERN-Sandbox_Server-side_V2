@@ -776,6 +776,48 @@ const getAllAddress = async (req, res, next) => {
   res.status(200).json({ user: user.toObject({ getters: true }) });
 };
 
+const updateAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+
+  const {
+    zip_code,
+    country,
+    name,
+    todoufuken,
+    address_info1,
+    address_info2,
+    phone_number,
+    email,
+    company,
+  } = req.body;
+
+  let address;
+  try {
+    address = await Address.findByIdAndUpdate(
+      addressId,
+      {
+        zip_code: Number(zip_code),
+        country,
+        name,
+        todoufuken,
+        address_info1,
+        address_info2,
+        phone_number: Number(phone_number),
+        email,
+        company,
+      },
+      (doc) => {
+        return doc;
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ address });
+};
+
 const deleteAddress = async (req, res, next) => {
   const userId = req.params.userId;
   const addressId = req.params.addressId;
@@ -824,3 +866,4 @@ exports.getVisitedArticleHistoriesOfUser = getVisitedArticleHistoriesOfUser;
 exports.createAddress = createAddress;
 exports.getAllAddress = getAllAddress;
 exports.deleteAddress = deleteAddress;
+exports.updateAddress = updateAddress;
