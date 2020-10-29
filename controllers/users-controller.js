@@ -735,13 +735,13 @@ const createAddress = async (req, res, next) => {
 
   const createdAddress = new Address({
     user: userId,
-    zip_code: Number(zip_code),
+    zip_code: zip_code,
     country,
     name,
     todoufuken,
     address_info1,
     address_info2,
-    phone_number: Number(phone_number),
+    phone_number: phone_number,
     email,
     company,
   });
@@ -797,13 +797,13 @@ const updateAddress = async (req, res, next) => {
     address = await Address.findByIdAndUpdate(
       addressId,
       {
-        zip_code: Number(zip_code),
+        zip_code: zip_code,
         country,
         name,
         todoufuken,
         address_info1,
         address_info2,
-        phone_number: Number(phone_number),
+        phone_number: phone_number,
         email,
         company,
       },
