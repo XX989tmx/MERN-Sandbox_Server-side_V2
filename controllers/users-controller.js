@@ -794,7 +794,7 @@ const updateAddress = async (req, res, next) => {
 
   let address;
   try {
-    address = await Address.findByIdAndUpdate(
+    await Address.findByIdAndUpdate(
       addressId,
       {
         zip_code: zip_code,
@@ -815,7 +815,13 @@ const updateAddress = async (req, res, next) => {
     console.log(error);
   }
 
-  res.json({ address });
+  try {
+    address = await Address.findById(addressId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ address: address.toObject({ getters: true }) });
 };
 
 const deleteAddress = async (req, res, next) => {
