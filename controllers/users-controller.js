@@ -776,6 +776,30 @@ const getAllAddress = async (req, res, next) => {
   res.status(200).json({ user: user.toObject({ getters: true }) });
 };
 
+const deleteAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+
+  let user;
+  let address;
+  try {
+    user = await User.findById(userId).populate({ path: "addresses" });
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
+    await Address.findByIdAndDelete(addressId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await user.addresses.pull(addressId);
+  await user.save();
+
+  res.status(200).json({ user: user.toObject({ getters: true }) });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -799,3 +823,4 @@ exports.addsArticleToVisitedArticleHistories = addsArticleToVisitedArticleHistor
 exports.getVisitedArticleHistoriesOfUser = getVisitedArticleHistoriesOfUser;
 exports.createAddress = createAddress;
 exports.getAllAddress = getAllAddress;
+exports.deleteAddress = deleteAddress;

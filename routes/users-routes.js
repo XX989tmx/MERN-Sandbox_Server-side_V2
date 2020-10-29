@@ -89,6 +89,11 @@ router.post(
 
 router.get("/getAllAddress/:userId", usersControllers.getAllAddress);
 
+router.delete(
+  "/deleteAddress/:userId/:addressId",
+  usersControllers.deleteAddress
+);
+
 router.post(
   "/signup",
   fileUpload.single("image"),
