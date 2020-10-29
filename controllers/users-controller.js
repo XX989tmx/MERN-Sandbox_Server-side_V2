@@ -375,6 +375,35 @@ const followOtherUser = async (req, res, next) => {
   res.status(200).json({ user, message });
 };
 
+const unfollowFollowing = async (req, res, next) => {
+  const userId = req.params.userId;
+  const unfollowCandidateId = req.params.unfollowCandidateId;
+
+  let user;
+  let userYouWantToUnfollow;
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await user.following.pull(unfollowCandidateId);
+  await user.save();
+
+  try {
+    userYouWantToUnfollow = await User.findById(unfollowCandidateId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await userYouWantToUnfollow.followedBy.pull(userId);
+  await userYouWantToUnfollow.save();
+
+  const message = "unfollowed specified user";
+
+  res.status(200).json({ user, userYouWantToUnfollow, message });
+};
+
 const getUsersYouAreFollowing = async (req, res, next) => {
   // get following
   const userId = req.params.userId;
@@ -873,3 +902,4 @@ exports.createAddress = createAddress;
 exports.getAllAddress = getAllAddress;
 exports.deleteAddress = deleteAddress;
 exports.updateAddress = updateAddress;
+exports.unfollowFollowing = unfollowFollowing;

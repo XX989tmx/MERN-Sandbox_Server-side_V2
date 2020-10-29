@@ -15,6 +15,11 @@ router.get(
   usersControllers.followOtherUser
 );
 
+router.delete(
+  "/unfollowFollowing/:userId/:unfollowCandidateId",
+  usersControllers.unfollowFollowing
+);
+
 router.get(
   "/getUsersYouAreFollowing/:userId",
   usersControllers.getUsersYouAreFollowing
