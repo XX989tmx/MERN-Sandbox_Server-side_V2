@@ -761,6 +761,21 @@ const createAddress = async (req, res, next) => {
   res.status(200).json({ user, createdAddress });
 };
 
+const getAllAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  let user;
+  try {
+    user = await User.findById(userId).populate({ path: "addresses" });
+  } catch (error) {
+    console.log(error);
+  }
+
+  // const addresses = user.addresses;
+  // console.log(addresses);
+
+  res.status(200).json({ user: user.toObject({ getters: true }) });
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
@@ -783,3 +798,4 @@ exports.updateProfile = updateProfile;
 exports.addsArticleToVisitedArticleHistories = addsArticleToVisitedArticleHistories;
 exports.getVisitedArticleHistoriesOfUser = getVisitedArticleHistoriesOfUser;
 exports.createAddress = createAddress;
+exports.getAllAddress = getAllAddress;

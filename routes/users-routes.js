@@ -82,10 +82,12 @@ router.post(
     check("todoufuken").notEmpty(),
     check("address_info1").notEmpty(),
     check("phone_number").notEmpty(),
-    check("email").normalizeEmail().isEmail(), 
+    check("email").normalizeEmail().isEmail(),
   ],
   usersControllers.createAddress
 );
+
+router.get("/getAllAddress/:userId", usersControllers.getAllAddress);
 
 router.post(
   "/signup",
