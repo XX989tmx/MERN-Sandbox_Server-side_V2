@@ -94,6 +94,11 @@ router.post(
 
 router.get("/getAllAddress/:userId", usersControllers.getAllAddress);
 
+router.get(
+  "/getSpecificAddress/:userId/:addressId",
+  usersControllers.getSpecificAddress
+);
+
 router.patch(
   "/updateAddress/:userId/:addressId",
   [

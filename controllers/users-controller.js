@@ -790,6 +790,19 @@ const createAddress = async (req, res, next) => {
   res.status(200).json({ user, createdAddress });
 };
 
+const getSpecificAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  let address;
+  try {
+    address = await Address.findById(addressId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.status(200).json({ address: address.toObject({ getters: true }) });
+};
+
 const getAllAddress = async (req, res, next) => {
   const userId = req.params.userId;
   let user;
@@ -903,3 +916,4 @@ exports.getAllAddress = getAllAddress;
 exports.deleteAddress = deleteAddress;
 exports.updateAddress = updateAddress;
 exports.unfollowFollowing = unfollowFollowing;
+exports.getSpecificAddress = getSpecificAddress;
