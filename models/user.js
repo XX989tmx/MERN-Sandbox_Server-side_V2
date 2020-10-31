@@ -23,6 +23,7 @@ const userSchema = new Schema({
   },
   article_histories: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
   addresses: [{ type: mongoose.Types.ObjectId, ref: "Address" }],
+  flagged: [{ type: mongoose.Types.ObjectId, ref: "FlaggedStatus" }],
   // user_detail_infos: [{
   //   type: mongoose.Types.ObjectId,
   //   required: true,

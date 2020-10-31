@@ -14,6 +14,7 @@ const mongooseUniqueValidator = require("mongoose-unique-validator");
 const referenceSitesHandler = require("../modules/controllers-modules/reference-sites-handler");
 const externalSitesHandler = require("../modules/controllers-modules/external-sites-handler");
 const ArticleComment = require("../models/article-comment");
+const FlaggedStatus = require("../models/flagged-status");
 
 const allArticles = async (req, res, next) => {
   // const query = req.query.q;
@@ -1802,6 +1803,44 @@ const getByWhomArticleWasVisited = async (req, res, next) => {
   res.json({ article });
 };
 
+const flagArticleComment = async (req, res, next) => {
+  const userId = req.params.userId;
+  const articleCommentId = req.params.articleCommentId;
+  const { information } = req.body;
+
+  const createdFlaggedStatus = new FlaggedStatus({
+    userWhoFlaggedThisComment: userId,
+    commentFlagged: articleCommentId,
+    information,
+    date: new Date(Date.now()).toString(),
+  });
+
+  await createdFlaggedStatus.save();
+
+  let articleComment;
+  try {
+    articleComment = await ArticleComment.findById(articleCommentId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await articleComment.flagged.push(createdFlaggedStatus);
+  await articleComment.save();
+
+  let user;
+
+  try {
+    user = await User.findById(userId);
+  } catch (error) {
+    console.log(error);
+  }
+
+  await user.flagged.push(createdFlaggedStatus);
+  await user.save();
+
+  res.json({ createdFlaggedStatus, articleComment, user });
+};
+
 // const searchQuery = async(req, res, next) => {
 //   let results;
 //   try {
@@ -1885,3 +1924,4 @@ exports.addCommentsToArticle = addCommentsToArticle;
 exports.getByWhomArticleWasVisited = getByWhomArticleWasVisited;
 exports.popularitySort = popularitySort;
 exports.removeArticleFromStaredList = removeArticleFromStaredList;
+exports.flagArticleComment = flagArticleComment;

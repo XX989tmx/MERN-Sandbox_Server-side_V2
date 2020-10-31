@@ -39,6 +39,11 @@ router.post(
   [check("comment").not().isEmpty()],
   articlesControllers.addCommentsToArticle
 );
+
+router.post(
+  "/flagArticleComment/:userId/:articleCommentId",
+  articlesControllers.flagArticleComment
+);
 //GET 'https:://localhost500/api/articles/all?q=query'
 
 // OR search (k1 or k2)
